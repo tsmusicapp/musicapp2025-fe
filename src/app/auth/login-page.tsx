@@ -9,6 +9,7 @@ import { Toast } from "primereact/toast";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { login } from "@/redux/features/auth/authSlice";
+import { LOGINUSER } from "@/services/apiServices";
 
 interface FormLogin {
   email: string;
@@ -31,7 +32,7 @@ export function LoginPage() {
 
   const onSubmit = async (data: FormLogin) => {
     try {
-      const response = await fetch("http://localhost:3000/v1/auth/login", {
+      const response = await fetch(LOGINUSER, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -59,7 +60,7 @@ export function LoginPage() {
   
         // Redirect based on user type
         if (result.isNewUser) {
-          window.location.href = "/edit-user-space";
+          window.location.href = "/user-space";
         } else {
           window.location.href = "/";
         }

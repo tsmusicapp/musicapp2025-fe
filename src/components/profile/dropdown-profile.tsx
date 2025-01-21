@@ -15,6 +15,7 @@ import { isCustomer } from "@/redux/features/offer/offerSlice";
 import { Toast } from "primereact/toast";
 import { logout } from "@/redux/features/auth/authSlice";
 import { useLocalStorage } from "@/context/LocalStorageContext";
+import { LOGOUTUSER } from "@/services/apiServices";
 
 interface UserProps {
   user: any;
@@ -30,7 +31,7 @@ export default function DropdownProfile({ user }: UserProps) {
     try {
       const refreshToken = auth.tokens.refresh.token;
       console.log({ refreshToken });
-      const response = await fetch("http://localhost:3000/v1/auth/logout", {
+      const response = await fetch(LOGOUTUSER, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

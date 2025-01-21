@@ -1,5 +1,6 @@
 import { FormData } from "@/app/share-work-creation/share-work-creation";
 import { getAuthToken } from "@/utils/auth";
+import { BASE_URL } from "@/conf/api";
 
 interface MusicCreationData {
   musicName: string;
@@ -20,7 +21,8 @@ interface MusicCreationData {
   softwareTool?: string;
 }
 
-const BACKEND_URL = "http://localhost:3000/v1/music-creation";
+// const BACKEND_URL = "http://localhost:5000/v1/music-creation";
+const BACKEND_URL = `${BASE_URL}/v1/music-creation`;
 
 export const MusicCreationService = {
   getMusicCreationById: async (id: string) => {
@@ -42,7 +44,7 @@ export const MusicCreationService = {
     const token = getAuthToken();
     if (!token) throw new Error("No authentication token found");
   
-    const response = await fetch(`https://localhost:3000/v1/music/upload`, {
+    const response = await fetch(`${BASE_URL}/v1/music/upload`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,

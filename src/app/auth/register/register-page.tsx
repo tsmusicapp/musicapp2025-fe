@@ -7,6 +7,7 @@ import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
 import { Toast } from "primereact/toast";
 import { useForm } from "react-hook-form";
+import { RESGISTERUSER } from "@/services/apiServices";
 
 interface FormData {
   name: string;
@@ -52,7 +53,7 @@ export function RegisterPage() {
   const onSubmit = async (data: FormData) => {
     try {
       delete data.confirmPassword;
-      const response = await fetch("http://localhost:3000/v1/auth/register", {
+      const response = await fetch(RESGISTERUSER, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

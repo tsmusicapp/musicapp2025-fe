@@ -6,6 +6,7 @@ import { useForm } from "react-hook-form";
 import { Toast } from "primereact/toast";
 import Image from "next/image";
 import { StarIcon } from "@heroicons/react/24/outline";
+import { BASE_URL } from "@/conf/api";
 import {
   Card,
   Input,
@@ -85,7 +86,7 @@ export function CreativeHire() {
 
       const formattedTimeFrame = `${data.timeFrame.startDate} to ${data.timeFrame.endDate}`;
 
-      const response = await fetch("http://localhost:3000/v1/job/add", {
+      const response = await fetch(`${BASE_URL}/v1/job/add`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,
