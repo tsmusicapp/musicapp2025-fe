@@ -1,8 +1,23 @@
 import CardJobs from "@/components/card-jobs";
 import { ACTIVE_JOBS, INACTIVE_JOBS } from "@/dummy/example";
 import { Typography, Button } from "@material-tailwind/react";
+import { useDispatch, useSelector } from "react-redux";
+import { getJobs } from "@/redux/features/job/jobSlice";
+import { useEffect } from "react";
+import { AppDispatch } from "@/redux/store";
 
 export function MyProjects() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { data, loading, error } = useSelector((state:any) => state.job);
+
+  useEffect(() => {
+    dispatch(getJobs());
+  }, [dispatch]);
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+
+
   return (
     <>
       <section className="grid min-h-screen">

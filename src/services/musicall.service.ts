@@ -1,5 +1,5 @@
-const BACKEND_URL = "http://localhost:3000/v1/music-creation";
-const BASE_URL = "http://localhost:3000";
+const BACKEND_URL = "http://localhost:5000/v1/music-creation";
+const BASE_URL = "http://localhost:5000";
 
 export class MusicallService {
   // Get auth token from localStorage

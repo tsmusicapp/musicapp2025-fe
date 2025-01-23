@@ -25,7 +25,7 @@ export function TabsMenu() {
   ];
 
   return (
-    <section className="flex h-full min-h-[40vh] justify-start px-3 w-full">
+    <section className="flex justify-start px-3 w-full">
       <Tabs id="custom-animation" value={"for-you"} className="w-full mb-16">
         <div className="flex h-full flex-row items-start mb-2">
           <TabsHeader

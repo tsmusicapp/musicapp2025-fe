@@ -240,7 +240,7 @@ export function CreativeHire() {
                 ))}
               </div>
 
-              <Typography
+              {/* <Typography
                 variant="small"
                 color="blue-gray"
                 className="-mb-2 font-semibold"
@@ -303,7 +303,7 @@ export function CreativeHire() {
                   <option value="CH">Chinese</option>
                   <option value="AR">Arabic</option>
                 </select>
-              </div>
+              </div> */}
               {/* <div className="flex flex-col gap-1">
                 <label
                   htmlFor="default"

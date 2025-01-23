@@ -1,8 +1,47 @@
 import CardJobs from "@/components/card-jobs";
 import { SAVED_JOBS, APPLIED_JOBS } from "@/services/jobService";
-import { Typography } from "@material-tailwind/react";
+import { useSelector } from "react-redux";
+import { Spinner, Typography } from "@material-tailwind/react";
+import { RootState } from "@/redux/store";
+import JobCard from "@/components/jobs/job-card";
+interface Job {
+  id: string;
+  title: string;
+  workcontent: string; // Changed from string[] to string
+  musicculture: string;
+  descriptionjob: string;
+  imgSong: string;
+  singerName: string;
+  songName: string;
+  imgComposer: string;
+  composerName: string;
+  musicStyle: string;
+  tags: string[];
+  username: string;
+  fotoprofile: string;
+  category: string[];
+  musicUse: string[];
+  cultureArea: string[];
+  lyricLanguage: string;
+  budget: string[];
+  timeFrame: string;
+  applicantName: string;
+  createdAt: string;
+  savedBy:string[];
+}
 
 export function SavedJobs() {
+
+  const userString = localStorage.getItem('auth');
+  const auth: any = userString ? JSON.parse(userString) : null;
+
+  const allJobs = useSelector((state: RootState) => state.job.data);
+
+  
+  const savedJobs = allJobs?.jobs.filter((job: any) => job.savedBy.includes(auth?.user?.id) );
+
+  console.log(savedJobs, "saved jobs");
+
   return (
     <>
       <section className="grid min-h-screen">
@@ -12,9 +51,9 @@ export function SavedJobs() {
               Saved Jobs
             </Typography>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-              {SAVED_JOBS.map((props, key) => (
-                <CardJobs key={key} {...props} />
-              ))}
+              {allJobs ? savedJobs.map((props : Job, key : number) => (
+                <JobCard key={key} {...props} />
+              )) : <Spinner className="w-12 h-12" /> }
             </div>
             <div className="pt-[4rem]"></div>
             <Typography variant="h5" className="font-bold" color="black">

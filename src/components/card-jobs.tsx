@@ -32,55 +32,70 @@ import SelectableBox from "./music-box/selectable-box";
 
 interface CategoryCardProps {
   title: string;
-  workcontent: string;
-  musicculture: string;
-  descriptionjob: string;
-  imgSong: string;
-  singerName: string;
-  songName: string;
-  imgComposer: string;
-  composerName: string;
-  savedJobs?: boolean | false;
-  appliedJobs?: boolean | false;
-  activeJobs?: boolean | false;
-  id: string;
-  username: string;
-  fotoprofile: string;
-  category: string[];
-  musicUse: string[];
-  cultureArea: string[];
+  applicantAvatar: string;
+  applicantBackgroundImage: string;
+  applicantSelectedSongs: string;
+  createdBy: string;
+  description: string;
+  isHaveLyric: boolean;
   lyricLanguage: string;
+  preferredLocation: string;
+  projectTitle: string;
+  category: string[];
+  cultureArea: string[];
   budget: string[];
-  timeFrame: string;
+  musicUse: string[];
   applicantName: string;
   createdAt: string;
+  id: string;
+  timeFrame: string;
 }
 
-function CardJobs({
-  title,
-  workcontent,
-  musicculture,
-  descriptionjob,
-  imgSong,
-  singerName,
-  songName,
-  imgComposer,
-  composerName,
-  savedJobs,
-  appliedJobs,
-  activeJobs,
-  id,
-  username,
-  fotoprofile,
-  category,
-  musicUse,
-  cultureArea,
-  lyricLanguage,
-  budget,
-  timeFrame,
-  applicantName,
-  createdAt,
-}: CategoryCardProps) {
+function CardJobs(
+  {
+    applicantName,
+    applicantAvatar,
+    applicantBackgroundImage,
+    applicantSelectedSongs,
+    budget,
+    category,
+    createdBy,
+    cultureArea,
+    description,
+    isHaveLyric,
+    id,
+    lyricLanguage,
+    musicUse,
+    preferredLocation,
+    projectTitle,
+    timeFrame
+  }
+//   {
+//   title,
+//   workcontent,
+//   musicculture,
+//   descriptionjob,
+//   imgSong,
+//   singerName,
+//   songName,
+//   imgComposer,
+//   composerName,
+//   savedJobs,
+//   appliedJobs,
+//   activeJobs,
+//   id,
+//   username,
+//   fotoprofile,
+//   category,
+//   musicUse,
+//   cultureArea,
+//   lyricLanguage,
+//   budget,
+//   timeFrame,
+//   applicantName,
+//   createdAt,
+// }
+: CategoryCardProps) {
   const router = useRouter();
   const toast = useRef<Toast>(null);
   const [openPopup, setOpenPopup] = React.useState(false);
@@ -123,7 +138,7 @@ function CardJobs({
     }
   
     try {
-      const response = await fetch(`http://localhost:3000/v1/job/apply/${id}`, {
+      const response = await fetch(`http://localhost:5000/v1/job/apply/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -147,7 +162,7 @@ function CardJobs({
       // });
 
       setopenSmallbox(!openSmallbox);
-      setopenReview(!openReview);
+      setopenReviewisHaveLyric(!openReview);
     } catch (error) {
       console.error("Error submitting application:", error);
       alert("Failed to submit application. Please try again.");
@@ -170,7 +185,7 @@ function CardJobs({
           <div className="flex flex-col">
             <div className="flex justify-between gap-4">
               <div className="flex flex-row gap-4">
-                <Avatar src={fotoprofile} size="sm" alt="avatar" />
+                <Avatar src={applicantAvatar} size="sm" alt="avatar" />
                 <div>
                   {/* <Badge content="Pro" color="blue" withBorder>
                   <Button
@@ -187,7 +202,7 @@ function CardJobs({
                       color="black"
                       className="font-bold text-xs pt-1"
                     >
-                      {username}
+                      {applicantName}
                     </Typography>
                     {/* <Typography
                     variant="small"
@@ -219,7 +234,7 @@ function CardJobs({
                   </Typography>
                 </div>
               </div>
-              {savedJobs ? (
+              {/* {savedJobs ? (
                 <div className="">
                   <StaredIcon
                     width={26}
@@ -272,11 +287,11 @@ function CardJobs({
                     className="cursor-pointer hover:scale-125"
                   />
                 </div>
-              )}
+              )} */}
             </div>
             <div className="flex items-center justify-between gap-4 mt-[0.3rem]">
               <Typography variant="small" className="font-bold" color="black">
-                {title}
+                {projectTitle}
               </Typography>
               {/* <div className="flex flex-row">
                 <MapPinIcon height={12} color="black" />
@@ -295,24 +310,24 @@ function CardJobs({
                 color="black"
                 className="font-normal text-[0.7rem]"
               >
-                {`Work Content : ${workcontent}`}
+                {`Work Content : ${musicUse}`}
               </Typography>
               <Typography
                 variant="small"
                 color="black"
                 className="font-normal text-[0.7rem]"
               >
-                {`Music Culture Region : ${musicculture}`}
+                {`Music Culture Region : ${cultureArea}`}
               </Typography>
-              <Typography
+              {/* <Typography
                 variant="small"
                 color="black"
                 className="text-justify text-[0.6rem] max-w-[20rem] overflow-hidden text-ellipsis"
               >
-                {descriptionjob?.length > 150
-                ? `${descriptionjob.substring(0, 150)}...`
-                : descriptionjob || "No description available"}
-              </Typography>
+                {description?.length > 150
+                ? `${description.substring(0, 90)}...`
+                : description || "No description available"}
+              </Typography> */}
             </div>
           </div>
           <div className="flex justify-between">
@@ -321,13 +336,13 @@ function CardJobs({
               color="black"
               className="text-[0.6rem] mt-[0.6rem]"
             >
-              {new Date(createdAt).toLocaleString()}
+              {new Date(createdBy).toLocaleString()}
             </Typography>
             {/* <Link
               href={{ pathname: "/jobs-detail", query: { id: 1 } }}
               className="inline-block"
             > */}
-            {appliedJobs ? (
+            {isHaveLyric ? (
               <Chip
                 value="Applied 5 days ago"
                 size="sm"
@@ -360,7 +375,7 @@ function CardJobs({
             )}
             {/* </Link> */}
           </div>
-          {activeJobs == true || activeJobs == false ? (
+          {isHaveLyric == true || isHaveLyric == false ? (
             <div className="flex justify-between pt-[0.4rem]">
               <Chip
                 value="View Applications (15)"
@@ -374,7 +389,7 @@ function CardJobs({
         </CardBody>
       </Card>
 
-      <Dialog
+      {/* <Dialog
         dismiss={{ outsidePress: false }}
         size="lg"
         open={openPopup}
@@ -384,7 +399,7 @@ function CardJobs({
           <div></div>
           <div className="flex flex-col z-10 justify-center items-center text-center gap-[0.1rem]">
             <Avatar
-              src={fotoprofile}
+              src={applicantBackgroundImage}
               alt="avatar"
               size="lg"
               className=""
@@ -500,7 +515,7 @@ function CardJobs({
                   desktop publishing software like Aldus PageMaker including
                   versions of Lorem Ipsum.
                 </Typography> */}
-                <div className="container mx-auto px-4 py-8">
+                {/* <div className="container mx-auto px-4 py-8">
                   <div className="w-full mb-10 md:flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Button
@@ -585,7 +600,7 @@ function CardJobs({
                     className="mb-2 font-bold"
                   >
                     {timeFrame}
-                  </Typography>
+                  </Typography> */}
                   {/* <Typography variant="small" color="gray" className="text-xs">
                     Job Location
                   </Typography>
@@ -596,7 +611,7 @@ function CardJobs({
                   >
                     Anywhere
                   </Typography> */}
-                  <Typography variant="small" color="gray" className="text-xs">
+                  {/* <Typography variant="small" color="gray" className="text-xs">
                     Aplicant Name
                   </Typography>
                   <Typography
@@ -620,7 +635,7 @@ function CardJobs({
               </div>
             </div>
           </div>
-        </DialogBody>
+        </DialogBody> */}
         {/* <DialogFooter className="flex justify-center"> */}
         {/* <Button
             variant="text"
@@ -634,7 +649,7 @@ function CardJobs({
             <span>Submit Application</span>
           </Button> */}
         {/* </DialogFooter> */}
-      </Dialog>
+      {/* </Dialog>
 
       <Dialog
         dismiss={{ outsidePress: false }}
@@ -785,7 +800,7 @@ function CardJobs({
         </DialogBody>
         <DialogFooter className="flex justify-center py-4 px-6">
           <Button
-            onClick={() => handleSubmit(id)}
+            onClick={() => handleSubmit(  )}
             variant="gradient"
             color="blue"
             size="sm"
@@ -794,7 +809,7 @@ function CardJobs({
             Submit Application
           </Button>
         </DialogFooter>
-      </Dialog>
+      </Dialog>  */}
     </>
   );
 }

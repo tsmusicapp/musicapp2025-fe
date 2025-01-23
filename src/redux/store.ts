@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import CounterReducer from "@/redux/features/counter/counterSlice";
+import JobReducer from "@/redux/features/job/jobSlice";
 import ChatReducer from "@/redux/features/chat/chatSlice";
 import OfferReducer from "@/redux/features/offer/offerSlice";
 import MenuReducer from "@/redux/features/menu/menuSlice";
@@ -21,6 +22,7 @@ const preloadedState = {
 export const store = configureStore({
   reducer: {
     counter: CounterReducer,
+    job: JobReducer,
     chat: ChatReducer,
     offer: OfferReducer,
     menu: MenuReducer,

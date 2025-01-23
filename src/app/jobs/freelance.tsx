@@ -7,10 +7,18 @@ import {
   ListItem,
   ListItemPrefix,
   Typography,
+  Spinner
 } from "@material-tailwind/react";
+
 import CardJobs from "@/components/card-jobs";
+import JobsCard from "@/components/jobs/job-card";
 import { JOBS_PROPS } from "@/conf/jobsprops";
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getJobs } from "@/redux/features/job/jobSlice";
+import { AppDispatch } from "@/redux/store";
+
+
 
 interface Job {
   id: string;
@@ -34,7 +42,8 @@ interface Job {
   budget: string[];
   timeFrame: string;
   applicantName: string;
-  createdAt:string;
+  createdAt: string;
+  savedBy:string[];
 }
 
 interface CheckboxGroupProps {
@@ -83,10 +92,24 @@ export function CheckboxHorizontalListGroup({ selectedCategories, onCategoryChan
 }
 
 export function Freelance() {
+  const dispatch = useDispatch<AppDispatch>();
+  const activeTab = useSelector((state: any) => state.job.activeTab);
+  const { data, loading, error } = useSelector((state: any) => state.job);
+
+  console.log(loading , "Loading")
+  
   const [searchText, setSearchText] = useState<string>("");
   const [selectedRegion, setSelectedRegion] = useState<string>("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  const [filteredJobs, setFilteredJobs] = useState<Job[]>(JOBS_PROPS);
+  
+  const isFreelanceTab = activeTab.some((tab: any) => tab.value === "freelance");
+  
+ 
+    useEffect(() => {
+      if(isFreelanceTab) {
+        dispatch(getJobs());
+      }
+    }, [dispatch , activeTab]);
 
   // Handle category checkbox changes
   const handleCategoryChange = (category: string, isChecked: boolean): void => {
@@ -98,56 +121,25 @@ export function Freelance() {
       }
     });
   };
-
-  // Filter jobs when any filter changes
-  useEffect(() => {
-    let filtered = [...JOBS_PROPS] as Job[];
-
-    // Filter by search text
-    if (searchText) {
-      filtered = filtered.filter(job => 
-        job.title.toLowerCase().includes(searchText.toLowerCase()) ||
-        job.descriptionjob.toLowerCase().includes(searchText.toLowerCase())
-      );
-    }
-
-    // Filter by region
-    if (selectedRegion) {
-      filtered = filtered.filter(job => 
-        job.musicculture === selectedRegion
-      );
-    }
-
-    // Filter by categories
-    if (selectedCategories.length > 0) {
-      filtered = filtered.filter(job => 
-        // Check if any selected category is included in the workcontent string
-        selectedCategories.some(category => 
-          job.workcontent.includes(category)
-        )
-      );
-    }
-
-    setFilteredJobs(filtered);
-  }, [searchText, selectedRegion, selectedCategories]);
-
-  // Get unique regions from jobs data
+  
   const regions = Array.from(new Set(JOBS_PROPS.map(job => job.musicculture)));
 
+
   return (
+
     <>
       <section className="grid min-h-screen">
         <div className="flex flex-row justify-start gap-2">
           <div className="flex flex-row justify-start gap-1 w-[37rem] max-w-[37rem]">
-            <Input 
-              crossOrigin={""} 
-              label="Search" 
+            <Input
+              crossOrigin={""}
+              label="Search"
               size="md"
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
             />
-            <Select 
-              size="md" 
+            <Select
+              size="md"
               label="Music Cultural Region"
               value={selectedRegion}
               onChange={(value) => setSelectedRegion(value || "")}
@@ -159,7 +151,7 @@ export function Freelance() {
             </Select>
           </div>
           <div className="w-[28rem]">
-            <CheckboxHorizontalListGroup 
+            <CheckboxHorizontalListGroup
               selectedCategories={selectedCategories}
               onCategoryChange={handleCategoryChange}
             />
@@ -168,9 +160,12 @@ export function Freelance() {
         <div className="py-4 flex justify-items-start items-start sm:justify-start">
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-1">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-              {filteredJobs.map((props, index) => (
-                <CardJobs key={props.id || index} {...props} />
-              ))}
+              {data ? data.jobs.map((props : Job, index:number) => (
+                <JobsCard key={props.id || index} {...props} />
+              )) : <div>
+                    <Spinner className="h-12 w-12"/>
+                  </div>
+              }
             </div>
           </div>
         </div>

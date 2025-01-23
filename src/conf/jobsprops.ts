@@ -6,9 +6,9 @@ export const CATEGORIES: any[] = [];
 export const SELECTED: any[] = [];
 
 // Fungsi untuk mengambil data dari backend
-const fetchJobsData = async () => {
+export const fetchJobsData = async () => {
   try {
-    const response = await fetch("http://localhost:3000/v1/job", {
+    const response = await fetch("http://localhost:5000/v1/job", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -66,7 +66,7 @@ const fetchJobsData = async () => {
             composerName: "Unknown Composer", // Default
             musicStyle: "Category", // Default untuk kategori
             tags: [cat], // Tags hanya berisi nama kategori
-            username: job.createdBy[0].name ? job.createdBy[0].name : 'Unknown User',
+            username: job.createdBy[0].name ? job.pbulisherName : 'Unknown User',
             fotoprofile: job.createdBy[0].profilePicture ? job.createdBy[0].profilePicture : '',
             category: job.category,
             cultureArea: job.cultureArea,
