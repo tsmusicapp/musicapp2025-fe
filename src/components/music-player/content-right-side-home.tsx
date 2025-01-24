@@ -65,7 +65,7 @@ function ContentRightSideHome() {
 
     try {
       const response = await fetch(
-        `http://localhost:3000/v1/music/comment/${selectedId}`,
+        `http://localhost:5000/v1/music/comment/${selectedId}`,
         {
           method: "POST",
           headers: {

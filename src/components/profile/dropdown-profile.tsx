@@ -84,7 +84,7 @@ export default function DropdownProfile({ user }: UserProps) {
           className="cursor-pointer"
           src={
             user?.profilePicture
-              ? `http://localhost:3000/uploads/${user.id}/profilePicture.png`
+              ? `http://localhost:5000/uploads/${user.id}/profilePicture.png`
               : "/image/default-picture.png"
           }
         />

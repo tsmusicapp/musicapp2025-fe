@@ -95,7 +95,7 @@ export function EditUserSpace() {
     profilePicture.append("profilePicture", file);
 
     try {
-      const response = await fetch("http://localhost:3000/v1/upload/profile", {
+      const response = await fetch("http://localhost:5000/v1/upload/profile", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${auth.tokens.access.token}`,
@@ -206,7 +206,7 @@ export function EditUserSpace() {
 
     console.log(cleanedData)
     try {
-      const response = await fetch("http://localhost:3000/v1/user-space/add", {
+      const response = await fetch("http://localhost:5000/v1/user-space/add", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -254,7 +254,7 @@ export function EditUserSpace() {
     let cleanedData = removeEmptyStrings(formData);
     try {
       const response = await fetch(
-        "http://localhost:3000/v1/user-space/update",
+        "http://localhost:5000/v1/user-space/update",
         {
           method: "PATCH",
           headers: {
@@ -322,13 +322,13 @@ export function EditUserSpace() {
 
   const getProfileImageUrl = (userId: string, filename: string) => {
     if (!userId || !filename) return null;
-    return `http://localhost:3000/uploads/${userId}/profilePicture.jpg`;
+    return `http://localhost:5000/uploads/${userId}/profilePicture.jpg`;
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:3000/v1/user-space", {
+        const response = await fetch("http://localhost:5000/v1/user-space", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -341,7 +341,7 @@ export function EditUserSpace() {
 
           // Set the image URL if profilePicture exists
           if (data.profilePicture && data.createdBy) {
-            const imageUrl = `http://localhost:3000/uploads/${data.createdBy}/profilePicture.jpg`;
+            const imageUrl = `http://localhost:5000/uploads/${data.createdBy}/profilePicture.jpg`;
             setImageUrl(imageUrl);
           }
 

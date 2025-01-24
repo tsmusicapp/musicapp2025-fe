@@ -35,7 +35,7 @@ export default function ShareWorkSalesMarket() {
   const [formData, setFormData] = useState<IMusicAsset>(defaultMusicAsset);
 
   const [fileImage, setFileImage] = useState<File | null>(null);
-  const [fileMusic, setFileMusic] = useState<File | null>(null);
+  const [fileMusic, setFileMusic] = useState<File | undefined | Blob>(undefined);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [musicPreview, setMusicPreview] = useState<string | null>(null);
 
@@ -119,16 +119,27 @@ export default function ShareWorkSalesMarket() {
   const handleFileMusicChange = (
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
-    const selectedFile = event.target.files?.[0];
+    const selectedFile: Blob | File | undefined = event.target.files?.[0];
+    const reader = new FileReader();
+
     if (selectedFile) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setMusicPreview(reader.result as string);
-      };
+      // console.log(selectedFile, "music here1");
       reader.readAsDataURL(selectedFile);
+      console.log(selectedFile, "after reader");
       setFileMusic(selectedFile);
+    } else {
+      console.error("No file selected");
     }
-  };
+    // if (selectedFile?.type.split('/')[0] == "image") {
+      //   console.log(selectedFile, "reader inside condition");
+      //   reader.onloadend = () => {
+        //     setMusicPreview(reader.result as string);
+        //   };
+        // }
+        // reader.readAsDataURL(selectedFile);
+        
+        
+      };
 
   useEffect(() => {
     const uploadImage = async () => {
@@ -136,9 +147,11 @@ export default function ShareWorkSalesMarket() {
       const musicImageForm = new FormData();
       musicImageForm.append("musicImage", fileImage);
 
+      console.log(musicImageForm, "music image here in form data");
+
       try {
         const response = await fetch(
-          "http://localhost:3000/v1/upload/music-image",
+          "http://localhost:5000/v1/upload/music-image",
           {
             method: "POST",
             headers: {
@@ -166,9 +179,8 @@ export default function ShareWorkSalesMarket() {
           toast.current?.show({
             severity: errorResult.code === 422 ? "warn" : "error",
             summary: errorResult.code === 422 ? "Warning" : "Error",
-            detail: `Error: ${
-              errorResult.message || "Failed to upload Music Image"
-            }`,
+            detail: `Error: ${errorResult.message || "Failed to upload Music Image"
+              }`,
             life: 3000,
           });
         }
@@ -184,17 +196,26 @@ export default function ShareWorkSalesMarket() {
     };
 
     const uploadMusic = async () => {
-      if (!fileMusic) return;
-      const track = new FormData();
-      track.append("track", fileMusic);
+      if (!fileMusic) {
+        return
+      };
+      console.log(fileMusic ,"music here2")
+      const formData = new FormData();
+      formData.append("audio", fileMusic);
+
+      console.log(formData, 'music here in data ');
+
+      // Log the FormData contents
+
+      console.log(formData, 'No music');
 
       try {
-        const response = await fetch("http://localhost:3000/v1/tracks", {
+        const response = await fetch("http://localhost:5000/v1/tracks/", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${auth.tokens.access.token}`,
           },
-          body: track,
+          body: formData,
         });
 
         if (response.ok) {
@@ -212,9 +233,8 @@ export default function ShareWorkSalesMarket() {
           toast.current?.show({
             severity: errorResult.code === 422 ? "warn" : "error",
             summary: errorResult.code === 422 ? "Warning" : "Error",
-            detail: `Error: ${
-              errorResult.message || "Failed to upload Music Track"
-            }`,
+            detail: `Error: ${errorResult.message || "Failed to upload Music Track"
+              }`,
             life: 3000,
           });
         }
@@ -228,22 +248,85 @@ export default function ShareWorkSalesMarket() {
         });
       }
     };
-
+    if (fileMusic) {
+      console.log(fileMusic, "music here3");
+      uploadMusic();
+    }
     if (fileImage) {
       uploadImage();
     }
 
-    if (fileMusic) {
-      uploadMusic();
-    }
-  }, [fileImage, fileMusic, auth]);
+
+  }, [fileMusic, fileImage, auth]);
+
+  // useEffect(() => {
+  //   const uploadMusic = async () => {
+  //     if (!fileMusic) {
+  //       return
+  //     };
+  //     console.log(fileMusic)
+  //     const formData = new FormData();
+  //     await formData.append("audio", fileMusic);
+
+  //     console.log(formData, 'music here in data ');
+
+  //     // Log the FormData contents
+
+  //     console.log(formData, 'No music');
+
+  //     try {
+  //       const response = await fetch("http://localhost:5000/v1/tracks", {
+  //         method: "POST",
+  //         headers: {
+  //           Authorization: `Bearer ${auth.tokens.access.token}`,
+  //         },
+  //         body: formData,
+  //       });
+
+  //       if (response.ok) {
+  //         const result = await response.json();
+  //         // result.data is the Mongo ObjectID, use it as your music identifier
+  //         setFormData((prev) => ({ ...prev, music: result.data }));
+  //         toast.current?.show({
+  //           severity: "success",
+  //           summary: "Success",
+  //           detail: "Upload Music Track successful!",
+  //           life: 3000,
+  //         });
+  //       } else {
+  //         const errorResult = await response.json();
+  //         toast.current?.show({
+  //           severity: errorResult.code === 422 ? "warn" : "error",
+  //           summary: errorResult.code === 422 ? "Warning" : "Error",
+  //           detail: `Error: ${errorResult.message || "Failed to upload Music Track"
+  //             }`,
+  //           life: 3000,
+  //         });
+  //       }
+  //     } catch (error) {
+  //       console.error("Error during Upload Music:", error);
+  //       toast.current?.show({
+  //         severity: "error",
+  //         summary: "Error",
+  //         detail: "An unexpected error occurred.",
+  //         life: 3000,
+  //       });
+  //     }
+  //   };
+  //   if (fileMusic) {
+  //     console.log(fileMusic, "music here3");
+  //     uploadMusic();
+  //   }
+  // }, [fileMusic, auth]);
+
 
   const onSubmit: SubmitHandler<IMusicAsset> = async (data) => {
     const finalData = { ...formData, ...data, myRole: checkedItems };
     const cleanedData = removeEmptyStrings(finalData);
+    console.log(cleanedData, "cleaned");
 
     try {
-      const response = await fetch("http://localhost:3000/v1/music-asset", {
+      const response = await fetch("http://localhost:5000/v1/music-asset", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -270,9 +353,8 @@ export default function ShareWorkSalesMarket() {
         toast.current?.show({
           severity: errorResult.code == 422 ? "warn" : "error",
           summary: errorResult.code == 422 ? "Warning" : "Error",
-          detail: `Error: ${
-            errorResult.message || "Failed to create music asset"
-          }`,
+          detail: `Error: ${errorResult.message || "Failed to create music asset"
+            }`,
           life: 3000,
         });
       }
@@ -379,7 +461,7 @@ export default function ShareWorkSalesMarket() {
                       <input
                         id="dropzone-file-music"
                         type="file"
-                        className="hidden"
+                        className="block"
                         onChange={handleFileMusicChange}
                       />
                     </label>

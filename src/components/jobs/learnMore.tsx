@@ -67,7 +67,7 @@ const learnMore = ({ openPopup, handleOpen, handleOpenSmallbox, selectedJob }: p
         <div></div>
         <div className="flex flex-col z-10 justify-center items-center text-center gap-[0.1rem]">
           <Avatar
-            src='newiamge.png'
+            src='https://picsum.photos/200/300'
             alt="avatar"
             size="lg"
             className=""
