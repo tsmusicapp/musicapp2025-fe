@@ -1,4 +1,4 @@
-import { FormData } from "@/app/share-work-creation/share-work-creation";
+import FormData from "@/app/share-work-creation/share-work-creation";
 import { getAuthToken } from "@/utils/auth";
 import { BASE_URL } from "@/conf/api";
 
@@ -55,5 +55,4 @@ export const MusicCreationService = {
     if (!response.ok) throw new Error("Failed to create music");
     return response.json();
   }
-  // other methods...
 };

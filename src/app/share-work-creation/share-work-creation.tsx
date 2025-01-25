@@ -14,14 +14,14 @@ import MusicBackgroundDialog from "../../components/share-work-creation/music-ba
 import { MusicallService } from "@/services/musicall.service";
 import { MusicCreationService } from "@/services/music-creation.service";
 
-export interface FormData {
+export interface ShareWorkFormData {
   musicName: string;
   myRole: string[];
   description: string;
   musicImage: any;
   music: any;
   musicLyric?: any;
-  // musicBackground?: FileList;
+  musicBackground?: FileList;
   musicUse: string[];
   musicStyle: string;
   musicMood?: string;
@@ -45,7 +45,7 @@ export function ShareWorkCreationPage() {
     formState: { errors },
     watch,
     setValue,
-  } = useForm<FormData>({
+  } = useForm<ShareWorkFormData>({
     mode: "onChange",
     defaultValues: {
       musicName: "",
@@ -78,30 +78,43 @@ export function ShareWorkCreationPage() {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  const onSubmit = async (data: FormData) => {
+  const onSubmit = async (data: ShareWorkFormData) => {
     try {
       console.log("Submitting data:", data);
 
-      const formattedData = {
-        musicName: data.musicName,
-        myRole: data.myRole,
-        singerName: data.singerName || "",
-        publisher: data.publisher || "",
-        songLanguage: data.songLanguage || "",
-        musicUse: data.musicUse,
-        musicStyle: data.musicStyle,
-        musicMood: data.musicMood || "",
-        musicImage: "path/to/image.jpg",
-        music: "path/to/music.mp3",
-        musicLyric: data.musicLyric ? "Example lyrics..." : "",
-        // musicPlaybackBackground: "path/to/background.jpg",
-        musicInstrument: data.musicInstrument || "",
-        tags: data.tags,
-        description: data.description,
-        softwareTool: data.softwareTool || "",
-      };
+      // Prepare FormData to handle files and other form fields
+      const formData = new FormData();
 
-      await MusicCreationService.createMusic(formattedData);
+      // Append form data fields
+      formData.append("musicName", data.musicName);
+      formData.append("myRole", JSON.stringify(data.myRole)); // Arrays should be serialized
+      formData.append("singerName", data.singerName || "");
+      formData.append("publisher", data.publisher || "");
+      formData.append("songLanguage", data.songLanguage || "");
+      formData.append("musicUse", JSON.stringify(data.musicUse)); // Arrays should be serialized
+      formData.append("musicStyle", data.musicStyle);
+      formData.append("musicMood", data.musicMood || "");
+      formData.append("musicInstrument", data.musicInstrument || "");
+      formData.append("tags", data.tags);
+      formData.append("description", data.description);
+      formData.append("softwareTool", data.softwareTool || "");
+
+      // Append file data (if any)
+      if (data.musicImage && data.musicImage[0]) {
+        formData.append("musicImage", data.musicImage[0]);
+      }
+      if (data.music && data.music[0]) {
+        formData.append("music", data.music[0]);
+      }
+      if (data.musicLyric) {
+        formData.append("musicLyric", data.musicLyric);
+      }
+      if (data.musicBackground && data.musicBackground[0]) {
+        formData.append("musicBackground", data.musicBackground[0]);
+      }
+
+      // Call the createMusic service
+      await MusicCreationService.createMusic(formData);
 
       toast.current?.show({
         severity: "success",
@@ -121,6 +134,7 @@ export function ShareWorkCreationPage() {
     }
   };
 
+
   if (!isAuthenticated) {
     return null;
   }
@@ -134,7 +148,7 @@ export function ShareWorkCreationPage() {
         <div className="flex flex-row gap-24">
           <div className="flex flex-col gap- w-1/2">
             <LeftSideFirst register={register} errors={errors} />
-            <LeftSideSecond register={register} errors={errors} setValue={setValue}/>
+            <LeftSideSecond register={register} errors={errors} setValue={setValue} />
           </div>
 
           <div className="flex flex-col gap-8 w-1/2">

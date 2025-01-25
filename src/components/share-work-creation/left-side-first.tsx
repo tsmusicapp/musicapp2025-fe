@@ -1,4 +1,3 @@
-// components/share-work-creation/left-side-first.tsx
 "use client";
 
 import { Typography, Input } from "@material-tailwind/react";
@@ -12,6 +11,8 @@ interface LeftSideFirstProps {
 
 function LeftSideFirst({ register, errors }: LeftSideFirstProps) {
   const [musicImagePreview, setMusicImagePreview] = useState<string>("");
+  const musicSizeLimit = 20 * 1024 * 1024; // 20MB
+  const imageSizeLimit = 1024 * 1024; // 1MB
 
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -66,7 +67,7 @@ function LeftSideFirst({ register, errors }: LeftSideFirstProps) {
                 ) : (
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
                     <p className="mb-2 text-sm text-gray-500">
-                      <span className="font-semibold">Less than 1M</span>
+                      <span className="font-semibold">Less than 1MB</span>
                     </p>
                   </div>
                 )}
@@ -80,9 +81,9 @@ function LeftSideFirst({ register, errors }: LeftSideFirstProps) {
                     onChange: (e) => {
                       const file = e.target.files?.[0];
                       if (file) {
-                        if (file.size > 1024 * 1024) {
-                          // 1MB
+                        if (file.size > imageSizeLimit) {
                           e.target.value = "";
+                          // You can add a state for error message instead of alert here
                           alert("Image must be less than 1MB");
                           return;
                         }
@@ -116,7 +117,7 @@ function LeftSideFirst({ register, errors }: LeftSideFirstProps) {
               >
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   <p className="text-sm text-gray-500">
-                    <span className="font-semibold">Less than 20M</span>
+                    <span className="font-semibold">Less than 20MB</span>
                   </p>
                 </div>
                 <input
@@ -129,8 +130,7 @@ function LeftSideFirst({ register, errors }: LeftSideFirstProps) {
                     onChange: (e) => {
                       const file = e.target.files?.[0];
                       if (file) {
-                        if (file.size > 20 * 1024 * 1024) {
-                          // 20MB
+                        if (file.size > musicSizeLimit) {
                           e.target.value = "";
                           alert("Music file must be less than 20MB");
                           return;
@@ -152,9 +152,9 @@ function LeftSideFirst({ register, errors }: LeftSideFirstProps) {
               )}
             </div>
           </div>
-          <div className="flex gap-2 pr-32 ">
+          <div className="flex gap-2 pr-32">
             <p className="text-sm">
-              The Music uploaded here is only for trial listening and not for download; <br/> if you don't have copyright, only upload music clips
+              The Music uploaded here is only for trial listening and not for download; <br /> if you don't have copyright, only upload music clips
             </p>
           </div>
         </div>
