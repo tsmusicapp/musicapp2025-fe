@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import Image from "next/image";
 import { StarIcon } from "@heroicons/react/24/outline";
 import {
@@ -17,6 +17,7 @@ import {
   Tabs,
   TabsBody,
   TabsHeader,
+  Spinner,
 } from "@material-tailwind/react";
 import Link from "next/link";
 import { CATEGORIES, JOBS_PROPS } from "@/dummy/example";
@@ -68,6 +69,7 @@ export function UserSpace() {
     sectionActive = "works";
   }
   return (
+    <Suspense fallback={<div><Spinner className="h-12 w-12"/></div>}>
     <div className="mx-auto min-h-[60rem]" key={sectionActive}>
       <MusicPlayerDialog />
       <div className="grid grid-cols-12 pl-10">
@@ -115,6 +117,7 @@ export function UserSpace() {
         </div>
       </div>
     </div>
+    </Suspense>
   );
 }
 

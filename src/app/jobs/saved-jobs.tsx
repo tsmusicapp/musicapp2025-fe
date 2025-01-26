@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { Spinner, Typography } from "@material-tailwind/react";
 import { RootState } from "@/redux/store";
 import JobCard from "@/components/jobs/job-card";
+import { useEffect, useState } from "react";
 interface Job {
   id: string;
   title: string;
@@ -32,8 +33,12 @@ interface Job {
 
 export function SavedJobs() {
 
-  const userString = localStorage.getItem('auth');
-  const auth: any = userString ? JSON.parse(userString) : null;
+  const [auth, setAuth] = useState<any>(null);
+
+  useEffect(() => {
+    const userString = localStorage.getItem('auth');
+    setAuth(userString ? JSON.parse(userString) : null);
+  }, []);
 
   const allJobs = useSelector((state: RootState) => state.job.data);
 
@@ -51,9 +56,10 @@ export function SavedJobs() {
               Saved Jobs
             </Typography>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-              {allJobs ? savedJobs.map((props : Job, key : number) => (
+              {(!savedJobs == undefined) || allJobs ? savedJobs.map((props : Job, key : number) => (
                 <JobCard key={key} {...props} />
-              )) : <Spinner className="w-12 h-12" /> }
+              )) : ( auth?.user.role !=='recruiter' ? <Spinner className="w-12 h-12" /> : <div>This feature is for musician only.</div> )
+              }
             </div>
             <div className="pt-[4rem]"></div>
             <Typography variant="h5" className="font-bold" color="black">

@@ -7,27 +7,27 @@ import {
   DialogFooter,
   IconButton,
 } from "@material-tailwind/react";
-import { deleteJob, fireGetJobRequest } from "@/redux/features/job/jobSlice";
+import {  fireGetJobRequest, updateJobStatus } from "@/redux/features/job/jobSlice";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 
 interface deleteProps {
 
-  delModal: (openPopup: React.MouseEvent<HTMLButtonElement>) => void;
-  openDelete: boolean;
+  StatusModal: (openPopup: React.MouseEvent<HTMLButtonElement>) => void;
+  openStatus: boolean;
   jobId: string;
 }
 
-export function DeleteJob({ delModal, openDelete, jobId }: deleteProps) {
+export function JobStatus({ StatusModal, openStatus, jobId }: deleteProps) {
   const dispatch = useDispatch<AppDispatch>();
   const fireGetJob = useSelector((state:any) => state.job.fireGetJob);
   const router = useRouter()
-  const handleDeleteJob = async (jobId: string) => {
+  const handleUpdateJob = async (id:string, status:string) => {
     console.log(jobId, "job id here ");
-    dispatch(deleteJob(jobId));
+    dispatch(updateJobStatus({ id, status }));
     dispatch(fireGetJobRequest(!fireGetJob))
-    delModal({} as React.MouseEvent<HTMLButtonElement>); // Pass empty event object
+    StatusModal({} as React.MouseEvent<HTMLButtonElement>);
 }
 
 
@@ -36,12 +36,12 @@ export function DeleteJob({ delModal, openDelete, jobId }: deleteProps) {
       <Dialog
         dismiss={{ outsidePress: false }}
         size="md"
-        open={openDelete}
-        handler={delModal}
+        open={openStatus}
+        handler={StatusModal}
       >
         <DialogHeader className="font-bold text-md flex justify-between text-[30px] items-start p-2">
-          <div className="text-center" >Delete Job</div>
-          <IconButton variant="text" onClick={delModal}>
+          <div className="text-center" >Update Job Status</div>
+          <IconButton variant="text" onClick={StatusModal}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -60,25 +60,25 @@ export function DeleteJob({ delModal, openDelete, jobId }: deleteProps) {
         </DialogHeader>
         <DialogBody className="p-0 min-h-[80px] pt-[10px] text-center">
           <div>
-            Are You Sure You Want To Delete This Job?
+            Update the job status , which job be avail for applicants to apply.Make it active or inactive.
           </div>
         </DialogBody>
         <DialogFooter className="flex justify-center">
           <Button
             variant="text"
             color="green"
-            onClick={delModal}
             className="mr-1"
+            onClick={() => {handleUpdateJob(jobId , 'active')}}
           >
-            <span>Cancel</span>
+            <span>Active</span>
           </Button>
           <Button
             variant="text"
             color="red"
-            onClick={() => {handleDeleteJob(jobId)}}
+            onClick={() => {handleUpdateJob(jobId , 'inactive')}}
             className="mr-1"
           >
-            <span>Yes, Delete</span>
+            <span>Inactive</span>
           </Button>
         </DialogFooter>
       </Dialog>

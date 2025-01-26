@@ -20,16 +20,9 @@ interface TabItem {
 }
 export function JobsPage() {
 
-  const activeTab = useSelector((state: { job: { activeTab: TabItem[] } }) => state.job.activeTab);
   const dispatch = useDispatch();
 
-  const handleTabChange = (value: string) => {
-    const newTabs = activeTab.map(tab => ({
-      ...tab,
-      active: tab.label === value
-    }));
-    dispatch(setActiveTab(newTabs));
-  };
+
 
   const data = [
     {
@@ -63,13 +56,9 @@ export function JobsPage() {
       >
         {/* <TabsHeader className="h-10 !w-12/12 md:w-[50rem] border border-white/25 bg-opacity-90"> */}
         <TabsHeader className="h-10 !w-12/12 md:w-[55rem] border border-white/25 bg-opacity-90">
-          {/* {activeTab.map(({ label, value }) => (
-            <Tab onClick={ () => handleTabChange(label) } key={value} value={value}>
-              {label}
-            </Tab>
-          ))} */}
-          {activeTab.map((tab: TabItem) => (
-            <Tab onClick={() => handleTabChange(tab.label)} key={tab.value} value={tab.value}>
+          
+          {data.map((tab: TabItem) => (
+            <Tab key={tab.value} value={tab.value}>
               {tab.label}
             </Tab>
           ))}

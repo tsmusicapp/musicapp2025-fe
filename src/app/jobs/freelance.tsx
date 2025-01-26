@@ -22,6 +22,7 @@ import { AppDispatch } from "@/redux/store";
 
 interface Job {
   id: string;
+  status: string;
   title: string;
   workcontent: string; // Changed from string[] to string
   musicculture: string;
@@ -93,7 +94,7 @@ export function CheckboxHorizontalListGroup({ selectedCategories, onCategoryChan
 
 export function Freelance() {
   const dispatch = useDispatch<AppDispatch>();
-  const activeTab = useSelector((state: any) => state.job.activeTab);
+  const fireGetJob = useSelector((state: any) => state.job.fireGetJob);
   const { data, loading, error } = useSelector((state: any) => state.job);
 
   console.log(loading , "Loading")
@@ -101,15 +102,12 @@ export function Freelance() {
   const [searchText, setSearchText] = useState<string>("");
   const [selectedRegion, setSelectedRegion] = useState<string>("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
-  
-  const isFreelanceTab = activeTab.some((tab: any) => tab.value === "freelance");
-  
- 
+
+  const activeJobs = data?.jobs.filter((job:Job)=> job.status === "active");
+
     useEffect(() => {
-      if(isFreelanceTab) {
         dispatch(getJobs());
-      }
-    }, [dispatch , activeTab]);
+    }, [dispatch , fireGetJob]);
 
   // Handle category checkbox changes
   const handleCategoryChange = (category: string, isChecked: boolean): void => {
@@ -160,7 +158,7 @@ export function Freelance() {
         <div className="py-4 flex justify-items-start items-start sm:justify-start">
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-1">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-              {data ? data.jobs.map((props : Job, index:number) => (
+              {data ? activeJobs.map((props : Job, index:number) => (
                 <JobsCard key={props.id || index} {...props} />
               )) : <div>
                     <Spinner className="h-12 w-12"/>

@@ -1,19 +1,48 @@
 import CardJobs from "@/components/card-jobs";
 import { ACTIVE_JOBS, INACTIVE_JOBS } from "@/dummy/example";
-import { Typography, Button } from "@material-tailwind/react";
+import { Typography, Button, Spinner } from "@material-tailwind/react";
 import { useDispatch, useSelector } from "react-redux";
-import { getJobs } from "@/redux/features/job/jobSlice";
+import { getMyJobs } from "@/redux/features/job/jobSlice";
 import { useEffect } from "react";
 import { AppDispatch } from "@/redux/store";
-
+import JobsCard from "@/components/jobs/job-card";
+interface Job {
+  applicantName: string;
+  applicantAvatar: string | null;
+  applicantBackgroundImage: string | null;
+  applicantSelectedSongs: string[] | null;
+  status : string;
+  budget: string[];
+  category: string[];
+  createdAt: string;
+  createdBy: string;
+  cultureArea: string[];
+  description: string;
+  isHaveLyric: boolean;
+  id: string;
+  lyricLanguage: string;
+  musicUse: string[];
+  preferredLocation: string;
+  projectTitle: string;
+  timeFrame: string;
+  savedBy: string[];
+}
 export function MyProjects() {
   const dispatch = useDispatch<AppDispatch>();
-  const { data, loading, error } = useSelector((state:any) => state.job);
+  const { data,myJobs, loading, error } = useSelector((state:any) => state.job);
+  console.log(myJobs , "data for my projects")
+  const fireGetJob = useSelector((state:any) => state.job.fireGetJob);
+  const activeJobs = myJobs?.filter((job:Job)=> job.status === "active");
+  const inactiveJobs = myJobs?.filter((job:Job)=> job.status === "inactive");
+
+
+  console.log(activeJobs , "actibbe")
 
   useEffect(() => {
-    dispatch(getJobs());
-  }, [dispatch]);
+    dispatch(getMyJobs());
+  }, [dispatch , fireGetJob ]);
 
+  console.log(data, "my jobs");
   if (loading) return <div>Loading...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -33,18 +62,24 @@ export function MyProjects() {
               Active
             </Typography>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-              {ACTIVE_JOBS.map((props, key) => (
-                <CardJobs key={key} {...props} />
-              ))}
+              {myJobs ? activeJobs.map((props : Job, index:number) => (
+                <JobsCard key={props.id || index} {...props} />
+              )) : <div>
+                    <Spinner className="h-12 w-12"/>
+                  </div>
+              }
             </div>
             <div className="pt-[4rem]"></div>
             <Typography variant="h5" className="font-bold" color="black">
               Inactive
             </Typography>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-              {INACTIVE_JOBS.map((props, key) => (
-                <CardJobs key={key} {...props} />
-              ))}
+            {myJobs ? inactiveJobs.map((props : Job, index:number) => (
+                <JobsCard key={props.id || index} {...props} />
+              )) : <div>
+                    <Spinner className="h-12 w-12"/>
+                  </div>
+              }
             </div>
           </div>
         </div>

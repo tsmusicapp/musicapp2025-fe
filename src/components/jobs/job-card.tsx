@@ -24,7 +24,8 @@ import { create } from 'domain';
 import { useDispatch, useSelector } from 'react-redux';
 import { DeleteJob } from './deleteJob';
 import { AppDispatch } from '@/redux/store';
-import { saveJob } from '@/redux/features/job/jobSlice';
+import { fireGetJobRequest, getJobs, saveJob } from '@/redux/features/job/jobSlice';
+import { JobStatus } from './jobStatus';
 
 interface CategoryCardProps {
     applicantName: string;
@@ -70,31 +71,30 @@ const jobCard = ({
 }: CategoryCardProps) => {
     const dispatch = useDispatch<AppDispatch>();
     const { data, loading, error } = useSelector((state: any) => state.job);
-    const [openDelete, setOpenDelete] = React.useState(false);
-    const userString = localStorage.getItem('auth');
-    const user: any = userString ? JSON.parse(userString) : null;
+    const fireGetJob = useSelector((state: any) => state.job.fireGetJob);
 
-    console.log(savedBy , "user data")
-    
-    const delModal = () => {
-        setOpenDelete(!openDelete);
-    }
+    const [openDelete, setOpenDelete] = React.useState(false);
+    const [savedJob, setSaveJob] = useState(false);
     const [openPopup, setOpenPopup] = useState(false);
     const [openSmallbox, setopenSmallbox] = useState(false);
+    const [selectedJob, setSelectedJob] = useState<CategoryCardProps | null>(null);
+    const [openStatus , setOpenStatus] = useState<boolean>(false);
+    
+    const userString = localStorage.getItem('auth');
+    const user: any = userString ? JSON.parse(userString) : null;
+    
+    const delModal = () => setOpenDelete(!openDelete);
+    
     const handleOpen = () => setOpenPopup(!openPopup);
 
-    const [selectedJob, setSelectedJob] = useState<CategoryCardProps | null>(null);
     const handleOpenSmallbox = () => setopenSmallbox(!openSmallbox);
-    // state to hit save job api , remove when api is ready
-    const [savedJob, setSaveJob] = useState(false);
 
-    // const alreadySaved = savedBy.filter((item: any) => item == user?.user?.id)
-    // if (savedBy?.includes(user.user.id)) {
-    //     setSaveJob(true);
-    // }
+    const StatusModal = () => setOpenStatus(!openStatus);
 
     const handleSaveJob = (id: string) => {
         dispatch(saveJob(id))
+        dispatch(getJobs())
+        dispatch(fireGetJobRequest(!fireGetJob))
         setSaveJob(!savedJob);
     }
 
@@ -102,6 +102,12 @@ const jobCard = ({
         const selectedJobs = data.jobs.filter((item: any) => item.id == id)
         setSelectedJob(selectedJobs[0]);
         handleOpen();
+    }
+
+    const StatusModalOpen = (id: string) => {
+        const selectedJobs = data.jobs.filter((item: any) => item.id == id)
+        setSelectedJob(selectedJobs[0]);
+        StatusModal();
     }
     const delModalOpen = (id: string) => {
         const selectedJobs = data.jobs.filter((item: any) => item.id == id)
@@ -176,8 +182,8 @@ const jobCard = ({
                                             <a className="block px-2 py-2 hover:bg-gray-100 text-xs font-semibold tracking-wider">
                                                 Copy Link
                                             </a>
-                                            <a className="block px-2 py-2 hover:bg-gray-100 text-xs font-semibold tracking-wider">
-                                                Edit
+                                            <a onClick={()=>StatusModalOpen(id)} className="block px-2 py-2 hover:bg-gray-100 text-xs font-semibold tracking-wider">
+                                                Status
                                             </a>
                                             <a onClick={() => delModalOpen(id)} className="block px-2 py-2 hover:bg-gray-100 text-red-500 text-xs font-semibold tracking-wider">
                                                 Delete
@@ -265,6 +271,10 @@ const jobCard = ({
             }
             {
                 (selectedJob != null && openDelete) && <DeleteJob jobId={selectedJob?.id} delModal={delModal} openDelete={openDelete} />
+            }
+
+            {
+                (selectedJob != null && openStatus) && <JobStatus jobId={selectedJob?.id} StatusModal={StatusModal} openStatus={openStatus} />
             }
         </>
     )
