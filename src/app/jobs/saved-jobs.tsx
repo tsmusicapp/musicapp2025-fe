@@ -1,10 +1,11 @@
 import CardJobs from "@/components/card-jobs";
 import { SAVED_JOBS, APPLIED_JOBS } from "@/services/jobService";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Spinner, Typography } from "@material-tailwind/react";
-import { RootState } from "@/redux/store";
+import { AppDispatch, RootState } from "@/redux/store";
 import JobCard from "@/components/jobs/job-card";
 import { useEffect, useState } from "react";
+import { getAppliedJobs } from "@/redux/features/job/jobSlice";
 interface Job {
   id: string;
   title: string;
@@ -33,19 +34,29 @@ interface Job {
 
 export function SavedJobs() {
 
+  const dispatch = useDispatch<AppDispatch>();
+  const Applied_Jobs = useSelector((state: RootState) => state.job.appliedJobs);
+  const fireGetJob = useSelector((state: any) => state.job.fireGetJob);
+
   const [auth, setAuth] = useState<any>(null);
 
   useEffect(() => {
     const userString = localStorage.getItem('auth');
     setAuth(userString ? JSON.parse(userString) : null);
-  }, []);
+    dispatch(getAppliedJobs())
+    
+  }, [fireGetJob]);
 
   const allJobs = useSelector((state: RootState) => state.job.data);
 
-  
   const savedJobs = allJobs?.jobs.filter((job: any) => job.savedBy.includes(auth?.user?.id) );
 
-  console.log(savedJobs, "saved jobs");
+  const appliedJobIds = Applied_Jobs ? Applied_Jobs.map((job: any) => job.id) : [];
+
+  const onlySavedJobs =savedJobs ? savedJobs.filter((job: any) => !appliedJobIds.includes(job.id)) : []
+
+
+  // console.log(savedJobs, "saved jobs");
 
   return (
     <>
@@ -56,7 +67,7 @@ export function SavedJobs() {
               Saved Jobs
             </Typography>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-              {(!savedJobs == undefined) || allJobs ? savedJobs.map((props : Job, key : number) => (
+              {(!savedJobs == undefined) || allJobs ? onlySavedJobs.map((props : Job, key : number) => (
                 <JobCard key={key} {...props} />
               )) : ( auth?.user.role !=='recruiter' ? <Spinner className="w-12 h-12" /> : <div>This feature is for musician only.</div> )
               }
@@ -66,9 +77,10 @@ export function SavedJobs() {
               My Application
             </Typography>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-              {APPLIED_JOBS.map((props, key) => (
-                <CardJobs key={key} {...props} />
-              ))}
+              {Applied_Jobs ? Applied_Jobs.map((props : Job, key:number) => (
+                <JobCard key={key} {...props} />
+              )) : <Spinner className="w-12 h-12" />
+            }
             </div>
           </div>
         </div>

@@ -118,6 +118,13 @@ export class MusicallService {
     }
     return null;
   }
+  public static getCurrentUser(): string | null {
+    if (typeof window !== "undefined") {
+      const auth = JSON.parse(localStorage.getItem("auth") || "{}");
+      return auth.user || null;
+    }
+    return null;
+  }
 }
 
 // Export constants if needed elsewhere

@@ -125,7 +125,7 @@ function LeftSideFirst({ register, errors }: LeftSideFirstProps) {
                   type="file"
                   className="hidden"
                   accept="audio/*"
-                  {...register("music", {
+                  {...register("musicAudio", {
                     required: "Music file is required",
                     onChange: (e) => {
                       const file = e.target.files?.[0];

@@ -9,6 +9,7 @@ import ManagementReducer from "@/redux/features/management/managementSlice";
 import AuthReducer, { AuthState } from "@/redux/features/auth/authSlice";
 import SelectMultipleReducer from "@/redux/features/selectMultiple/selectMultipleSlice";
 import { loadState, saveState } from "./localStorage";
+import MusicReducer from '@/redux/features/music/musicSlice'
 
 // const defaultAuthState: AuthState = { credentials: null }; // Define the default state
 // const preloadedState = {
@@ -23,6 +24,7 @@ export const store = configureStore({
   reducer: {
     counter: CounterReducer,
     job: JobReducer,
+    Music: MusicReducer,
     chat: ChatReducer,
     offer: OfferReducer,
     menu: MenuReducer,

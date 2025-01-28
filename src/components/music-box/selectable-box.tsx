@@ -2,9 +2,14 @@ import React from "react";
 import { Card, CardBody, Avatar, Typography } from "@material-tailwind/react";
 
 import { PlayIcon, CheckIcon } from "@heroicons/react/24/solid";
+import { BASE_URL } from "@/conf/api";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { updateMusicIds } from "@/redux/features/job/jobSlice";
+import { selectedMusic } from "@/redux/features/music/musicSlice";
 interface CategoryCardProps {
-  id: number;
-  imgSong: string;
+  id: string;
+  musicImage: string;
   singerName: string;
   songName: string;
   imgComposer: string;
@@ -17,18 +22,25 @@ interface ClickProps {
 
 function SelectableBox({
   id,
-  imgSong,
+  musicImage,
   singerName,
   songName,
   imgComposer,
   composerName,
 }: CategoryCardProps) {
   const [selected, setSelected] = React.useState(false);
-  const handleClick = (e: React.MouseEvent, id: number) => {
+  const dispatch = useDispatch<AppDispatch>();
+  const values = useSelector((state: any) => state.job);
+  
+  // console.log(values.applyJob, "jobs values");
+  const handleClick = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
+    dispatch(updateMusicIds(id));
+    dispatch(selectedMusic(id));
     e.stopPropagation();
     setSelected(!selected);
   };
+  const modifiedPath = musicImage.replace('public/', '');
   return (
     <>
       <button className="" onClick={(e) => handleClick(e, id)}>
@@ -45,7 +57,7 @@ function SelectableBox({
               <div className={`col-span-2 flex flex-col gap-2`}>
                 <div className="flex items-center gap-2">
                   <div className="flex flex-row gap-2">
-                    <Avatar src={imgSong} alt="avatar" variant="rounded" />
+                    <Avatar src={BASE_URL+"/"+modifiedPath} alt="avatar" variant="rounded" />
                     <div>
                       <Typography
                         variant="small"
@@ -94,7 +106,7 @@ function SelectableBox({
                 <div className="flex flex-col">
                   <PlayIcon className="h-10 w-10" />
                 </div>
-                {selected ? (
+                { values?.applyJob.musicIds.includes(id) ? ( 
                   <>
                     <div className=" absolute bottom-0 right-0 mx-[0.7rem]">
                       <CheckIcon className="w-8 h-8 font-bold" />

@@ -201,7 +201,7 @@ export default function ShareWorkSalesMarket() {
       };
       console.log(fileMusic ,"music here2")
       const formData = new FormData();
-      formData.append("audio", fileMusic);
+      formData.append("music", fileMusic);
 
       console.log(formData, 'music here in data ');
 
@@ -221,7 +221,9 @@ export default function ShareWorkSalesMarket() {
         if (response.ok) {
           const result = await response.json();
           // result.data is the Mongo ObjectID, use it as your music identifier
-          setFormData((prev) => ({ ...prev, music: result.data }));
+          console.log(result, "music here returned",result?.data);
+          setFormData((prev) => ({ ...prev, music:result?.data?.music }));
+          console.log(formData, "form data after uploading music");
           toast.current?.show({
             severity: "success",
             summary: "Success",

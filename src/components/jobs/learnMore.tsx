@@ -12,7 +12,10 @@ import {
 import { MapPinIcon, StarIcon as StaredIcon } from "@heroicons/react/24/solid";
 import { StarIcon, EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
 import { Badge, Button } from "@material-tailwind/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/redux/store";
+import { updateJobId } from "@/redux/features/job/jobSlice";
 interface JobData {
   applicantName: string;
   applicantAvatar: string | null;
@@ -55,7 +58,13 @@ interface popoupProps {
 }
 
 const learnMore = ({ openPopup, handleOpen, handleOpenSmallbox, selectedJob }: popoupProps) => {
+  
+  const dispatch = useDispatch<AppDispatch>();
 
+  useEffect(() => {
+    dispatch(updateJobId(selectedJob.id));
+  }, [selectedJob]);
+  
   return (
     <Dialog
       dismiss={{ outsidePress: false }}

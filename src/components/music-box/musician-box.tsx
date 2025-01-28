@@ -53,7 +53,7 @@ function MusicianBox({
     (state: RootState) => state.offer.musicPlayerDialog
   );
 
-  const tagsData = tags.split(",");
+  // const tagsData = tags ? tags.split(","): '';
 
   const [removeClass, setRemoveClass] = useState(false);
 
@@ -168,7 +168,7 @@ function MusicianBox({
           <div className="flex justify-between p-2 items-center">
             <p className="text-sm">{musicStyle}</p>
             <div className="flex gap-1.5">
-              {tags ? tagsData.map((t, index) => (
+              {/* {tags ? tagsData.map((t, index) => (
                 <p
                   key={index}
                   className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded-sm"
@@ -177,7 +177,7 @@ function MusicianBox({
                 </p>
               )) :
               <Spinner className="h-12 w-12" />
-            }
+            } */}
             </div>
           </div>
           {/* <div className="flex flex-col border-t-2 mx-3 h-[3rem] max-h-[3rem] justify-center gap-1">

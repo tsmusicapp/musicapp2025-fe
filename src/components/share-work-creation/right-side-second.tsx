@@ -110,7 +110,7 @@ function RightSideSecond({
   const [selectedItems, setSelectedItems] = useState<string[]>([]);
 
   // Watch for external changes to musicUse
-  const musicUseValue = watch("musicUse");
+  const musicUseValue = watch("musicUsage");
 
   // Sync the internal state with form state
   useEffect(() => {
@@ -127,7 +127,7 @@ function RightSideSecond({
       : [...selectedItems, option];
 
     setSelectedItems(newSelectedItems);
-    setValue("musicUse", newSelectedItems, {
+    setValue("musicUsage", newSelectedItems, {
       shouldValidate: true,
       shouldDirty: true,
       shouldTouch: true,
@@ -136,7 +136,7 @@ function RightSideSecond({
 
   useEffect(() => {
     // Register the field
-    register("musicUse", {
+    register("musicUsage", {
       required: "Please select at least one music use",
       validate: (value) =>
         (value && value.length > 0) || "Please select at least one music use",
@@ -199,8 +199,8 @@ function RightSideSecond({
           Language
         </label>
         <select
-          id="languages"
-          {...register("languages", {
+          id="songLanguage"
+          {...register("songLanguage", {
             required: "Please select a music language",
           })}
           className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"

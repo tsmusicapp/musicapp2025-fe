@@ -35,9 +35,10 @@ export default function Collections() {
   return (
     <>
       <div className="grid grid-cols-4 gap-4">
-        {categories.map((props, key) => (
+        {!categories ? categories.map((props, key) => (
           <BoxWithInfo key={key} {...props} withSale={false} />
-        ))}
+        )) : null
+      }
       </div>
     </>
   );

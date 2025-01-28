@@ -66,13 +66,13 @@ function UserInfo() {
     fetchData();
   }, [auth, toast]);
 
-  useEffect(() => {
-    if (formData.profilePicture && formData.id) {
-      setImageUrl(
-        `http://localhost:5000/uploads/${formData.id}/profilePicture.png`
-      );
-    }
-  }, [formData]);
+  // useEffect(() => {
+  //   if (formData.profilePicture && formData.id) {
+  //     setImageUrl(
+  //       `http://localhost:5000/uploads/${formData.id}/profilePicture.png`
+  //     );
+  //   }
+  // }, [formData]);
 
   console.log(formData)
 
@@ -84,7 +84,7 @@ function UserInfo() {
             <Avatar
               size="xxl"
               variant="circular"
-              src={formData.profilePicture}
+              src={imageUrl}
               alt="profile picture"
               className="border-2 border-white hover:z-10 focus:z-10"
             />

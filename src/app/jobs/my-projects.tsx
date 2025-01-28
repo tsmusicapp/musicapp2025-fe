@@ -2,7 +2,7 @@ import CardJobs from "@/components/card-jobs";
 import { ACTIVE_JOBS, INACTIVE_JOBS } from "@/dummy/example";
 import { Typography, Button, Spinner } from "@material-tailwind/react";
 import { useDispatch, useSelector } from "react-redux";
-import { getMyJobs } from "@/redux/features/job/jobSlice";
+import { getJobs, getMyJobs } from "@/redux/features/job/jobSlice";
 import { useEffect } from "react";
 import { AppDispatch } from "@/redux/store";
 import JobsCard from "@/components/jobs/job-card";
@@ -25,26 +25,30 @@ interface Job {
   preferredLocation: string;
   projectTitle: string;
   timeFrame: string;
-  savedBy: string[];
+  savedBy: string[];// const activeJobs = data != null ? data.filter((job:Job)=> job.status === "active"):[];
+  // const inactiveJobs = data != null ? data.filter((job:Job)=> job.status === "inactive"):[];
+
 }
 export function MyProjects() {
   const dispatch = useDispatch<AppDispatch>();
-  const { data,myJobs, loading, error } = useSelector((state:any) => state.job);
-  console.log(myJobs , "data for my projects")
-  const fireGetJob = useSelector((state:any) => state.job.fireGetJob);
-  const activeJobs = myJobs?.filter((job:Job)=> job.status === "active");
-  const inactiveJobs = myJobs?.filter((job:Job)=> job.status === "inactive");
+  const {data} = useSelector((state:any) => state.job);
+  console.log(data , "data for my projects")
+  const fireGetJob // const activeJobs = data != null ? data.filter((job:Job)=> job.status === "active"):[];
+  // const inactiveJobs = data != null ? data.filter((job:Job)=> job.status === "inactive"):[];
+= useSelector((state:any) => state.job.fireGetJob);
+  // const activeJobs = data != null ? data.filter((job:Job)=> job.status === "active"):[];
+  // const inactiveJobs = data != null ? data.filter((job:Job)=> job.status === "inactive"):[];
 
 
-  console.log(activeJobs , "actibbe")
+  // console.log(activeJobs , "active")
 
   useEffect(() => {
-    dispatch(getMyJobs());
+    dispatch(getJobs());
   }, [dispatch , fireGetJob ]);
 
-  console.log(data, "my jobs");
-  if (loading) return <div>Loading...</div>;
-  if (error) return <div>Error: {error}</div>;
+  // console.log(data, "my jobs");
+  // if (loading) return <div>Loading...</div>;
+  // if (error) return <div>Error: {error}</div>;
 
 
   return (
@@ -62,8 +66,8 @@ export function MyProjects() {
               Active
             </Typography>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-              {myJobs ? activeJobs.map((props : Job, index:number) => (
-                <JobsCard key={props.id || index} {...props} />
+              {data ? data.jobs.map((props : Job, index:number) => (
+                props.status === "active" && <JobsCard key={props.id || index} {...props} />
               )) : <div>
                     <Spinner className="h-12 w-12"/>
                   </div>
@@ -74,8 +78,8 @@ export function MyProjects() {
               Inactive
             </Typography>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-            {myJobs ? inactiveJobs.map((props : Job, index:number) => (
-                <JobsCard key={props.id || index} {...props} />
+            {data ? data.jobs.map((props : Job, index:number) => (
+                props.status != "active" && <JobsCard key={props.id || index} {...props} />
               )) : <div>
                     <Spinner className="h-12 w-12"/>
                   </div>

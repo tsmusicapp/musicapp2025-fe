@@ -19,10 +19,12 @@ export interface ShareWorkFormData {
   myRole: string[];
   description: string;
   musicImage: any;
+  musicAudio: any;
+  language:string;
   music: any;
   musicLyric?: any;
   musicBackground?: FileList;
-  musicUse: string[];
+  musicUsage: string[];
   musicStyle: string;
   musicMood?: string;
   musicInstrument?: string;
@@ -87,11 +89,12 @@ export function ShareWorkCreationPage() {
 
       // Append form data fields
       formData.append("musicName", data.musicName);
+      formData.append("songName", data.musicName);
       formData.append("myRole", JSON.stringify(data.myRole)); // Arrays should be serialized
       formData.append("singerName", data.singerName || "");
       formData.append("publisher", data.publisher || "");
       formData.append("songLanguage", data.songLanguage || "");
-      formData.append("musicUse", JSON.stringify(data.musicUse)); // Arrays should be serialized
+      formData.append("musicUsage", JSON.stringify(data.musicUsage)); // Arrays should be serialized
       formData.append("musicStyle", data.musicStyle);
       formData.append("musicMood", data.musicMood || "");
       formData.append("musicInstrument", data.musicInstrument || "");
@@ -111,6 +114,9 @@ export function ShareWorkCreationPage() {
       }
       if (data.musicBackground && data.musicBackground[0]) {
         formData.append("musicBackground", data.musicBackground[0]);
+      }
+      if (data.musicAudio && data.musicAudio[0]) {
+        formData.append("musicAudio", data.musicAudio[0]);
       }
 
       // Call the createMusic service

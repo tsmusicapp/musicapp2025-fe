@@ -15,7 +15,7 @@ import JobsCard from "@/components/jobs/job-card";
 import { JOBS_PROPS } from "@/conf/jobsprops";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getJobs } from "@/redux/features/job/jobSlice";
+import { getAppliedJobs, getJobs } from "@/redux/features/job/jobSlice";
 import { AppDispatch } from "@/redux/store";
 
 
@@ -97,7 +97,7 @@ export function Freelance() {
   const fireGetJob = useSelector((state: any) => state.job.fireGetJob);
   const { data, loading, error } = useSelector((state: any) => state.job);
 
-  console.log(loading , "Loading")
+  // console.log(loading , "Loading")
   
   const [searchText, setSearchText] = useState<string>("");
   const [selectedRegion, setSelectedRegion] = useState<string>("");
@@ -107,6 +107,7 @@ export function Freelance() {
 
     useEffect(() => {
         dispatch(getJobs());
+        dispatch(getAppliedJobs())
     }, [dispatch , fireGetJob]);
 
   // Handle category checkbox changes
@@ -120,7 +121,8 @@ export function Freelance() {
     });
   };
   
-  const regions = Array.from(new Set(JOBS_PROPS.map(job => job.musicculture)));
+  // const regions = Array.from(new Set(JOBS_PROPS.map(job => job.musicculture)));
+  const regions:any = [];
 
 
   return (

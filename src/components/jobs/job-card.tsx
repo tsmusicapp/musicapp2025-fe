@@ -1,6 +1,6 @@
 
 "use client";
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useRouter } from "next/navigation";
 import { Toast } from "primereact/toast";
 import Image from "next/image";
@@ -23,8 +23,8 @@ import SmallBox from './smallBox';
 import { create } from 'domain';
 import { useDispatch, useSelector } from 'react-redux';
 import { DeleteJob } from './deleteJob';
-import { AppDispatch } from '@/redux/store';
-import { fireGetJobRequest, getJobs, saveJob } from '@/redux/features/job/jobSlice';
+import { AppDispatch, RootState } from '@/redux/store';
+import { fireGetJobRequest, getAppliedJobs, getJobs, saveJob } from '@/redux/features/job/jobSlice';
 import { JobStatus } from './jobStatus';
 
 interface CategoryCardProps {
@@ -46,6 +46,8 @@ interface CategoryCardProps {
     projectTitle: string;
     timeFrame: string;
     savedBy: string[];
+    createdOn: Date;
+    isApplied: boolean | null;
 }
 
 
@@ -67,29 +69,45 @@ const jobCard = ({
     preferredLocation,
     projectTitle,
     timeFrame,
-    savedBy
+    savedBy,
+    createdOn,
+    isApplied
 }: CategoryCardProps) => {
     const dispatch = useDispatch<AppDispatch>();
     const { data, loading, error } = useSelector((state: any) => state.job);
-    const fireGetJob = useSelector((state: any) => state.job.fireGetJob);
+    const fireGetJob = useSelector((state: RootState) => state.job.fireGetJob);
+    const appliedJobs = useSelector((state: RootState) => state.job.appliedJobs);
+
+    // console.log("fireGetJob", appliedJobs);
 
     const [openDelete, setOpenDelete] = React.useState(false);
     const [savedJob, setSaveJob] = useState(false);
+    const [applied, setApplied] = useState(false);
     const [openPopup, setOpenPopup] = useState(false);
     const [openSmallbox, setopenSmallbox] = useState(false);
     const [selectedJob, setSelectedJob] = useState<CategoryCardProps | null>(null);
-    const [openStatus , setOpenStatus] = useState<boolean>(false);
-    
+    const [openStatus, setOpenStatus] = useState<boolean>(false);
+
     const userString = localStorage.getItem('auth');
     const user: any = userString ? JSON.parse(userString) : null;
-    
+
     const delModal = () => setOpenDelete(!openDelete);
-    
+
     const handleOpen = () => setOpenPopup(!openPopup);
 
     const handleOpenSmallbox = () => setopenSmallbox(!openSmallbox);
 
     const StatusModal = () => setOpenStatus(!openStatus);
+
+    const formatDate = (dateString: Date) => {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+    }
+
 
     const handleSaveJob = (id: string) => {
         dispatch(saveJob(id))
@@ -114,14 +132,19 @@ const jobCard = ({
         setSelectedJob(selectedJobs[0]);
         delModal();
     }
-    console.log(selectedJob, "data inside components");
 
+    const appliedJobIds = appliedJobs ? appliedJobs.map((job: any) => job.id) : [];
+
+
+
+
+    // console.log(appliedJobIds, "job ids");
 
     const { getUserRole } = useAuth();
 
     const userRole = getUserRole();
 
-    console.log(userRole, "current role");
+    // console.log(userRole, "current role");
 
 
     return (
@@ -166,7 +189,7 @@ const jobCard = ({
                                 </div>
                             </div>
                             {
-                                userRole === 'user' ?
+                                userRole === 'user'?
 
                                     <StarIcon
                                         width={26}
@@ -182,7 +205,7 @@ const jobCard = ({
                                             <a className="block px-2 py-2 hover:bg-gray-100 text-xs font-semibold tracking-wider">
                                                 Copy Link
                                             </a>
-                                            <a onClick={()=>StatusModalOpen(id)} className="block px-2 py-2 hover:bg-gray-100 text-xs font-semibold tracking-wider">
+                                            <a onClick={() => StatusModalOpen(id)} className="block px-2 py-2 hover:bg-gray-100 text-xs font-semibold tracking-wider">
                                                 Status
                                             </a>
                                             <a onClick={() => delModalOpen(id)} className="block px-2 py-2 hover:bg-gray-100 text-red-500 text-xs font-semibold tracking-wider">
@@ -220,18 +243,18 @@ const jobCard = ({
                             color="black"
                             className="text-[0.6rem] mt-[0.6rem]"
                         >
-                            Created on: {createdAt}
+
+                            {formatDate(createdOn)}
                         </Typography>
                         {
-                            userRole === 'user' ?
+                            userRole === 'user'  && ( appliedJobs ? !appliedJobIds.includes(id) : true)  ?
                                 <Button
-                                    size="sm"
-                                    variant="text"
-                                    className="flex items-ce nter gap-2  p-2 text-[0.6rem] mt-[0.2rem]"
+                                    size='md'
+                                    className=" text-black mt-[10px] min-w-[100px] text-center bg-blue-400 normal-case"
                                     onClick={() => learnMore(id)}
                                 >
-                                    Learn More
-                                    <svg
+                                    Apply
+                                    {/* <svg
                                         xmlns="http://www.w3.org/2000/svg"
                                         fill="none"
                                         viewBox="0 0 24 24"
@@ -244,14 +267,17 @@ const jobCard = ({
                                             strokeLinejoin="round"
                                             d="M17.25 8.25L21 12m0 0l-3.75 3.75M21 12H3"
                                         />
-                                    </svg>
+                                    </svg> */}
                                 </Button> :
-                                userRole === 'user' ?
-                                    <Button
-                                        onClick={handleOpen}
-                                        size='md'
-                                        className=" text-black mt-[10px] min-w-[100px] text-center bg-blue-400 normal-case"
-                                    >Apply</Button> :
+                                userRole === 'user' && ( appliedJobs ? appliedJobIds.includes(id) : true)   ?
+                                    <>
+                                        <Chip
+                                            value="Applied 0 days ago"
+                                            size="sm"
+                                            className="text-[0.5rem] h-[1.4rem] text-black bg-blue-gray-100 normal-case mr-[1rem]"
+                                        />
+                                    </>
+                                    :
                                     <Button
                                         className=" text-black mt-[10px] bg-blue-400 normal-case"
                                     >View Applications {`(15)`}</Button>

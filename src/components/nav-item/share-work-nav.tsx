@@ -38,22 +38,28 @@ const Button = dynamic(
 const menuItems = [
   {
     url: "share-work-creation",
-    description: "Upload Music Creation",
+    description: "Share Your Music Creation",
     size: "0.8",
     iconName: "share-work-creation",
   },
   {
-    url: "share-work-sales-market",
-    description: "Upload Music Assets to the sales market",
+    url: "share-lyrics",
+    description: "Share Your Sing Work",
     size: "0.6",
-    iconName: "share-work-market",
+    iconName: "share-work-creation",
   },
   {
     url: "share-lyrics",
-    description: "Share Your Lyrics (without music)",
+    description: "Share Your Lyric Work",
     size: "0.6",
     iconName: "share-lyric",
   },
+  {
+    url: "share-work-sales-market",
+    description: "Upload Your Music Assets to the sales market",
+    size: "0.6",
+    iconName: "share-work-market",
+  }
 ];
 
 interface NavProps {
@@ -67,9 +73,11 @@ export default function ShareWorkNav({
 }: NavProps) {
   const [openMenu, setOpenMenu] = React.useState(false);
 
+  const handleOpen = () => setOpenMenu(!openMenu);
+
   return (
     <div className="relative">
-      <Menu open={openMenu} handler={setOpenMenu}>
+      <Menu open={openMenu} handler={handleOpen}>
         <MenuHandler>
           {lightOnly ? (
             <Button
@@ -95,7 +103,7 @@ export default function ShareWorkNav({
             </Button>
           )}
         </MenuHandler>
-        <MenuList className="hidden w-[18rem] p-1 gap-3 overflow-visible lg:grid hover:outline-none focus:outline-none">
+        <MenuList className=" hidden !absolute !top-[5%] w-[18rem] p-1 gap-3 overflow-visible lg:grid hover:outline-none focus:outline-none">
           <ul className="flex w-full flex-col gap-1">
             {menuItems.map(({ url, description, size, iconName }) => (
               <Link
