@@ -39,7 +39,7 @@ function LeftSideFirst({ register, errors }: LeftSideFirstProps) {
           crossOrigin={""}
           size="lg"
           {...register("musicName", { required: "Music name is required" })}
-          className="!border-t-blue-gray-200 focus:!border-t-gray-900"
+          className="!border !border-black !rounded-none"
           placeholder="Enter music name"
         />
         {errors.musicName && (
@@ -56,7 +56,7 @@ function LeftSideFirst({ register, errors }: LeftSideFirstProps) {
               Upload Music Image
               <label
                 htmlFor="musicImage"
-                className="flex flex-col items-center justify-center w-[10rem] h-[10rem] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+                className="flex flex-col items-center justify-center w-[10rem] h-[10rem] border-2 border-black border-dashed rounded-lg cursor-pointer  hover:bg-gray-100"
               >
                 {musicImagePreview ? (
                   <img
@@ -113,7 +113,7 @@ function LeftSideFirst({ register, errors }: LeftSideFirstProps) {
               Upload Music
               <label
                 htmlFor="music"
-                className="flex flex-col items-center justify-center w-[10rem] h-[6rem] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100"
+                className="flex flex-col items-center justify-center w-[10rem] h-[6rem] border-2 border-black border-dashed rounded-lg cursor-pointer hover:bg-gray-100"
               >
                 <div className="flex flex-col items-center justify-center pt-5 pb-6">
                   <p className="text-sm text-gray-500">

@@ -44,7 +44,7 @@ function BottomPart({ register, errors }: BottomPartProps) {
         <Typography
           variant="small"
           color="blue-gray"
-          className="-mb-3 font-semibold"
+          className="font-semibold"
         >
           Musical Instrument (Optional)
         </Typography>
@@ -52,7 +52,7 @@ function BottomPart({ register, errors }: BottomPartProps) {
           crossOrigin={""}
           size="lg"
           {...register("musicInstrument")}
-          className="!border-t-blue-gray-200 focus:!border-t-gray-900"
+          className="!border !border-black !rounded-none"
           placeholder="e.g., Piano, Guitar, Violin"
         />
       </div>
@@ -62,7 +62,7 @@ function BottomPart({ register, errors }: BottomPartProps) {
         <Typography
           variant="small"
           color="blue-gray"
-          className="-mb-3 font-semibold"
+          className="font-semibold"
         >
           Tags (Fill in at least 3 key attribute words, separated by commas)
         </Typography>
@@ -70,7 +70,7 @@ function BottomPart({ register, errors }: BottomPartProps) {
           crossOrigin={""}
           size="lg"
           placeholder="e.g., Jazz, Acoustic, Instrumental"
-          className="!border-t-blue-gray-200 focus:!border-t-gray-900"
+          className="!border !border-black !rounded-none"
           {...register("tags", {
             required: "Tags are required",
             validate: validateTags,
@@ -93,7 +93,7 @@ function BottomPart({ register, errors }: BottomPartProps) {
           Description *
         </Typography>
         <Textarea
-          className="w-full min-h-[200px] p-2 border rounded-lg focus:ring-blue-500 focus:border-blue-500"
+          className="!border !border-black !rounded-none"
           placeholder="Describe your music piece..."
           {...register("description", {
             required: "Description is required",
@@ -112,7 +112,7 @@ function BottomPart({ register, errors }: BottomPartProps) {
         <Typography
           variant="small"
           color="blue-gray"
-          className="-mb-3 font-semibold"
+          className="font-semibold"
         >
           Software Tool (Optional)
         </Typography>
@@ -120,7 +120,7 @@ function BottomPart({ register, errors }: BottomPartProps) {
           crossOrigin={""}
           size="lg"
           placeholder="e.g., FL Studio, Ableton Live, Pro Tools"
-          className="!border-t-blue-gray-200 focus:!border-t-gray-900"
+         className="!border !border-black !rounded-none"
           {...register("softwareTool")}
         />
       </div>

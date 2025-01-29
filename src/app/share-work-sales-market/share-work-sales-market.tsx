@@ -131,15 +131,15 @@ export default function ShareWorkSalesMarket() {
       console.error("No file selected");
     }
     // if (selectedFile?.type.split('/')[0] == "image") {
-      //   console.log(selectedFile, "reader inside condition");
-      //   reader.onloadend = () => {
-        //     setMusicPreview(reader.result as string);
-        //   };
-        // }
-        // reader.readAsDataURL(selectedFile);
-        
-        
-      };
+    //   console.log(selectedFile, "reader inside condition");
+    //   reader.onloadend = () => {
+    //     setMusicPreview(reader.result as string);
+    //   };
+    // }
+    // reader.readAsDataURL(selectedFile);
+
+
+  };
 
   useEffect(() => {
     const uploadImage = async () => {
@@ -199,7 +199,7 @@ export default function ShareWorkSalesMarket() {
       if (!fileMusic) {
         return
       };
-      console.log(fileMusic ,"music here2")
+      console.log(fileMusic, "music here2")
       const formData = new FormData();
       formData.append("music", fileMusic);
 
@@ -221,8 +221,8 @@ export default function ShareWorkSalesMarket() {
         if (response.ok) {
           const result = await response.json();
           // result.data is the Mongo ObjectID, use it as your music identifier
-          console.log(result, "music here returned",result?.data);
-          setFormData((prev) => ({ ...prev, music:result?.data?.music }));
+          console.log(result, "music here returned", result?.data);
+          setFormData((prev) => ({ ...prev, music: result?.data?.music }));
           console.log(formData, "form data after uploading music");
           toast.current?.show({
             severity: "success",
@@ -402,21 +402,22 @@ export default function ShareWorkSalesMarket() {
                 })}
                 onChange={handleChange}
                 error={!!errors.musicName}
+                className="!border !border-black !rounded-none"
               />
               {errors.musicName && (
                 <p style={{ color: "red" }}>{errors.musicName.message}</p>
               )}
 
               <div className="flex flex-col gap-4">
-                <div className="flex justify-center items-center gap-2">
-                  <div className="w-[18rem] flex flex-col justify-center items-center gap-2 font-semibold text-sm">
+                <div className="flex  gap-2">
+                  <div className="w-[18rem] flex flex-col justify-center items-start gap-2 font-semibold text-sm">
                     Upload Music Image
                     <label
                       htmlFor="dropzone-file"
-                      className="relative flex flex-col items-center justify-center w-[10rem] h-[10rem] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50"
+                      className="relative flex flex-col items-center justify-center w-[10rem] h-[10rem] border-2 border-black border-dashed rounded-lg cursor-pointer"
                     >
                       {!imagePreview && (
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                        <div className="flex flex-col items-left justify-center pt-5 pb-6">
                           <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
                             <span className="font-semibold">Less than 1M</span>
                           </p>
@@ -439,12 +440,12 @@ export default function ShareWorkSalesMarket() {
                   </div>
                 </div>
 
-                <div className="flex justify-center items-center gap-2">
-                  <div className="w-[18rem] flex flex-col justify-center items-center gap-2 font-semibold text-sm">
+                <div className="flex justify-start items-start gap-2">
+                  <div className="w-[18rem] flex flex-col justify-center items-start  font-semibold text-sm">
                     Upload Music
                     <label
                       htmlFor="dropzone-file-music"
-                      className="relative flex flex-col items-center justify-center w-[10rem] h-[6rem] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50"
+                      className="relative flex flex-col items-center justify-center w-[10rem] h-[6rem] border-2 border-black border-dashed rounded-lg cursor-pointer"
                     >
                       {!musicPreview && (
                         <div className="flex flex-col items-center justify-center pt-5 pb-6">
@@ -464,14 +465,14 @@ export default function ShareWorkSalesMarket() {
                         id="dropzone-file-music"
                         type="file"
                         name="track"
-                        className="block"
+                        className="hidden"
                         onChange={handleFileMusicChange}
                       />
                     </label>
                   </div>
                 </div>
 
-                <div className="flex justify-center items-center gap-2 max-w-[28rem]">
+                <div className="flex justify-start items-start gap-2 max-w-[28rem]">
                   <Button
                     className="bg-blue-200 text-black normal-case w-[16rem] flex items-center justify-center"
                     color="blue"
@@ -508,7 +509,7 @@ export default function ShareWorkSalesMarket() {
                         <input
                           type="number"
                           name="personalUsePrice"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5"
+                          className="border border-black text-gray-900 text-sm p-2.5"
                           onChange={handleChange}
                         />
                       </div>
@@ -537,7 +538,7 @@ export default function ShareWorkSalesMarket() {
                         <input
                           type="number"
                           name="commercialUsePrice"
-                          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5"
+                          className="border border-black text-gray-900 text-sm p-2.5"
                           onChange={handleChange}
                         />
                       </div>
@@ -666,6 +667,7 @@ export default function ShareWorkSalesMarket() {
                 {...register("creationTime", {
                   required: "Creation Time is required",
                 })}
+                className="!border !border-black !rounded-none"
                 onChange={handleChange}
                 error={!!errors.creationTime}
               />
@@ -682,10 +684,11 @@ export default function ShareWorkSalesMarket() {
                 </label>
                 <select
                   id="musicUsage"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5"
+                  className="border border-black text-gray-900 text-sm p-2.5"
                   {...register("musicUsage", {
                     required: "Music usage is required.",
                   })}
+
                   onChange={handleChange}
                 >
                   <option value="">Select Music Use</option>
@@ -716,7 +719,7 @@ export default function ShareWorkSalesMarket() {
                 </label>
                 <select
                   id="musicStyle"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5"
+                  className="border border-black text-gray-900 text-sm p-2.5"
                   {...register("musicStyle", {
                     required: "Music Style is required.",
                   })}
@@ -745,7 +748,7 @@ export default function ShareWorkSalesMarket() {
                 </label>
                 <select
                   id="musicMood"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg p-2.5"
+                  className="border border-black text-gray-900 text-sm p-2.5"
                   {...register("musicMood", {
                     required: "Music Mood is required.",
                   })}
@@ -781,6 +784,7 @@ export default function ShareWorkSalesMarket() {
                 size="lg"
                 {...register("musicInstrument")}
                 onChange={handleChange}
+                className="!border !border-black !rounded-none"
               />
 
               <Typography
@@ -796,6 +800,8 @@ export default function ShareWorkSalesMarket() {
                 placeholder="e.g., Jazz, Acoustic, Instrumental"
                 value={tags}
                 onChange={handleTagChange}
+                className="!border !border-black !rounded-none"
+
               />
               {error && (
                 <label className="text-red-500 -mt-4 text-xs">{error}</label>
@@ -813,6 +819,8 @@ export default function ShareWorkSalesMarket() {
                 {...register("description", {
                   required: "Description is required",
                 })}
+                className="!border !border-black !rounded-none"
+
                 onChange={handleChange}
               />
               {errors.description && (
@@ -831,6 +839,7 @@ export default function ShareWorkSalesMarket() {
                 size="lg"
                 {...register("softwareTool")}
                 onChange={handleChange}
+                className="!border !border-black !rounded-none"
               />
             </div>
           </div>

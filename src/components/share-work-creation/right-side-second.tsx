@@ -1,7 +1,6 @@
 // components/share-work-creation/right-side-second.tsx
 "use client";
 
-import { Button } from "@material-tailwind/react";
 import { Typography, Input } from "@material-tailwind/react";
 import { Check, ChevronDown } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -147,10 +146,10 @@ function RightSideSecond({
     <div className="mb-1 flex flex-col gap-10">
       <div className="flex flex-col gap-1">
         <label className="block text-sm font-semibold text-gray-900">
-          My Role *
+          My Role (Multiple Choise)
         </label>
         <div className="grid grid-cols-2 gap-2">
-          {["Composer", "Arranger", "Producer", "Lyricist"].map((role) => (
+          {["Singer", "Lyricist"].map((role) => (
             <div key={role} className="flex items-center">
               <input
                 type="checkbox"
@@ -177,18 +176,31 @@ function RightSideSecond({
         )}
       </div>
       <div>
+        <Typography variant="small" color="blue-gray" className="font-bold">
+          Album Name (Optional)
+        </Typography>
+        <Input
+          crossOrigin={""}
+          size="lg"
+          {...register("albumname")}
+          className="!border !border-black !rounded-none"
+          placeholder="Enter album name"
+        />
+      </div>
+
+      <div>
         <Typography
           variant="small"
           color="blue-gray"
-          className="-mb-3 font-bold"
+          className="font-bold"
         >
-          Singer Name (Optional)
+          Publisher(Optional)
         </Typography>
         <Input
           crossOrigin={""}
           size="lg"
           {...register("singerName")}
-          className="!border-t-blue-gray-200 focus:!border-t-gray-900"
+          className="!border !border-black !rounded-none"
         />
       </div>
       <div className="flex flex-col gap-1">
@@ -196,14 +208,14 @@ function RightSideSecond({
           htmlFor="musicStyle"
           className="block text-sm font-semibold text-gray-900"
         >
-          Language
+          Song Language(Optional)
         </label>
         <select
           id="songLanguage"
           {...register("songLanguage", {
             required: "Please select a music language",
           })}
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          className=" border border-black text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         >
           <option value="">Select Music Language</option>
           {languages.map((value, label) => (
@@ -221,13 +233,13 @@ function RightSideSecond({
       {/* Music Use Section */}
       <div className="flex flex-col gap-1">
         <label className="block text-sm font-semibold text-gray-900">
-          Music Use
+          Music is used for
         </label>
         <div className="relative">
           <button
             type="button"
             onClick={toggleDropdown}
-            className="flex items-center justify-between w-full p-2.5 text-sm border rounded-lg bg-gray-50 hover:bg-gray-100 focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="border border-black flex items-center justify-between w-full p-2.5 text-sm border hover:bg-gray-100 focus:ring-2 "
             aria-expanded={isOpen}
             aria-haspopup="listbox"
           >
@@ -237,9 +249,8 @@ function RightSideSecond({
                 : "Select music use..."}
             </span>
             <ChevronDown
-              className={`w-4 h-4 transition-transform ${
-                isOpen ? "rotate-180" : ""
-              }`}
+              className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""
+                }`}
             />
           </button>
 
@@ -288,7 +299,7 @@ function RightSideSecond({
           {...register("musicStyle", {
             required: "Please select a music style",
           })}
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          className="text-gray-900 text-sm block w-full p-2.5 border border-black"
         >
           <option value="">Select Music Style</option>
           {musicStyles.map((style) => (
@@ -297,6 +308,7 @@ function RightSideSecond({
             </option>
           ))}
         </select>
+
         {errors.musicStyle && (
           <span className="text-red-500 text-xs mt-1">
             {errors.musicStyle.message as string}
@@ -315,7 +327,7 @@ function RightSideSecond({
         <select
           id="musicMood"
           {...register("musicMood")}
-          className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+          className="border border-black text-gray-900 text-sm block w-full p-2.5"
         >
           <option value="">Select Music Mood</option>
           {musicMoods.map((mood) => (

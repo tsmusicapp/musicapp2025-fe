@@ -2,19 +2,22 @@
 
 import React, { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { Toast } from "primereact/toast";
 import Image from "next/image";
 import { StarIcon } from "@heroicons/react/24/outline";
 import { BASE_URL } from "@/conf/api";
+import { Select } from "antd";
+const { Option } = Select;
+
 import {
   Card,
   Input,
   Checkbox,
   Button,
   Typography,
-  Select,
   Textarea,
+
 } from "@material-tailwind/react";
 
 const musicUse = [
@@ -29,6 +32,20 @@ const musicUse = [
   "Animation Music",
   "Light Music",
 ];
+
+const options = [
+  { label: "Pop Music", value: "Pop Music" },
+  { label: "Folk Music", value: "Folk Music" },
+  { label: "Game Music", value: "Game Music" },
+  { label: "Movie Music", value: "Movie Music" },
+  { label: "Classical Music", value: "Classical Music" },
+  { label: "Children Music", value: "Children Music" },
+  { label: "Dance Music", value: "Dance Music" },
+  { label: "Travel Music", value: "Travel Music" },
+  { label: "Animation Music", value: "Animation Music" },
+  { label: "Light Music", value: "Light Music" },
+];
+
 
 const cultureArea = [
   "North America",
@@ -72,9 +89,11 @@ export function CreativeHire() {
     watch,
     formState: { errors },
     reset,
+    control
   } = useForm<JobFormData>();
 
   const onSubmit = async (data: JobFormData) => {
+    debugger
     try {
       setIsLoading(true);
 
@@ -105,7 +124,7 @@ export function CreativeHire() {
           publisherName: data.publisherName,
           applicantName: data.applicantName,
         }),
-        
+
       });
 
       console.log("Payload to be sent:", {
@@ -240,102 +259,41 @@ export function CreativeHire() {
                 ))}
               </div>
 
-              {/* <Typography
-                variant="small"
-                color="blue-gray"
-                className="-mb-2 font-semibold"
-              >
-                Does the music have lyrics?
-              </Typography>
-              <div className="flex mt-0">
-                <div className="flex items-center me-4">
-                  <input
-                    {...register("isHaveLyric")}
-                    type="radio"
-                    value="true"
-                    id="radio-yes"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 cursor-pointer"
-                  />
-                  <label
-                    htmlFor="radio-yes"
-                    className="ms-2 text-sm font-medium text-gray-900"
-                  >
-                    Yes
-                  </label>
-                </div>
-                <div className="flex items-center me-4">
-                  <input
-                    {...register("isHaveLyric")}
-                    type="radio"
-                    value="false"
-                    id="radio-no"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 cursor-pointer"
-                  />
-                  <label
-                    htmlFor="radio-no"
-                    className="ms-2 text-sm font-medium text-gray-900"
-                  >
-                    No
-                  </label>
-                </div>
+              <div className="flex flex-col gap-2">
+                <Typography
+                  variant="small"
+                  color="blue-gray"
+                  className="-mb-1 font-semibold"
+                >
+                  Single work or Management position
+                </Typography>
+                <Input
+                  {...register("publisherName", {
+                    required: "Publisher name is required",
+                  })}
+                  crossOrigin={""}
+                  size="lg"
+                  // placeholder="Enter publisher name"
+                  className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                  labelProps={{
+                    className: "before:content-none after:content-none",
+                  }}
+                />
+                {errors.publisherName && (
+                  <span className="text-red-500 text-sm">
+                    {errors.publisherName.message}
+                  </span>
+                )}
               </div>
-              <div className="flex flex-col gap-1">
-                <label
-                  htmlFor="default"
-                  className="block text-sm font-semibold text-gray-900 "
-                >
-                  Lyrics Language (Optional)
-                </label>
-                <select
-                  {...register("lyricLanguage", { required: "Lyrics language is required" })}
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[15rem] p-2.5 "
-                >
-                  <option defaultValue={"Select Language"}>
-                    Select Language
-                  </option>
-                  <option value="EN">English</option>
-                  <option value="JP">Japanese</option>
-                  <option value="GR">German</option>
-                  <option value="FR">French</option>
-                  <option value="IT">Italian</option>
-                  <option value="SP">Spanish</option>
-                  <option value="KR">Korean</option>
-                  <option value="CH">Chinese</option>
-                  <option value="AR">Arabic</option>
-                </select>
-              </div> */}
-              {/* <div className="flex flex-col gap-1">
-                <label
-                  htmlFor="default"
-                  className="block text-sm font-semibold text-gray-900 "
-                >
-                  Music Usage
-                </label>
-                <select
-                  id="default"
-                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-[15rem] p-2.5 "
-                >
-                  <option defaultValue={"Select Music Usage"}>
-                    Select Music Usage
-                  </option>
 
-                  <option value="pop">Pop Music</option>
-                  <option value="folk">Folk Music</option>
-                  <option value="game">Game Music</option>
-                  <option value="movie">Movie Music</option>
-                  <option value="classical">Classical Music</option>
-                  <option value="childrens">{"Children's Music"}</option>
-                  <option value="scene">Scene Music</option>
-                </select>
-              </div> */}
 
               <label
                 htmlFor="default"
                 className="block text-sm font-semibold text-gray-900 "
               >
-                Music Use to (Multiple Choice)
+                Music is used for
               </label>
-              <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+              {/* <div className="grid grid-cols-2 gap-x-4 gap-y-2">
                 {musicUse.map((style, index) => (
                   <div key={index} className="flex items-center">
                     <input
@@ -353,8 +311,33 @@ export function CreativeHire() {
                     </label>
                   </div>
                 ))}
+              </div> */}
+
+              <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-black">
+                <Controller
+                  name="musicUse"
+                  control={control}
+                  render={({ field }) => (
+                    <Select
+                      {...field}
+                      mode="multiple"
+                      allowClear
+                      placeholder="Select music styles"
+                      className="w-[740px] h-[40px] py-4 border border-gray-300 rounded-md" 
+                    >
+                      {musicUse.map((style, index) => (
+                        <Option key={index} value={style}>
+                          {style}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                />
               </div>
-              <label
+
+
+
+              {/* <label
                 htmlFor="default"
                 className="block text-sm font-semibold text-gray-900 "
               >
@@ -378,7 +361,34 @@ export function CreativeHire() {
                     </label>
                   </div>
                 ))}
-              </div>
+              </div> */}
+
+              {/* <label htmlFor="default" className="block text-sm font-semibold text-gray-900">
+                Music Culture Area
+              </label> */}
+
+              {/* <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+                <Controller
+                  name="cultureArea" // Register the field for cultureArea
+                  control={control} // Use control from react-hook-form
+                  render={({ field }) => (
+                    <Select
+                      {...field} // Spread the field props (includes value, onChange, etc.)
+                      mode="multiple"  // Multiple selection mode
+                      allowClear  // Allow clearing selections
+                      placeholder="Select music styles"
+                      className="w-full"
+                    >
+                      {cultureArea.map((style, index) => (
+                        <Option key={index} value={style}>
+                          {style}
+                        </Option>
+                      ))}
+                    </Select>
+                  )}
+                />
+              </div> */}
+
 
               <div className="flex flex-col gap-2">
                 <Typography
@@ -390,7 +400,7 @@ export function CreativeHire() {
                 </Typography>
                 <div className="flex flex-row justify-start items-center gap-1">
                   US$
-                  <div className="max-w-[5rem]">
+                  <div className="max-w-[6rem]">
                     <input
                       {...register("budget.min", {
                         required: "Minimum budget is required",
@@ -400,11 +410,11 @@ export function CreativeHire() {
                         },
                       })}
                       type="number"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                      className=" border border-gray-300 text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
                     />
                   </div>
                   <p className="px-2 mb-4">___</p>
-                  <div className="max-w-[5rem]">
+                  <div className="max-w-[6rem]">
                     <input
                       {...register("budget.max", {
                         required: "Maximum budget is required",
@@ -414,7 +424,7 @@ export function CreativeHire() {
                         },
                       })}
                       type="number"
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                      className=" border border-gray-300 text-gray-900 text-sm  focus:ring-blue-500 focus:border-blue-500 block w-full p-1.5"
                     />
                   </div>
                 </div>
@@ -434,7 +444,7 @@ export function CreativeHire() {
                       {...register("timeFrame.startDate", {
                         required: "Start date is required",
                       })}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                      className=" border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                     />
                     {errors.timeFrame?.startDate && (
                       <span className="text-red-500 text-sm">
@@ -458,7 +468,7 @@ export function CreativeHire() {
                           return true;
                         },
                       })}
-                      className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
+                      className=" border border-gray-300 text-gray-900 text-sm rounded-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2"
                     />
                     {errors.timeFrame?.endDate && (
                       <span className="text-red-500 text-sm">
@@ -468,7 +478,7 @@ export function CreativeHire() {
                   </div>
                 </div>
               </div>
-              <div className="flex flex-col gap-2">
+              {/* <div className="flex flex-col gap-2">
                 <Typography
                   variant="small"
                   color="blue-gray"
@@ -493,8 +503,8 @@ export function CreativeHire() {
                     {errors.publisherName.message}
                   </span>
                 )}
-              </div>
-              <div className="flex flex-col gap-2">
+              </div> */}
+              {/* <div className="flex flex-col gap-2">
                 <Typography
                   variant="small"
                   color="blue-gray"
@@ -519,7 +529,7 @@ export function CreativeHire() {
                     {errors.applicantName.message}
                   </span>
                 )}
-              </div>
+              </div> */}
               <div className="flex flex-col gap-3">
                 <Typography
                   variant="small"
