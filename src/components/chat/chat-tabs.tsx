@@ -11,16 +11,23 @@ import { chatService } from "@/services/chatService";
 import { useDispatch, useSelector } from "react-redux";
 import { updateChatUsers } from "@/redux/features/chat/chatSlice";
 import { RootState } from "@/redux/store";
+import { useLocalStorage } from "@/context/LocalStorageContext";
 
 export interface IChatUser {
-  id: number;
+  id: string;
+  _id: string;
   avatar: string;
-  userName: string;
-  latestMessage: string;
+  name: string;
+  email: string;
   unreadCount: number;
 }
 
 export function ChatTabs() {
+  const { getItem } = useLocalStorage()
+  const auth = getItem<{ user: any }>("auth", {} as any);
+  const currentUser = auth?.user;
+
+  console.log("Current user:", currentUser);
   const [activeTab, setActiveTab] = React.useState("all");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -31,8 +38,10 @@ export function ChatTabs() {
     const fetchChatUsers = async () => {
       try {
         setLoading(true);
-        const users = await chatService.getChatUsers();
-        dispatch(updateChatUsers(users));
+        const users = await chatService.getChatUsers(currentUser.role);
+        console.log("Fetched chat users:", users);
+        users ? dispatch(updateChatUsers(users)) : null;
+        // dispatch(updateChatUsers(users));
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load chats");
       } finally {

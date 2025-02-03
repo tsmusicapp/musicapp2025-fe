@@ -4,8 +4,13 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { updateDialog } from "@/redux/features/offer/offerSlice";
 import { chatService } from "@/services/chatService";
 import { PaperClipIcon, FaceSmileIcon } from "@heroicons/react/24/outline";
+import { useLocalStorage } from "@/context/LocalStorageContext";
+import { updateChatUsers } from "@/redux/features/chat/chatSlice";
 
 function ChatInput() {
+   const { getItem } = useLocalStorage()
+      const auth = getItem<{ user: any }>("auth", {} as any);
+      const currentUser = auth?.user;
   const dispatch = useDispatch<AppDispatch>();
   const chatId = useSelector((state: RootState) => state.chat.chatId);
   const [message, setMessage] = useState("");
@@ -20,7 +25,7 @@ function ChatInput() {
       setMessage(""); // Clear input after successful send
 
       // Trigger chat list refresh after sending message
-      const updatedUsers = await chatService.getChatUsers();
+      const updatedUsers = await chatService.getChatUsers(currentUser?.role);
       dispatch(updateChatUsers(updatedUsers)); // We'll create this action
     } catch (error) {
       console.error("Error sending message:", error);
@@ -39,8 +44,8 @@ function ChatInput() {
   return (
     <>
       {chatId ? (
-        <div className="w-full gap-4 inline-flex justify-center mr-20">
-          <div className="flex items-start gap-2">
+        <div className="w-full gap-4 inline-flex justify-center mr-20 mb-2">
+          <div className="flex items-center justify-center gap-2">
             <PaperClipIcon
               className="h-8 w-8 cursor-pointer hover:bg-black/10 hover:rounded-lg p-1"
               color="black"
@@ -65,7 +70,7 @@ function ChatInput() {
               onKeyPress={handleKeyPress}
               cols={30}
               rows={10}
-              className="w-[35rem] !h-[6rem] bg-white resize-none bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+              className="w-[35rem] !h-[2.5rem] bg-white resize-none bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
               placeholder="Enter your text"
               disabled={sending}
             />

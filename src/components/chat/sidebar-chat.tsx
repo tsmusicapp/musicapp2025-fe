@@ -3,8 +3,13 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import JobApplications from "./job-applications";
 import { ChatTabs } from "./chat-tabs";
+import ChatDrawer from "./chat-drawer";
+import { useLocalStorage } from "@/context/LocalStorageContext";
 
 export default function SidebarChat() {
+  const { getItem } = useLocalStorage()
+    const auth = getItem<{ user: any }>("auth", {} as any);
+    const currentUser = auth?.user;
   return (
     <div className="h-full flex flex-col">
       {/* Header */}
@@ -13,10 +18,16 @@ export default function SidebarChat() {
       </div>
 
       {/* Job Applications Section */}
-      <div className="flex flex-col px-4 border-b-2 border-black/10">
-        <p className="text-xs font-semibold">JOB APPLICATIONS</p>
-        <JobApplications />
-      </div>
+      {
+        currentUser?.role === "recruiter" ? (
+          <div className="flex flex-col px-4 border-b-2 border-black/10">
+            <p className="text-xs font-semibold">JOB APPLICATIONS</p>
+            <ChatDrawer/>
+            <JobApplications />
+          </div>
+        ) : null
+      }
+      
 
       {/* Chat List */}
       <div className="flex-1 overflow-y-auto">

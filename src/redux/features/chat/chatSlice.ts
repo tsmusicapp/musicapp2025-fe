@@ -33,7 +33,7 @@ export const chatSlice = createSlice({
       state.chatId = action.payload;
     },
     updateChatUsers: (state, action: PayloadAction<ChatUser[]>) => {
-      state.chatUsers = [...state.chatUsers, ...action.payload];
+      state.chatUsers = [ ...action.payload];
     },
   },
 });

@@ -40,7 +40,8 @@ function SelectableBox({
     e.stopPropagation();
     setSelected(!selected);
   };
-  const modifiedPath = musicImage.replace('public/', '');
+  const modifiedPath = musicImage.replace('public', '');
+  console.log(modifiedPath, "modifiedPath");
   return (
     <>
       <button className="" onClick={(e) => handleClick(e, id)}>

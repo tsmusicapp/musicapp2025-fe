@@ -5,10 +5,10 @@ import { updateChatUsers } from "../redux/features/chat/chatSlice";
 const BASE_URL = "http://localhost:5000/v1";
 
 export const chatService = {
-  async getChatUsers(): Promise<IChatUser[]> {
+  async getChatUsers(role : string): Promise<IChatUser[]> {
     try {
       const token = localStorage.getItem("token");
-      const response = await fetch(`${BASE_URL}/chat-system/users`, {
+      const response = await fetch(`${BASE_URL}/chat-system/users/${role}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "application/json",
@@ -19,18 +19,19 @@ export const chatService = {
         throw new Error("Failed to fetch chat users");
       }
 
-      return await response.json();
+      const users = await response.json();
+      return users.data
     } catch (error) {
       console.error("Error fetching chat users:", error);
       throw error;
     }
   },
 
-  async getChatMessages(chatId: number): Promise<IChatRoom> {
+  async getChatMessages(currentUserId:string ,chatId: string): Promise<> {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
-        `${BASE_URL}/chat-system/${chatId}/messages`,
+        `${BASE_URL}/chat-system/history/${chatId}?currentUserId=${currentUserId}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -43,7 +44,8 @@ export const chatService = {
         throw new Error("Failed to fetch chat messages");
       }
 
-      return await response.json();
+      const message = await response.json();
+      return message.data
     } catch (error) {
       console.error("Error fetching chat messages:", error);
       throw error;
@@ -53,8 +55,11 @@ export const chatService = {
   async sendMessage(chatId: number, message: string): Promise<IMessage> {
     try {
       const token = localStorage.getItem("token");
+      const auth = JSON.parse(localStorage.getItem("auth") || "{}");
+      const currentUser = auth.user;
+    
       const response = await fetch(
-        `${BASE_URL}/chat-system/${chatId}/messages`,
+        `${BASE_URL}/chat-system/${chatId}/messages?senderId=${currentUser?.id}`,
         {
           method: "POST",
           headers: {

@@ -43,11 +43,11 @@ function ChatList() {
             <span className="text-sm font-medium">{user.userName}</span>
             <span className="text-xs text-gray-600">{user.latestMessage}</span>
           </div>
-          {user.unreadCount > 0 && (
+          {/* {user.unreadCount > 0 && (
             <span className="ml-auto bg-blue-500 text-white text-xs rounded-full px-2 py-1">
               {user.unreadCount}
             </span>
-          )}
+          )} */}
         </div>
       ))}
     </div>

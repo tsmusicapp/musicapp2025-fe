@@ -9,12 +9,21 @@ import {
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { chatId } from "@/redux/features/chat/chatSlice";
+import { BASE_URL } from "@/conf/api";
 
-interface IChatUser {
-  id: number;
+// interface IChatUser {
+//   id: number;
+//   avatar: string;
+//   userName: string;
+//   latestMessage: string;
+//   unreadCount: number;
+// }
+export interface IChatUser {
+  id: string;
+  _id: string;
   avatar: string;
-  userName: string;
-  latestMessage: string;
+  name: string;
+  email: string;
   unreadCount: number;
 }
 
@@ -29,7 +38,7 @@ export default function ListChat({ listChat, loading, error }: ListChatProps) {
 
   const handleChatClick = (chat: IChatUser) => {
     console.log("Clicked chat:", chat); // Debug log
-    dispatch(chatId(chat.chatId)); // Use chatId instead of id
+    dispatch(chatId(chat.id)); // Use chatId instead of id
   };
 
   if (loading) {
@@ -58,39 +67,43 @@ export default function ListChat({ listChat, loading, error }: ListChatProps) {
 
   return (
     <List>
-      {listChat.map((chat) => (
+      {listChat.length > 0 ? listChat.map((chat) => (
         <ListItem
           key={chat.id}
           className="group hover:bg-blue-gray-50 gap-3"
           onClick={() => handleChatClick(chat)}
         >
           <ListItemPrefix>
-            <Avatar
-              src={chat.avatar}
-              alt={chat.userName}
+            {
+              chat.avatar ?
+              <Avatar
+              src={chat.avatar ?  BASE_URL+'/'+chat.avatar.replace('//','/') : ''}
+              // alt={chat.userName}
               size="sm"
               className="border border-gray-200"
-            />
+              /> : <></>
+            }
           </ListItemPrefix>
           <div className="flex-1 min-w-0">
             <Typography variant="h6" color="blue-gray" className="truncate">
-              {chat.userName}
+              {chat.name}
             </Typography>
             <Typography
               variant="small"
               color="gray"
               className="font-normal truncate"
             >
-              {chat.latestMessage}
+              {chat.email}
             </Typography>
           </div>
-          {chat.unreadCount > 0 && (
+          {/* {chat.unreadCount > 0 && (
             <span className="ml-auto bg-blue-500 text-white text-xs rounded-full px-2 py-1">
               {chat.unreadCount}
             </span>
-          )}
+          )} */}
         </ListItem>
-      ))}
+      )) : <></>
+    }
     </List>
   );
 }

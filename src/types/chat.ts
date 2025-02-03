@@ -1,18 +1,19 @@
 // src/types/chat.ts
 export interface IMessage {
-  id: number;
-  senderId: number;
-  receiverId: number;
-  message: string;
-  datetime: string;
-  isCard?: boolean;
-  cardType?: string;
-  currentUser: boolean;
+  id : number | undefined;
+  _id: string | undefined;
+  sender: number;
+  // receiverId: number | undefined;
+  text: string;
+  createdAt: string;
+  isCard?: boolean ;
+  cardType?: string ;
+  currentUser: string | undefined ;
 }
 
 export interface IChatRoom {
   chatId: number;
-  detail: IMessage[];
+  data: IMessage[];
 }
 
 export interface IChatUser {

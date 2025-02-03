@@ -35,3 +35,30 @@ export const filterDataByInterface = <T extends object>(
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
+
+
+export const formatDate = (dateString: Date) => {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric'
+  });
+}
+
+export const formatDateTime = (dateString: Date) => {
+  const date = new Date(dateString);
+
+  const time = date.toLocaleTimeString("en-US", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  const formattedDate = date.toLocaleDateString("en-US", {
+    month: "short", 
+    day: "numeric", 
+  });
+
+  return `${time} ( ${formattedDate} )`;
+};

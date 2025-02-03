@@ -47,7 +47,6 @@ export const getJobs = createAsyncThunk(
         },
       }
     );
-    console.log(response.data, "redux all jobs ");
     return response.data;
   }
 );

@@ -28,7 +28,7 @@ export default function DetailApplication() {
               withBorder
             >
               <Avatar
-                src="https://docs.material-tailwind.com/img/face-2.jpg"
+                src="https://picsum.photos/200/300"
                 alt="avatar"
                 size="sm"
               />
@@ -36,7 +36,7 @@ export default function DetailApplication() {
           </ListItemPrefix>
           <div className="max-w-[14rem] w-[14rem]">
             <Typography variant="small" color="gray" className="font-semibold">
-              UI Designer
+            Orchestral Film Score Composition
             </Typography>
             <Typography
               variant="small"
@@ -49,15 +49,16 @@ export default function DetailApplication() {
         </ListItem>
         <div className="flex flex-col gap-2 px-4">
           <p className="text-xs rounded-full bg-orange-100 w-fit font-semibold text-orange-600 px-2 py-1">
-            Inactive - Expired on Aug 1 , 2024
+            {/* Inactive - Expired on Aug 1 , 2024 */}
+            Active
           </p>
           <div className="flex flex-row items-center gap-2">
             <CalendarIcon className="h-6 w-6 cursor-pointer" color="black" />
-            <p className="text-xs w-fit font-semibold">Posted Jul 2, 2024</p>
+            <p className="text-xs w-fit font-semibold">Feb 1, 2025</p>
           </div>
           <div className="flex flex-row items-center gap-2">
             <ListBulletIcon className="h-6 w-6 cursor-pointer" color="black" />
-            <p className="text-xs w-fit font-semibold">29 Applicantions</p>
+            <p className="text-xs w-fit font-semibold">1 Applicantions</p>
             <p className="text-[0.5rem] w-fit rounded-md font-semibold bg-blue-100 text-blue-800 px-1">
               18 NEW
             </p>

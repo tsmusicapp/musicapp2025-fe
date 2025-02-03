@@ -30,17 +30,17 @@ export default function JobApplications() {
               withBorder
             >
               <Avatar
-                src="https://docs.material-tailwind.com/img/face-2.jpg"
+                src="https://picsum.photos/200/300"
                 alt="avatar"
               />
             </Badge>
           </ListItemPrefix>
           <div className="max-w-[14rem] w-[14rem]">
             <Typography variant="h6" color="blue">
-              UI Designer
+            Orchestral Film Score Composition
             </Typography>
             <Typography variant="small" color="blue" className="font-normal">
-              Fulltime - 0 New Applications
+              Fulltime - 1 New Applications
             </Typography>
           </div>
           <div className="flex justify-end">

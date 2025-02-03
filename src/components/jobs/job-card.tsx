@@ -26,6 +26,7 @@ import { DeleteJob } from './deleteJob';
 import { AppDispatch, RootState } from '@/redux/store';
 import { fireGetJobRequest, getAppliedJobs, getJobs, saveJob } from '@/redux/features/job/jobSlice';
 import { JobStatus } from './jobStatus';
+import { formatDate } from '@/utils/utils';
 
 interface CategoryCardProps {
     applicantName: string;
@@ -99,14 +100,14 @@ const jobCard = ({
 
     const StatusModal = () => setOpenStatus(!openStatus);
 
-    const formatDate = (dateString: Date) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric'
-        });
-    }
+    // const formatDate = (dateString: Date) => {
+    //     const date = new Date(dateString);
+    //     return date.toLocaleDateString('en-US', {
+    //         year: 'numeric',
+    //         month: 'long',
+    //         day: 'numeric'
+    //     });
+    // }
 
 
     const handleSaveJob = (id: string) => {

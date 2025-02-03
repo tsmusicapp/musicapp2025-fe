@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Tabs,
   TabsHeader,
@@ -7,14 +7,25 @@ import {
   TabPanel,
 } from "@material-tailwind/react";
 import ListChat from "./list";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
 
 export function ApplicationChatTabs() {
   const [activeTab, setActiveTab] = React.useState("inbox-applications");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const chatUsers = useSelector((state: RootState) => state.chat.chatUsers);
+  useEffect(() => {
+    if (chatUsers) {
+      setLoading(false);
+    }
+  }, [chatUsers]);
+
   const data = [
     {
       label: "Inbox (0)",
       value: "inbox-applications",
-      desc: <ListChat listChat={[]} />,
+      desc: <ListChat listChat={chatUsers} loading={loading} error={error} />,
     },
     {
       label: "Shortlist (0)",
