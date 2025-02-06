@@ -3,6 +3,8 @@ import { getAuthToken } from "@/utils/auth";
 const BACKEND_URL = "http://localhost:5000/v1/music-asset";
 
 export const MusicAssetService = {
+
+  
   getMusicAssetById: async (id: string) => {
     const token = getAuthToken();
     if (!token) throw new Error("No authentication token found");

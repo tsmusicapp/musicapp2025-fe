@@ -28,7 +28,7 @@ export const fetchMusicData = async () => {
       return [];
     }
 
-    const response = await fetch("http://localhost:5000/v1/music-asset", {
+    const response = await fetch("http://localhost:5000/v1/music/get-music", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -43,6 +43,7 @@ export const fetchMusicData = async () => {
 
     const data = await response.json();
     console.log("Raw API response:", data);
+    debugger
     return data;
   } catch (error) {
     console.error("Error fetching music data:", error);
@@ -108,6 +109,7 @@ export let JOBS_PROPS: any[] = [];
         createdBy: "David Wilson",
         updatedBy: "David Wilson",
       },
+
     ] : ''
     musicData <= 0 ? JOBS_PROPS = CATEGORIES : ""
     console.log("Initialized CATEGORIES:", CATEGORIES);

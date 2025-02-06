@@ -1,4 +1,6 @@
 const BACKEND_URL = "http://localhost:5000/v1/music-creation";
+const BACKEND_URL_Assets = "http://localhost:5000/v1/music-asset";
+
 const BASE_URL = "http://localhost:5000";
 
 export class MusicallService {
@@ -66,7 +68,7 @@ export class MusicallService {
   static async getMusicDetails(id: string) {
     try {
       const token = this.getAuthToken();
-      const response = await fetch(`${BACKEND_URL}/${id}`, {
+        const response = await fetch(`http://localhost:5000/v1/music/get-music/${id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -74,6 +76,10 @@ export class MusicallService {
       });
 
       const data = await response.json();
+      
+      console.log(data, "dataValueForCheck")
+      
+
       return {
         ...data,
         isLiked:

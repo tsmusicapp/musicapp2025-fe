@@ -5,6 +5,7 @@ import { RootState } from "@/redux/store";
 import { MusicAssetService } from "@/services/music-asset.service";
 import { MusicCreationService } from "@/services/music-creation.service";
 import { getAuthToken } from "@/utils/auth";
+import { MusicDetail } from "@/types/music";
 
 interface ContentLeftSideV2Props {
   musicData: any;
@@ -12,10 +13,16 @@ interface ContentLeftSideV2Props {
 
 function ContentLeftSideV2({ musicData }: ContentLeftSideV2Props) {
   const currentSource = useSelector((state: RootState) => state.offer.source);
+  const musicDetail = useSelector(
+    (state: RootState) => state.offer.musicDetail
+  ) as MusicDetail;
   const hasLyrics = useSelector((state: RootState) => state.offer.hasLyrics);
   const [likeCount, setLikeCount] = React.useState(
     musicData?.likes?.length || 0
   );
+
+  console.log(musicDetail, "musicDetails")
+
   const [isLiked, setIsLiked] = React.useState(false);
 
   const handleLyricLike = async () => {
@@ -57,12 +64,59 @@ function ContentLeftSideV2({ musicData }: ContentLeftSideV2Props) {
     setLikeCount(musicData?.likes?.length || 0);
   }, [musicData]);
 
-  console.log(hasLyrics, "hasLyrics")
+  console.log(musicData, "musicData")
 
   return (
     <>
       {hasLyrics === false && (
         <div className="flex flex-col py-4 px-6 gap-4 w-[29rem] border-2 border-black rounded-xl">
+
+          <div className="flex flex-row gap-2">
+            <p className="text-xs font-notoSemibold">Music Name:</p>
+            <p className="text-xs font-notoSemibold">{musicDetail?.songName}</p>
+          </div>
+          <div className="flex flex-row gap-2">
+            <p className="text-xs font-notoSemibold">Album Name :</p>
+            <p className="text-xs">{musicDetail?.albumName || "N/A"}</p>
+          </div>
+          <div className="flex flex-row gap-2">
+            <p className="text-xs font-notoSemibold">Publisher :</p>
+            <p className="text-xs">{musicDetail?.singerName || "N/A"}</p>
+          </div>
+          <div className="flex flex-row gap-2">
+            <p className="text-xs font-notoSemibold">Music Usage :</p>
+            <p className="text-xs">{musicDetail?.musicUsage}</p>
+          </div>
+          <div className="flex flex-row gap-2">
+            <p className="text-xs font-notoSemibold">Music Style :</p>
+            <p className="text-xs">{musicDetail?.musicStyle}</p>
+          </div>
+          <div className="flex flex-row gap-2">
+            <p className="text-xs font-notoSemibold">Mood :</p>
+            <p className="text-xs">{musicDetail?.musicMood}</p>
+          </div>
+          <div className="flex flex-row gap-2">
+            <p className="text-xs font-notoSemibold">Musical Instrument :</p>
+            <p className="text-xs">{musicDetail?.musicInstrument || "N/A"}</p>
+          </div>
+          <div className="flex flex-row gap-2">
+            <p className="text-xs font-notoSemibold">Software Tools :</p>
+            <p className="text-xs">{musicDetail?.softwareTool || "N/A"}</p>
+          </div>
+          {/* <div className="flex flex-row gap-2">
+            <p className="text-xs font-notoSemibold">Label :</p>
+            <p className="text-xs">{musicDetail?.label || "N/A"}</p>
+          </div> */}
+          <div className="flex flex-row gap-2">
+            <p className="text-xs font-notoSemibold">Tags :</p>
+            <p className="text-xs">
+              {musicDetail?.tags
+                ? typeof musicDetail.tags === "string"
+                  ? musicDetail.tags
+                  : musicDetail.tags.join(", ")
+                : "N/A"}
+            </p>
+          </div>
           <div className="flex flex-row gap-2">
             <p className="text-xs font-notoSemibold">Lyric :</p>
             <div className="flex flex-row gap-[0.4rem] items-center">
@@ -80,52 +134,6 @@ function ContentLeftSideV2({ musicData }: ContentLeftSideV2Props) {
               </p>
             </div>
           </div>
-          <div className="flex flex-row gap-2">
-            <p className="text-xs font-notoSemibold">Music Name:</p>
-            <p>{musicData?.musicName}</p>
-          </div>
-          <div className="flex flex-row gap-2">
-            <p className="text-xs font-notoSemibold">Singer Name :</p>
-            <p className="text-xs">{musicData?.singerName || "N/A"}</p>
-          </div>
-          <div className="flex flex-row gap-2">
-            <p className="text-xs font-notoSemibold">Publisher :</p>
-            <p className="text-xs">{musicData?.publisher || "N/A"}</p>
-          </div>
-          <div className="flex flex-row gap-2">
-            <p className="text-xs font-notoSemibold">Music Usage :</p>
-            <p className="text-xs">{musicData?.musicUsage}</p>
-          </div>
-          <div className="flex flex-row gap-2">
-            <p className="text-xs font-notoSemibold">Music Style :</p>
-            <p className="text-xs">{musicData?.musicStyle}</p>
-          </div>
-          <div className="flex flex-row gap-2">
-            <p className="text-xs font-notoSemibold">Mood :</p>
-            <p className="text-xs">{musicData?.musicMood}</p>
-          </div>
-          <div className="flex flex-row gap-2">
-            <p className="text-xs font-notoSemibold">Musical Instrument :</p>
-            <p className="text-xs">{musicData?.musicInstrument || "N/A"}</p>
-          </div>
-          <div className="flex flex-row gap-2">
-            <p className="text-xs font-notoSemibold">Software Tools :</p>
-            <p className="text-xs">{musicData?.softwareTool || "N/A"}</p>
-          </div>
-          <div className="flex flex-row gap-2">
-            <p className="text-xs font-notoSemibold">Label :</p>
-            <p className="text-xs">{musicData?.label || "N/A"}</p>
-          </div>
-          <div className="flex flex-row gap-2">
-            <p className="text-xs font-notoSemibold">Tags :</p>
-            <p className="text-xs">
-              {musicData?.tags
-                ? typeof musicData.tags === "string"
-                  ? musicData.tags
-                  : musicData.tags.join(", ")
-                : "N/A"}
-            </p>
-          </div>
         </div>
       )}
 
@@ -134,28 +142,28 @@ function ContentLeftSideV2({ musicData }: ContentLeftSideV2Props) {
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <p className="text-sm font-semibold">Lyric Name:</p>
-              <p className="text-sm">{musicData?.lyricName || "N/A"}</p>
+              <p className="text-sm">{musicDetail?.lyricName || "N/A"}</p>
             </div>
 
             <div className="flex flex-col gap-2">
               <p className="text-sm font-semibold">Suitable music style:</p>
-              <p className="text-sm">{musicData?.musicStyle || "N/A"}</p>
+              <p className="text-sm">{musicDetail?.musicStyle || "N/A"}</p>
             </div>
 
             <div className="flex flex-col gap-2">
               <p className="text-sm font-semibold">Mood:</p>
-              <p className="text-sm">{musicData?.musicMood || "N/A"}</p>
+              <p className="text-sm">{musicDetail?.musicMood || "N/A"}</p>
             </div>
 
             <div className="flex flex-col gap-2">
               <p className="text-sm font-semibold">Label:</p>
-              <p className="text-sm">{musicData?.label || "N/A"}</p>
+              <p className="text-sm">{musicDetail?.label || "N/A"}</p>
             </div>
 
             <div className="flex flex-col gap-2">
               <p className="text-sm font-semibold">Describe:</p>
               <p className="text-sm whitespace-pre-wrap">
-                {musicData?.description || "N/A"}
+                {musicDetail?.description || "N/A"}
               </p>
             </div>
           </div>

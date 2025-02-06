@@ -27,7 +27,7 @@ function TopMusicPlayerV2() {
     };
 
     dispatch(updateChatUsers([newChatUser]));
-    window.location.href = "http://localhost:3001/chat";
+    window.location.href = "http://localhost:3000/chat";
   };
 
   return (

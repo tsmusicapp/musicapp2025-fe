@@ -3,6 +3,8 @@ export interface MusicDetail {
   singerName: string;
   publisher: string;
   songLanguage: string;
+  songName:string,
+  albumName:string,
   musicUsage: string;
   musicStyle: string;
   musicMood: string;

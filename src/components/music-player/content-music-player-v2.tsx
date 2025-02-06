@@ -25,6 +25,7 @@ function ContentMusicPlayerV2({ source = "home" }: ContentMusicPlayerV2Props) {
   const currentSource = useSelector((state: RootState) => state.offer.source);
   const [musicData, setMusicData] = React.useState<any>(null);
 
+
   React.useEffect(() => {
     const fetchData = async () => {
       if (!selectedId) return;
@@ -45,6 +46,7 @@ function ContentMusicPlayerV2({ source = "home" }: ContentMusicPlayerV2Props) {
     fetchData();
   }, [selectedId, currentSource]);
 
+  debugger
   const RightSideComponent =
     source === "assets" ? ContentRightSideAssets : ContentRightSideHome;
 

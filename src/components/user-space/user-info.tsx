@@ -77,7 +77,7 @@ function UserInfo() {
   console.log(formData)
 
   return (
-    <div className="absolute max-w-[22rem] top-[10rem] left-[2rem] z-30 border-2 border-black/10 rounded-lg">
+    <div className="absolute max-w-[22rem] top-[23.5rem] left-[2rem] z-30 border-2 border-black/10 rounded-lg">
       <div className="bg-white shadow rounded-lg p-6 z-50">
         <div className="flex flex-col">
           <div className="flex flex-col items-center justify-center gap-1 py-6">

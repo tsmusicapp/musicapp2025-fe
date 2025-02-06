@@ -91,8 +91,10 @@ function BoxWithInfo({
 
   const handleCardClick = async () => {
     try {
-      dispatch(setSelectedId(id));
       const musicDetails = await MusicallService.getMusicDetails(id);
+
+      debugger
+      dispatch(setSelectedId(id));
       dispatch(setMusicDetail(musicDetails));
       dispatch(musicPlayerDialog());
     } catch (error) {

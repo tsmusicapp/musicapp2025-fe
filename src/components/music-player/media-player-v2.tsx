@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   PlayIcon,
   SpeakerWaveIcon,
@@ -16,10 +16,23 @@ import { reactionAddShopping, shoppingMusicSize } from "@/default/reaction";
 import toast, { Toaster } from "react-hot-toast";
 
 function MediaPlayerV2() {
+
+
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const audioSrc = "https://sonauto.ai/song/d7e3fb64-703a-477f-b3ff-e7568eec9abc";
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+
+
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isLiked, setIsLiked] = useState(false);
   const [likesCount, setLikesCount] = useState(0);
   const [showCopiedMessage, setShowCopiedMessage] = useState(false);
+
+
+
   const selectedId = useSelector((state: RootState) => state.offer.selectedId);
   const musicDetail = useSelector(
     (state: RootState) => state.offer.musicDetail
@@ -64,10 +77,47 @@ function MediaPlayerV2() {
     );
   };
 
+
+  useEffect(() => {
+    // Create a new audio instance
+    audioRef.current = new Audio(audioSrc);
+    const audio = audioRef.current;
+
+    // Set duration when metadata is loaded
+    const handleLoadedMetadata = () => setDuration(audio.duration);
+
+    // Update current time as audio plays
+    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
+
+    audio.addEventListener("loadedmetadata", handleLoadedMetadata);
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+
+    return () => {
+      // Cleanup event listeners and stop audio
+      audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.pause();
+    };
+  }, [audioSrc]);
+
+
   const handlePlay = () => {
-    console.log("playing music");
+    if (!audioRef.current) return;
+
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
   };
 
+  // Format time in mm:ss format
+  const formatTime = (time: number): string => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
   return (
     <div className="flex flex-row justify-between p-4 gap-16 w-full border-t-2 border-b-2 border-black/10">
       <Toaster />
@@ -80,54 +130,25 @@ function MediaPlayerV2() {
           className="rounded-lg bg-slate-100"
           loading="lazy"
         />
-        {!hasLyrics ? (
-          <div className="flex flex-row gap-4 items-center ml-4">
-            {isAuthenticated() ? (
-              <PlayIcon
-                height={40}
-                width={40}
-                className="border-2 rounded-full p-2 border-black/30 cursor-pointer"
-                onClick={() => {
-                  handlePlay();
-                }}
-              />
-            ) : (
-              <PlayIcon
-                height={40}
-                width={40}
-                className="border-2 rounded-full p-2 border-black/30 cursor-pointer"
-                onClick={() => {
-                  toast.success("Please Sign-in First");
-                }}
-              />
-            )}
-            <p className="text-xs">2.10</p>
-            <div className="w-[20rem] max-w-[20rem]">
-              <Progress
-                value={50}
-                variant="gradient"
-                size="sm"
-                className="border border-gray-900/10 bg-gray-900/5"
-              />
-            </div>
-            <p className="text-xs">3.40</p>
-            <SpeakerWaveIcon
-              height={24}
-              width={24}
-              className="cursor-pointer"
-            />
-            <div className="w-[5rem] max-w-[5rem]">
-              <Progress
-                value={50}
-                variant="gradient"
-                size="sm"
-                className="border border-gray-900/10 bg-gray-900/5"
-              />
-            </div>
+
+        <div className="flex flex-row gap-4 items-center ml-4">
+          <PlayIcon
+            height={40}
+            width={40}
+            className="border-2 rounded-full p-2 border-black/30 cursor-pointer"
+            onClick={handlePlay}
+          />
+          <p className="text-xs">{formatTime(currentTime)}</p>
+          <div className="w-[20rem] max-w-[20rem]">
+            <Progress value={(currentTime / duration) * 100 || 0} color="blue" />
           </div>
-        ) : (
-          ""
-        )}
+          <p className="text-xs">{formatTime(duration)}</p>
+          <SpeakerWaveIcon height={24} width={24} className="cursor-pointer" />
+          <div className="w-[5rem] max-w-[5rem]">
+            <Progress value={(currentTime / duration) * 100 || 0} color="blue" />
+          </div>
+        </div>
+
       </div>
       <div className="min-w-0 flex flex-row items-center font-semibold gap-3">
         <div className="flex flex-row gap-2 ml-[2rem]">
