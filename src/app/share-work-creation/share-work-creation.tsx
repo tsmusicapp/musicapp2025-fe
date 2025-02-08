@@ -22,6 +22,7 @@ export interface ShareWorkFormData {
   musicAudio: any;
   language:string;
   music: any;
+  albumname:any;
   musicLyric?: any;
   musicBackground?: FileList;
   musicUsage: string[];
@@ -86,15 +87,15 @@ export function ShareWorkCreationPage() {
 
       // Prepare FormData to handle files and other form fields
       const formData = new FormData();
-
       // Append form data fields
       formData.append("musicName", data.musicName);
       formData.append("songName", data.musicName);
-      formData.append("myRole", JSON.stringify(data.myRole)); // Arrays should be serialized
+      formData.append("myRole", JSON.stringify(data.myRole));
       formData.append("singerName", data.singerName || "");
       formData.append("publisher", data.publisher || "");
+      formData.append("albumname", data.albumname || "");
       formData.append("songLanguage", data.songLanguage || "");
-      formData.append("musicUsage", JSON.stringify(data.musicUsage)); // Arrays should be serialized
+      formData.append("musicUsage", JSON.stringify(data.musicUsage)); 
       formData.append("musicStyle", data.musicStyle);
       formData.append("musicMood", data.musicMood || "");
       formData.append("musicInstrument", data.musicInstrument || "");
