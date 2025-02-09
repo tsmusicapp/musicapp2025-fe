@@ -4,7 +4,7 @@ export interface MusicDetail {
   publisher: string;
   songLanguage: string;
   songName:string,
-  albumName:string,
+  albumname:string,
   musicUsage: string;
   musicStyle: string;
   musicMood: string;

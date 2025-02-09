@@ -149,7 +149,7 @@ function RightSideSecond({
           My Role (Multiple Choise)
         </label>
         <div className="grid grid-cols-2 gap-2">
-          {["Singer", "Lyricist"].map((role) => (
+          {["Singer","Composer", "Producer", "Lyricist"].map((role) => (
             <div key={role} className="flex items-center">
               <input
                 type="checkbox"

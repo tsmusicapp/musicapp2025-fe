@@ -1,12 +1,12 @@
 // import { CATEGORIES } from "@/dummy/example";
-import { CATEGORIES } from "@/conf/music";
+import { ASSETS } from "@/conf/music";
 import MusicianBox from "@/components/music-box/musician-box";
 
 export function MyAssets() {
   return (
     <>
       <div className="grid grid-cols-4 gap-4">
-        {CATEGORIES.map((props, key) => (
+        {ASSETS.map((props, key) => (
           <MusicianBox
             key={key}
             {...props}

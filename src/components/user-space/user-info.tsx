@@ -101,7 +101,8 @@ function UserInfo() {
                 style={{ height: 24, width: 24 }}
               />
               <p className="text-black font-bold text-sm">
-                {formData.location}
+                {/* {formData.location} */}
+                USA , New York
               </p>
             </div>
             <div className="flex flex-row items-center gap-1">

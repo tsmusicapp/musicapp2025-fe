@@ -77,7 +77,7 @@ function ContentLeftSideV2({ musicData }: ContentLeftSideV2Props) {
           </div>
           <div className="flex flex-row gap-2">
             <p className="text-xs font-notoSemibold">Album Name :</p>
-            <p className="text-xs">{musicDetail?.albumName || "N/A"}</p>
+            <p className="text-xs">{musicDetail?.albumname || "N/A"}</p>
           </div>
           <div className="flex flex-row gap-2">
             <p className="text-xs font-notoSemibold">Publisher :</p>

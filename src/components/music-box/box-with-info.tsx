@@ -28,10 +28,11 @@ import {
   setMusicDetail,
 } from "@/redux/features/offer/offerSlice";
 import { MusicallService } from "@/services/musicall.service";
+import { getImageUrl } from "@/conf/music";
 
 interface CategoryCardProps {
   id: string;
-  imgSong: string;
+  musicImage: string;
   singerName: string;
   songName: string;
   imgComposer: string;
@@ -50,7 +51,7 @@ interface CategoryCardProps {
 
 function BoxWithInfo({
   id,
-  imgSong,
+  musicImage,
   singerName,
   songName,
   imgComposer,
@@ -115,6 +116,8 @@ function BoxWithInfo({
     }
   };
 
+  const imagePath = getImageUrl(  musicImage  )
+
   return (
     <>
       <div className="max-w-fit">
@@ -130,7 +133,7 @@ function BoxWithInfo({
               <div className={`flex flex-col gap-2`}>
                 <div className="flex justify-center items-center flex-row gap-2">
                   <Avatar
-                    src={imgSong}
+                    src={imagePath}
                     size="md"
                     alt="avatar"
                     variant="rounded"
@@ -207,7 +210,7 @@ function BoxWithInfo({
             <>
               <div className="flex flex-row gap-2 items-center">
                 <Avatar
-                  src={imgSong}
+                  src={imagePath}
                   size="xs"
                   alt="avatar"
                   variant="circular"

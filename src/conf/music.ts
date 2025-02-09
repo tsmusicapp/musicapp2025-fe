@@ -3,19 +3,19 @@ import { getAuthToken } from "@/utils/auth";
 const BACKEND_URL = "http://localhost:5000/v1/music-asset"; // Music asset endpoint
 const BASE_URL = "http://localhost:5000"; // Base URL backend Anda
 
-function getImageUrl(path: string): string {
+export function getImageUrl(path: string): string {
   if (!path) {
     return "/image/default-picture.jpg";
   }
 
-  if (path.startsWith("http")) {
-    return path;
-  }
+  // if (path.startsWith("http")) {
+  //   return path;
+  // }
 
   // Remove 'public/' from the path and ensure it starts with a slash
   const cleanPath = path.replace("public/", "");
   return `${BASE_URL}${
-    cleanPath.startsWith("/") ? cleanPath : "/" + cleanPath
+    cleanPath.replace('public', '/')
   }`;
 }
 
@@ -50,17 +50,51 @@ export const fetchMusicData = async () => {
     return [];
   }
 };
+export const fetchAssetsData = async () => {
+  try {
+    const token = getAuthToken();
+    if (!token) {
+      console.error("No authentication token found");
+      return [];
+    }
+
+    const response = await fetch("http://localhost:5000/v1/music-asset/", {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("API Error:", errorData);
+      throw new Error(errorData.message || "Failed to fetch music data");
+    }
+
+    const data = await response.json();
+    console.log("Raw API response:", data);
+    debugger
+    return data;
+  } catch (error) {
+    console.error("Error fetching music data:", error);
+    return [];
+  }
+};
 
 // Variabel untuk menyimpan data
 export let CATEGORIES: any[] = [];
 export let JOBS_PROPS: any[] = [];
+export let ASSETS: any[] = [];
+
 
 // Inisialisasi data saat aplikasi dijalankan
 (async function initializeData() {
   try {
     const musicData = await fetchMusicData();
+    const assetsData = await fetchAssetsData();
     musicData.length > 0 ? CATEGORIES = musicData :  "";
     musicData.length > 0 ? JOBS_PROPS = musicData :  "";
+    assetsData.length > 0 ? ASSETS = assetsData :  "";
 
     musicData.length <= 0 ? CATEGORIES = [
       {

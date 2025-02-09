@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardBody, Avatar, Typography, Spinner } from "@material-tailwind/react";
 import { users } from "../../dummy/users";
+import { getImageUrl } from "@/conf/music";
 import {
   EllipsisHorizontalIcon,
   EllipsisVerticalIcon,
@@ -18,9 +19,10 @@ import {
   musicCreation,
   setSelectedId,
 } from "@/redux/features/offer/offerSlice";
+import { BASE_URL } from "@/conf/api";
 interface CategoryCardProps {
   id: string;
-  imgSong: string;
+  musicImage: string;
   singerName: string;
   songName: string;
   composerId: number;
@@ -35,7 +37,7 @@ interface CategoryCardProps {
 
 function MusicianBox({
   id,
-  imgSong,
+  musicImage,
   singerName,
   songName,
   composerId,
@@ -95,6 +97,8 @@ function MusicianBox({
     }
   };
 
+  const imagePath = getImageUrl(musicImage)
+
   return (
     <>
       <div className="">
@@ -111,13 +115,13 @@ function MusicianBox({
               </div> */}
                 <div className="flex justify-center items-center flex-row gap-2">
                   <Avatar
-                    src={imgSong || "/image/default-picture.jpg"}
+                    src={imagePath }
                     size="md"
                     alt={songName || "Music"}
                     variant="rounded"
-                    onError={(e: any) => {
-                      e.target.src = "/image/default-picture.jpg";
-                    }}
+                    // onError={(e: any) => {
+                    //   e.target.src = "/image/default-picture.jpg";
+                    // }}
                   />
                   <div className="w-[12rem] max-w-[12rem]">
                     <Typography

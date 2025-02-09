@@ -397,15 +397,15 @@ export default function ShareWorkSalesMarket() {
               <Input
                 crossOrigin={undefined}
                 size="lg"
-                {...register("musicName", {
+                {...register("songName", {
                   required: "Music Name is required",
                 })}
                 onChange={handleChange}
-                error={!!errors.musicName}
+                error={!!errors.songName}
                 className="!border !border-black !rounded-none"
               />
-              {errors.musicName && (
-                <p style={{ color: "red" }}>{errors.musicName.message}</p>
+              {errors.songName && (
+                <p style={{ color: "red" }}>{errors.songName.message}</p>
               )}
 
               <div className="flex flex-col gap-4">

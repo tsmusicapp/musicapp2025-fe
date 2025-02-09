@@ -1,5 +1,5 @@
 export interface IMusicAsset {
-  musicName: string;
+  songName: string;
   myRole?: Array<"composer" | "lyricist" | "arranger" | "producer">;
   creationTime: string;
   songLanguage: string;
