@@ -74,7 +74,7 @@ interface JobFormData {
     endDate: string;
   };
   description: string;
-  publisherName: string;
+  position: string;
   applicantName: string;
 }
 
@@ -121,7 +121,7 @@ export function CreativeHire() {
           budget: `${data.budget.min}-${data.budget.max} USD`,
           timeFrame: formattedTimeFrame,
           description: data.description,
-          publisherName: data.publisherName,
+          position: data.position,
           applicantName: data.applicantName,
         }),
 
@@ -137,7 +137,7 @@ export function CreativeHire() {
         budget: `${data.budget.min}-${data.budget.max} USD`,
         timeFrame: formattedTimeFrame,
         description: data.description,
-        publisherName: data.publisherName,
+        position: data.position,
         applicantName: data.applicantName,
       });
 
@@ -268,8 +268,8 @@ export function CreativeHire() {
                   Single work or Management position
                 </Typography>
                 <Input
-                  {...register("publisherName", {
-                    required: "Publisher name is required",
+                  {...register("position", {
+                    required: "position name is required",
                   })}
                   crossOrigin={""}
                   size="lg"
@@ -279,9 +279,9 @@ export function CreativeHire() {
                     className: "before:content-none after:content-none",
                   }}
                 />
-                {errors.publisherName && (
+                {errors.position && (
                   <span className="text-red-500 text-sm">
-                    {errors.publisherName.message}
+                    {errors.position.message}
                   </span>
                 )}
               </div>

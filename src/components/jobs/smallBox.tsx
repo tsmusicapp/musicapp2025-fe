@@ -86,7 +86,8 @@ const smallBox = ({ openSmallbox, handleOpenSmallbox }: smallboxprops) => {
   const fireGetJob = useSelector((state: any) => state.job.fireGetJob);
   const Musics = useSelector((state: any) => state.Music)
   const jobData = useSelector((state: any) => state.job)
-  // console.log(jobData , "musicItems")
+
+  console.log(jobData, "applyjobres")
 
   const [openPopup, setOpenPopup] = useState(false);
   //   const [openSmallbox, setopenSmallbox] = useState(false);
@@ -101,10 +102,10 @@ const smallBox = ({ openSmallbox, handleOpenSmallbox }: smallboxprops) => {
   };
 
   const handleApply = () => {
-    setOpenPopup(false);
     handleOpenReview();
     dispatch(fireGetJobRequest(!fireGetJob));
     dispatch(applyJob(jobData.applyJob))
+    setOpenPopup(false);
     handleOpenSmallbox
   };
 
@@ -181,7 +182,7 @@ const smallBox = ({ openSmallbox, handleOpenSmallbox }: smallboxprops) => {
           <div className="flex flex-row gap-2 items-center justify-center">
             <Avatar
               //   src={fotoprofile}
-              src={currentUser && BASE_URL+currentUser?.profilePicture.replace('public', '')}
+              src={currentUser && BASE_URL + currentUser?.profilePicture.replace('public', '')}
               alt="avatar"
               size="sm"
               className=""
@@ -236,7 +237,7 @@ const smallBox = ({ openSmallbox, handleOpenSmallbox }: smallboxprops) => {
                   alt="user 1"
                   size="xl"
                   className="absolute object-cover object-center top-[6.5rem]  border-2 border-black hover:z-10 focus:z-10"
-                  src={currentUser && BASE_URL+currentUser?.profilePicture.replace('public', '')}
+                  src={currentUser && BASE_URL + currentUser?.profilePicture.replace('public', '')}
                 />
               </div>
               <div className="pl-[6.5rem]">
@@ -250,9 +251,9 @@ const smallBox = ({ openSmallbox, handleOpenSmallbox }: smallboxprops) => {
                     {/* <PocketsizeBox /> */}
                     {Musics ? Musics.selectedMusic.map((props, key) => (
                       <PocketsizeBox key={key} {...props} />
-                    )) : 
-                    <Spinner className="w-12 h-12" />
-                  }
+                    )) :
+                      <Spinner className="w-12 h-12" />
+                    }
                   </div>
                 </div>
               </div>
@@ -275,7 +276,7 @@ const smallBox = ({ openSmallbox, handleOpenSmallbox }: smallboxprops) => {
             size="sm"
             className="hover:scale-100"
           >
-            Submit Applications
+            Submit Application
           </Button>
         </DialogFooter>
       </Dialog>
