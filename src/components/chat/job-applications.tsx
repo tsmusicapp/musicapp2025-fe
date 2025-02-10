@@ -7,51 +7,70 @@ import {
   Card,
   Typography,
   Badge,
+  Spinner,
 } from "@material-tailwind/react";
 import Link from "next/link";
-import { AppDispatch } from "@/redux/store";
-import { useDispatch } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { useDispatch, useSelector } from "react-redux";
 import { updateDrawer } from "@/redux/features/chat/chatSlice";
+import { useEffect } from "react";
+import { getMyJobs } from "@/redux/features/job/jobSlice";
 
 export default function JobApplications() {
   const dispatch = useDispatch<AppDispatch>();
+  const jobData = useSelector<RootState>((state) => state.job.myJobs)
+
+  console.log(jobData, 'jobs Data in here')
+
+  useEffect(() => {
+    dispatch(getMyJobs())
+  }, [dispatch])
+
   return (
     <>
-      <List>
-        <ListItem
-          className="relative hover:bg-blue-gray-200/30 gap-3"
-          onClick={() => dispatch(updateDrawer())}
-        >
-          <ListItemPrefix className="mr-0">
-            <Badge
-              placement="top-end"
-              overlap="circular"
-              color="blue"
-              withBorder
-            >
-              <Avatar
-                src="https://picsum.photos/200/300"
-                alt="avatar"
-              />
-            </Badge>
-          </ListItemPrefix>
-          <div className="max-w-[14rem] w-[14rem]">
-            <Typography variant="h6" color="blue">
-            Orchestral Film Score Composition
-            </Typography>
-            <Typography variant="small" color="blue" className="font-normal">
-              Fulltime - 1 New Applications
-            </Typography>
-          </div>
-          <div className="flex justify-end">
-            <ChevronRightIcon
-              strokeWidth={2.5}
-              className={`h-4 w-4`}
-              color="blue"
-            />
-          </div>
-        </ListItem>
-      </List>
+      {
+        jobData ? jobData.map((job) => {
+          return (
+            <List>
+              <ListItem
+                className="relative hover:bg-blue-gray-200/30 gap-3"
+                onClick={() => dispatch(updateDrawer())}
+              >
+                <ListItemPrefix className="mr-0">
+                  <Badge
+                    placement="top-end"
+                    overlap="circular"
+                    color="blue"
+                    withBorder
+                  >
+                    <Avatar
+                      src="https://picsum.photos/200/300"
+                      alt="avatar"
+                    />
+                  </Badge>
+                </ListItemPrefix>
+                <div className="max-w-[14rem] w-[14rem]">
+                  <Typography variant="h6" color="blue">
+                    {/* Orchestral Film Score Composition */}
+                    {job.projectTitle}
+                  </Typography>
+                  <Typography variant="small" color="blue" className="font-normal">
+                    {job.timeFrame} - 1 New Applications
+                  </Typography>
+                </div>
+                <div className="flex justify-end">
+                  <ChevronRightIcon
+                    strokeWidth={2.5}
+                    className={`h-4 w-4`}
+                    color="blue"
+                  />
+                </div>
+              </ListItem>
+            </List>
+          )
+        }) : <Spinner className="h-5 w-5" />
+      }
+
     </>
   );
 }

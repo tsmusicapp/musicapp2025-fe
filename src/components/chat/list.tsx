@@ -36,7 +36,7 @@ interface ListChatProps {
 
 export default function ListChat({ listChat, loading, error }: ListChatProps) {
   const dispatch = useDispatch<AppDispatch>();
-
+  console.log(listChat, "Chat data")
   const handleChatClick = (chat: IChatUser) => {
     console.log("Clicked chat:", chat); // Debug log
     dispatch(chatId(chat.id)); // Use chatId instead of id

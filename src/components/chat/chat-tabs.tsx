@@ -27,7 +27,8 @@ export function ChatTabs() {
   const auth = getItem<{ user: any }>("auth", {} as any);
   const currentUser = auth?.user;
 
-  console.log("Current user:", currentUser);
+  // console.log("Current user:", currentUser);
+
   const [activeTab, setActiveTab] = React.useState("all");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
