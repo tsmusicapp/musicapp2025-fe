@@ -1,5 +1,6 @@
 export interface MusicDetail {
   myRole: string[];
+  comments:string[],
   singerName: string;
   publisher: string;
   songLanguage: string;

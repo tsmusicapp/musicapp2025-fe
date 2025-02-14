@@ -8,6 +8,7 @@ import { RootState } from "@/redux/store";
 import { MusicCreationService } from "@/services/music-creation.service";
 import { getAuthToken } from "@/utils/auth";
 import { toast } from "react-hot-toast";
+import { MusicDetail } from "@/types/music";
 
 interface CommentType {
   _id: string;
@@ -21,10 +22,22 @@ function ContentRightSideHome() {
   const isMusicPlayerDialog = useSelector(
     (state: RootState) => state.offer.musicPlayerDialog
   );
+  const musicDetails = useSelector(
+    (state: RootState) => state.offer.musicDetail
+  ) as MusicDetail & { comments: CommentType[] };
+
+  console.log(musicDetails, "MusicDeatilsCheck")
   const [musicDetail, setMusicDetail] = useState<any>(null);
   const [commentText, setCommentText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  interface UserType {
+    id: string;
+    name: string;
+  }
+  
+  const [userDetails, setUserDetails] = useState<UserType[]>([]);
 
+  console.log(userDetails, "userDetails")
   useEffect(() => {
     const fetchData = async () => {
       if (selectedId && isMusicPlayerDialog) {
@@ -98,6 +111,27 @@ function ContentRightSideHome() {
     }
   };
 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:5000/v1/users/");
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json(); // Convert response to JSON
+        setUserDetails(data); // Set the user details
+
+      } catch (error) {
+        console.error("Failed to fetch users:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="flex flex-col py-4 px-6 gap-4 w-[38rem] overflow-y-auto border-2 border-black rounded-xl">
       <div className="flex flex-col gap-2">
@@ -130,17 +164,20 @@ function ContentRightSideHome() {
         </div>
       </div>
       <div className="flex flex-col gap-4 ml-10 overflow-y-auto">
-        {Array.isArray(musicDetail?.comments) &&
-          musicDetail.comments.map((comment: CommentType) => (
-            <Comment
-              key={comment._id}
-              userId={comment.userId}
-              userName="Unknown User"
-              comment={comment.comment}
-              createdAt={comment.createdAt}
-              profilePicture={null}
-            />
-          ))}
+        {Array.isArray(musicDetails?.comments) &&
+          musicDetails.comments.map((comment: CommentType) => {
+            const matchedUser = userDetails?.results?.find((user) => user.id === comment.userId);
+            return (
+              <Comment
+                key={comment._id}
+                userId={comment.userId}
+                userName={matchedUser ? matchedUser.name : "Unknown User"} // Use matched username or default
+                comment={comment.comment}
+                createdAt={comment.createdAt}
+                profilePicture={null} // Use profile picture if available
+              />
+            );
+          })}
       </div>
     </div>
   );
