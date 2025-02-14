@@ -2,9 +2,10 @@ import React from "react";
 import { Card, CardBody, Avatar, Typography } from "@material-tailwind/react";
 
 import { PlayIcon } from "@heroicons/react/24/solid";
+import { getImageUrl } from "@/conf/music";
 interface CategoryCardProps {
   id: number;
-  imgSong: string;
+  musicImage: string;
   singerName: string;
   songName: string;
   // imgComposer: string;
@@ -12,12 +13,13 @@ interface CategoryCardProps {
 }
 function PocketsizeBox({
   id,
-  imgSong,
+  musicImage,
   singerName,
   songName,
   // imgComposer,
   userName,
 }: CategoryCardProps) {
+  const imagePath = getImageUrl(musicImage)
   return (
     <>
       <Card
@@ -32,7 +34,7 @@ function PocketsizeBox({
               <div className="flex items-center justify-between gap-2">
                 <div className="flex flex-row items-center gap-2">
                   <Avatar
-                    src='https://picsum.photos/200/300'
+                    src={imagePath}
                     size="sm"
                     alt="avatar"
                     variant="rounded"
@@ -59,8 +61,8 @@ function PocketsizeBox({
               <div className="flex items-center gap-2">
                 {userName ? (
                   <>
-                    <div className="flex flex-row items-center gap-1">
-                      <Avatar src='https://picsum.photos/200/300' alt="avatar" className="h-5 w-5" />
+                    <div className="flex flex-row items-center gap-1 ">
+                      <Avatar src={imagePath} alt="avatar" className="h-5 w-5" />
                       <Typography
                         variant="small"
                         color="black"

@@ -8,9 +8,9 @@ import { useLocalStorage } from "@/context/LocalStorageContext";
 import { updateChatUsers } from "@/redux/features/chat/chatSlice";
 
 function ChatInput() {
-   const { getItem } = useLocalStorage()
-      const auth = getItem<{ user: any }>("auth", {} as any);
-      const currentUser = auth?.user;
+  const { getItem } = useLocalStorage()
+  const auth = getItem<{ user: any }>("auth", {} as any);
+  const currentUser = auth?.user;
   const dispatch = useDispatch<AppDispatch>();
   const chatId = useSelector((state: RootState) => state.chat.chatId);
   const [message, setMessage] = useState("");
@@ -44,7 +44,7 @@ function ChatInput() {
   return (
     <>
       {chatId ? (
-        <div className="w-full gap-4 inline-flex justify-center mr-20 mb-2">
+        <div className="w-full gap-4 inline-flex items-center justify-center mr-20 mb-2">
           <div className="flex items-center justify-center gap-2">
             <PaperClipIcon
               className="h-8 w-8 cursor-pointer hover:bg-black/10 hover:rounded-lg p-1"
@@ -70,7 +70,7 @@ function ChatInput() {
               onKeyPress={handleKeyPress}
               cols={30}
               rows={10}
-              className="w-[35rem] !h-[2.5rem] bg-white resize-none bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
+              className="w-[35rem] !h-[5rem] rounded-[16px] bg-white resize-none bg-transparent placeholder:text-slate-400 text-slate-700 text-sm border border-slate-200 px-3 py-2 transition duration-300 ease focus:outline-none focus:border-slate-400 hover:border-slate-400 shadow-sm focus:shadow-md"
               placeholder="Enter your text"
               disabled={sending}
             />
@@ -78,11 +78,10 @@ function ChatInput() {
           <button
             onClick={handleSendMessage}
             disabled={sending || !message.trim()}
-            className={`px-4 py-2 rounded-full ${
-              sending || !message.trim()
-                ? "bg-gray-300 cursor-not-allowed"
-                : "bg-blue-500 hover:bg-blue-600"
-            } text-white`}
+            className={`px-4 !h-fit py-2 rounded-full ${sending || !message.trim()
+              ? "bg-gray-300 cursor-not-allowed"
+              : "bg-blue-500 hover:bg-blue-600"
+              } text-white`}
           >
             {sending ? "Sending..." : "Send"}
           </button>

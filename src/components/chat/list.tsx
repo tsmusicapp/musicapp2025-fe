@@ -10,6 +10,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { chatId } from "@/redux/features/chat/chatSlice";
 import { BASE_URL } from "@/conf/api";
+import { getImageUrl } from "@/conf/music";
 
 // interface IChatUser {
 //   id: number;
@@ -76,12 +77,12 @@ export default function ListChat({ listChat, loading, error }: ListChatProps) {
           <ListItemPrefix>
             {
               chat.avatar ?
-              <Avatar
-              src={chat.avatar ?  BASE_URL+'/'+chat.avatar.replace('//','/') : ''}
-              // alt={chat.userName}
-              size="sm"
-              className="border border-gray-200"
-              /> : <></>
+                <Avatar
+                  src={getImageUrl(chat.avatar)}
+                  // alt={chat.userName}
+                  size="sm"
+                  className="border border-gray-200"
+                /> : <></>
             }
           </ListItemPrefix>
           <div className="flex-1 min-w-0">
@@ -103,7 +104,7 @@ export default function ListChat({ listChat, loading, error }: ListChatProps) {
           )} */}
         </ListItem>
       )) : <></>
-    }
+      }
     </List>
   );
 }

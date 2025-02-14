@@ -190,7 +190,7 @@ const jobCard = ({
                                 </div>
                             </div>
                             {
-                                userRole === 'user'?
+                                userRole === 'user' ?
 
                                     <StarIcon
                                         width={26}
@@ -248,7 +248,7 @@ const jobCard = ({
                             {formatDate(createdOn)}
                         </Typography>
                         {
-                            userRole === 'user'  && ( appliedJobs ? !appliedJobIds.includes(id) : true)  ?
+                            userRole === 'user' && (appliedJobs ? !appliedJobIds.includes(id) : true) ?
                                 <Button
                                     size='md'
                                     className=" text-black mt-[10px] min-w-[100px] text-center bg-blue-400 normal-case"
@@ -270,7 +270,7 @@ const jobCard = ({
                                         />
                                     </svg> */}
                                 </Button> :
-                                userRole === 'user' && ( appliedJobs ? appliedJobIds.includes(id) : true)   ?
+                                userRole === 'user' && (appliedJobs ? appliedJobIds.includes(id) : true) ?
                                     <>
                                         <Chip
                                             value="Applied 0 days ago"
