@@ -44,7 +44,7 @@ export function HomeMusicianBox({
   lyrics,
   tags,
   duration = "03:45",
-  likes = 55,
+  likes ,
   audioSrc,
 }: HomeMusicianBoxProps) {
   const dispatch = useDispatch<AppDispatch>();

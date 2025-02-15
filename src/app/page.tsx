@@ -13,7 +13,7 @@ import SelectableBox from "@/components/music-box/selectable-box";
 
 export default function Portfolio() {
   // Only show a few items on the home page
-  const featuredMusic = CATEGORIES.slice(0, 5); // Show only first 5 items
+  const featuredMusic = CATEGORIES // Show only first 5 items
 
   return (
     <>
@@ -31,7 +31,7 @@ export default function Portfolio() {
           />
         ))}
         {/* lyrics music box with feather icon */}
-        {featuredMusic.map((props, key) => (
+        {/* {featuredMusic.map((props, key) => (
           <HomeMusicianBox
             key={key}
             {...props}
@@ -39,8 +39,8 @@ export default function Portfolio() {
             lyrics={true}
             isMusicAsset={false} // Explicitly set to false for home page
           />
-        ))}
-        {featuredMusic.map((props, key) => (
+        ))} */}
+        {/* {featuredMusic.map((props, key) => (
           <HomeMusicianBox
             key={key}
             {...props}
@@ -48,7 +48,7 @@ export default function Portfolio() {
             lyrics={false}
             isMusicAsset={false} // Explicitly set to false for home page
           />
-        ))}
+        ))} */}
       </div>
     </>
   );

@@ -29,6 +29,7 @@ import MyFollowing from "./my-following";
 import { useSearchParams } from "next/navigation";
 import MyAssets from "./my-assets";
 import MusicPlayerDialog from "@/components/music-player/music-player-dialog";
+import MyLiked from "./my-liked";
 
 export function UserSpace() {
   const section = [
@@ -50,7 +51,7 @@ export function UserSpace() {
     {
       label: "My Liked",
       value: "my-liked",
-      desc: "My Liked",
+      desc: <MyLiked/>,
     },
     {
       label: "My Collection",
