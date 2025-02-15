@@ -5,24 +5,27 @@ import OrderOngoingFreelancer from "../order/order-ongoing-freelancer";
 import OrderInfo from "../order/order-info";
 import OrderUploadedWorks from "../order/order-uploaded-works";
 import OrderDone from "../order/order-done";
+import { Order } from "@/types/Order";
 
 interface componentProps {
-  componentType: number;
+  componentType: String;
+  orderData: Order
 }
 
-const ComponentSwitcher = ({ componentType }: componentProps) => {
+const ComponentSwitcher = ({ componentType, orderData }: componentProps) => {
+  console.log(componentType, orderData)
   switch (componentType) {
-    case 1:
+    case "1":
       return <OfferRequest />;
-    case 2:
+    case "2":
       return <OfferConfirmation />;
-    case 3:
+    case "3":
       return <OrderOngoingFreelancer />;
-    case 4:
-      return <OrderInfo />;
-    case 5:
+    case "inprogress":
+      return <OrderInfo order={orderData} />;
+    case "5":
       return <OrderUploadedWorks />;
-    case 6:
+    case "6":
       return <OrderDone />;
     default:
       return <div>Invalid component type</div>;

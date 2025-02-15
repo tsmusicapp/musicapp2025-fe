@@ -111,7 +111,7 @@ export const offerSlice = createSlice({
       state.source = "assets";
     },
     setMusicCreationId: (
-      state, 
+      state,
       action: PayloadAction<{ id: string; hasLyrics?: boolean }>
     ) => {
       state.selectedId = action.payload.id;

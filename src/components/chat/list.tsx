@@ -8,7 +8,7 @@ import {
 } from "@material-tailwind/react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
-import { chatId } from "@/redux/features/chat/chatSlice";
+import { chatId, recruiterId } from "@/redux/features/chat/chatSlice";
 import { BASE_URL } from "@/conf/api";
 import { getImageUrl } from "@/conf/music";
 
@@ -36,10 +36,11 @@ interface ListChatProps {
 
 export default function ListChat({ listChat, loading, error }: ListChatProps) {
   const dispatch = useDispatch<AppDispatch>();
-  console.log(listChat, "Chat data")
+  // console.log(listChat, "Chat data")
   const handleChatClick = (chat: IChatUser) => {
-    console.log("Clicked chat:", chat); // Debug log
+    // console.log("Clicked chat:", chat); // Debug log
     dispatch(chatId(chat.id)); // Use chatId instead of id
+    dispatch(recruiterId(chat._id))
   };
 
   if (loading) {

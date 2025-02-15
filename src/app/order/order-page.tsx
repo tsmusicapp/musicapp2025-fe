@@ -5,11 +5,25 @@ import OrderTable from "@/components/order-table/order-table";
 import OrderCanceled from "@/components/order-table/order-canceled";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
+import CancelOrderConfirmation from "@/components/order/cancel-order-confirmation";
+import CompleteDialogOrder from "@/components/order/complete-dialog-order";
+import RevisionDialogOrder from "@/components/order/revision-dialog-order";
+import RatingDialog from "@/components/order/rating-dialog";
+import ArbitrationDialog from "@/components/order/arbitrationDialog";
+import ReportDialog from "@/components/report/report-dialog";
+import ReportUserDialog from "@/components/report/report-user-dialog";
 
 function OrderPage() {
   const isCustomer = useSelector((state: RootState) => state.offer.isCustomer);
   return (
     <>
+      <CancelOrderConfirmation />
+      <CompleteDialogOrder />
+      <RevisionDialogOrder />
+      <RatingDialog />
+      <ArbitrationDialog />
+      <ReportDialog />
+      <ReportUserDialog />
       <InvoiceDialog />
       <section className="py-10 relative">
         <div className="w-full max-w-7xl mx-auto px-4 md:px-8">

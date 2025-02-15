@@ -19,10 +19,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar";
 import { Card, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { PauseIcon, PlayIcon } from "@heroicons/react/24/solid";
+import { getImageUrl } from "@/conf/music";
 
 interface HomeMusicianBoxProps {
   id: string;
-  imgSong: string;
+  musicImage: string;
   songName: string;
   singerName: string;
   composerName: string;
@@ -36,7 +37,7 @@ interface HomeMusicianBoxProps {
 
 export function HomeMusicianBox({
   id,
-  imgSong,
+  musicImage,
   songName,
   singerName,
   composerName,
@@ -56,7 +57,7 @@ export function HomeMusicianBox({
       <div
         className="cursor-pointer pb-4"
         onClick={() => {
-          dispatch(setMusicCreationId({ 
+          dispatch(setMusicCreationId({
             id: id,
             hasLyrics: true
           }));
@@ -126,7 +127,7 @@ export function HomeMusicianBox({
             {/* Album Art */}
             <div className="relative w-20 h-20 rounded-md overflow-hidden bg-muted">
               <img
-                src={imgSong || "/image/default-picture.jpg"}
+                src={getImageUrl(musicImage) || "/image/default-picture.jpg"}
                 alt={songName}
                 className="object-cover w-full h-full"
                 onError={(e: React.SyntheticEvent<HTMLImageElement>) => {

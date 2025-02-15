@@ -16,6 +16,11 @@ function ChatInput() {
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
 
+  const isOfferDialog = useSelector(
+    (state: RootState) => state.offer.offerDialog
+  );
+  console.log(isOfferDialog, "offer show")
+
   const handleSendMessage = async () => {
     if (!message.trim() || !chatId) return;
 
