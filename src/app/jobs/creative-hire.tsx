@@ -323,7 +323,7 @@ export function CreativeHire() {
                       mode="multiple"
                       allowClear
                       placeholder="Select music styles"
-                      className="w-[740px] h-[40px] py-4 border border-gray-300 rounded-md" 
+                      className="w-[740px] h-[40px] py-4 border border-gray-300 rounded-md"
                     >
                       {musicUse.map((style, index) => (
                         <Option key={index} value={style}>

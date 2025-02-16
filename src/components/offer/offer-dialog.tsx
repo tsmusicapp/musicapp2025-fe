@@ -53,7 +53,7 @@ export default function OfferDialog() {
 
     try {
       const res = await dispatch(createOrder(updatedData));
-      await chatService.sendMessage(chatData.chatId, "OrderRequestCard");
+      await chatService.sendMessage(chatData.chatId, `${data.title}||OrderRequestCard`);
       console.log(res, "res from order");
 
       if (res?.meta.requestStatus === "fulfilled") {

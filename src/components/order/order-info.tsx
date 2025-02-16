@@ -15,6 +15,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { cancelDialog } from "@/redux/features/offer/offerSlice";
 import { Order } from "@/types/Order";
+import Link from "next/link";
 interface props {
   order: Order
 }
@@ -53,7 +54,7 @@ function OrderInfo({ order }: props) {
             <div className="border-b-2 border-black/20 flex flex-col justify-start py-2 mx-6 gap-1">
               <div className="flex flex-col">
                 <p className="text-[0.6rem] font-bold text-black">
-                  Your offer includes
+                  This offer includes
                 </p>
                 <div className="flex flex-row justify-start gap-4">
                   <div className="flex flex-row justify-center gap-1">
@@ -91,13 +92,15 @@ function OrderInfo({ order }: props) {
                     Complete
                   </Button>
                 </div>
-                <Button
-                  variant="filled"
-                  size="sm"
-                  className="normal-case bg-gray-400 text-black text-center text-[0.6rem] w-[6rem] px-1 py-2"
-                >
-                  Go To order page
-                </Button>
+                <Link href={"/order"} >
+                  <Button
+                    variant="filled"
+                    size="sm"
+                    className="normal-case bg-gray-400 text-black text-center text-[0.6rem] w-[6rem] px-1 py-2"
+                  >
+                    Go To order page
+                  </Button>
+                </Link>
               </div>
               <p className="text-black text-[0.5rem] font-bold underline">
                 Submit to arbitration

@@ -140,11 +140,17 @@ function ChatRoom() {
                 />
               )}
               <div className="grid max-w-[25rem]">
-                {message.text == "OrderRequestCard" ?
-                  (orders ? orders?.map((item, ind) => <ComponentSwitcher orderData={item} componentType={item?.status} />) : <></>)
+                {message.text.split("||")[1] == "OrderRequestCard" ?
+                  (orders ? orders?.map((item, ind) => {
+                    return (
+                      item.title == message.text.split("||")[0] ?
+                        < ComponentSwitcher orderData={item} role={currentUser?.role} />
+                        : <></>
+                    )
+                  }) : <></>)
                   // orders ? orders.map((order)=>{
                   //   <ComponentSwitcher componentType={"3"} />
-                  // }): <Spinner className="w-6 h-6"/>
+                  // }): <Spinner className="w-6 h-6" />
                   : (
                     <div
                       className={`px-3 py-2 rounded ${message.sender === currentUser?.id ? "bg-blue-600" : "bg-blue-gray-200/20"
@@ -158,17 +164,6 @@ function ChatRoom() {
                       </Typography>
                     </div>
                   )}
-                {/* <div
-                  className={`px-3 py-2 rounded ${message.sender === currentUser?.id ? "bg-blue-600" : "bg-blue-gray-200/20"
-                    }`}
-                >
-                  <Typography
-                    className={`text-left text-sm font-normal leading-snug ${message.sender === currentUser?.id ? "text-white" : "text-black"
-                      }`}
-                  >
-                    {message.text}
-                  </Typography>
-                </div> */}
                 <div
                   className={`items-center inline-flex px-2 ${message.sender === currentUser?.id ? "justify-start" : "justify-end"
                     }`}

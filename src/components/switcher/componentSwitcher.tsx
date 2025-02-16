@@ -6,29 +6,43 @@ import OrderInfo from "../order/order-info";
 import OrderUploadedWorks from "../order/order-uploaded-works";
 import OrderDone from "../order/order-done";
 import { Order } from "@/types/Order";
+import OrderCancelCard from "../order/order-cancel-card";
+import OrderUploadedWorkCard from "../order/order-uploaded-works-card";
 
 interface componentProps {
-  componentType: String;
+  role: String;
   orderData: Order
 }
 
-const ComponentSwitcher = ({ componentType, orderData }: componentProps) => {
-  console.log(componentType, orderData)
-  switch (componentType) {
-    case "1":
-      return <OfferRequest />;
-    case "2":
-      return <OfferConfirmation />;
-    case "3":
-      return <OrderOngoingFreelancer />;
-    case "inprogress":
+const ComponentSwitcher = ({ role, orderData }: componentProps) => {
+  console.log(role, orderData)
+  switch (`${orderData.status}_${role}`) {
+    case "inprogress_recruiter":
+      return <OfferRequest order={orderData} />;
+    case "accepted_recruiter":
+      return <OfferConfirmation order={orderData} />;
+    case "accepted_user":
+      return <OrderOngoingFreelancer order={orderData} />;
+    case "inprogress_user":
       return <OrderInfo order={orderData} />;
-    case "5":
-      return <OrderUploadedWorks />;
-    case "6":
-      return <OrderDone />;
+    case "delivring_user":
+      return <OrderOngoingFreelancer order={orderData} />;
+    case "delivring_recruiter":
+      return <OrderUploadedWorkCard order={orderData} />;
+    case "revision_user":
+      return <OrderOngoingFreelancer order={orderData} />;
+    case "revision_recruiter":
+      return <OrderUploadedWorkCard order={orderData} />;
+    case "complete_user":
+      return <OrderDone order={orderData} />;
+    case "complete_recruiter":
+      return <OrderDone order={orderData} />;
+    case "cancel_recruiter":
+      return <OrderCancelCard order={orderData} />;
+    case "cancel_user":
+      return <OrderCancelCard order={orderData} />;
     default:
-      return <div>Invalid component type</div>;
+      return <div></div>;
   }
 };
 

@@ -14,8 +14,11 @@ import {
 import Link from "next/link";
 import { RootState } from "@/redux/store";
 import { useSelector } from "react-redux";
-
-function OrderDoneCard() {
+import { Order } from "@/types/Order";
+interface props {
+  order: Order
+}
+function OrderDoneCard({ order }: props) {
   const isCustomer = useSelector((state: RootState) => state.offer.isCustomer);
   return (
     <>
@@ -27,17 +30,17 @@ function OrderDoneCard() {
             <div className="border-b-2 border-black/20 py-2 px-6 flex flex-row justify-between items-center">
               <div className="flex flex-col gap-0">
                 <p className="text-[0.7rem] font-bold text-black">
-                  I Will compose a pop up music
+                  {order.title}
                 </p>
-                <p className="text-[0.5rem] font-bold text-black">
+                {/* <p className="text-[0.5rem] font-bold text-black">
                   {isCustomer ? "Musician" : "Orderer"}: Tom Blake
-                </p>
+                </p> */}
               </div>
               <p className="text-[0.9rem] font-bold text-blue-300">Done</p>
             </div>
             <div className="border-b-2 border-black/20 flex flex-col justify-start py-2 mx-6 gap-1">
               <div className="flex flex-row justify-between">
-                <p className="text-[0.9rem] font-bold text-black">US$2000</p>
+                <p className="text-[0.9rem] font-bold text-black">US${order.price}</p>
                 {/* <p className="text-[0.8rem] font-bold text-black">
                   Start Time
                   <span className="text-[0.7rem] ml-3">07/08/2024</span>
@@ -46,7 +49,7 @@ function OrderDoneCard() {
             </div>
             <div className="border-b-2 border-black/20 flex flex-col justify-start py-2 mx-6 gap-1">
               <div className="flex flex-row justify-between">
-                <p className="text-[0.6rem] font-bold text-black text-justify">{`Lorem Ipsum has been the industry's standard dummy text ever since the 1500s`}</p>
+                <p className="text-[0.6rem] font-bold text-black text-justify">{order.description}</p>
               </div>
             </div>
             <div className="border-b-2 border-black/20 flex flex-col justify-start py-2 mx-6 gap-1">
