@@ -93,7 +93,6 @@ export function CreativeHire() {
   } = useForm<JobFormData>();
 
   const onSubmit = async (data: JobFormData) => {
-    debugger
     try {
       setIsLoading(true);
 

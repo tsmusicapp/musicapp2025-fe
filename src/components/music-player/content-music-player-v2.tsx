@@ -46,7 +46,7 @@ function ContentMusicPlayerV2({ source = "home" }: ContentMusicPlayerV2Props) {
     fetchData();
   }, [selectedId, currentSource]);
 
-  debugger
+  
   const RightSideComponent =
     source === "assets" ? ContentRightSideAssets : ContentRightSideHome;
 

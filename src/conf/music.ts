@@ -14,9 +14,8 @@ export function getImageUrl(path: string): string {
 
   // Remove 'public/' from the path and ensure it starts with a slash
   const cleanPath = path.replace("public/", "");
-  return `${BASE_URL}${
-    cleanPath.replace('public', '/')
-  }`;
+  return `${BASE_URL}${cleanPath.replace('public', '/')
+    }`;
 }
 
 // Fungsi untuk mengambil data dari backend
@@ -91,12 +90,14 @@ export let ASSETS: any[] = [];
 (async function initializeData() {
   try {
     const musicData = await fetchMusicData();
+    console.log(musicData, 'musicData')
     const assetsData = await fetchAssetsData();
-    musicData.length > 0 ? CATEGORIES = musicData :  "";
-    musicData.length > 0 ? JOBS_PROPS = musicData :  "";
-    assetsData.length > 0 ? ASSETS = assetsData :  "";
+    console.log(assetsData, 'musicData')
+    musicData.length > 0 ? CATEGORIES = musicData : "";
+    musicData.length > 0 ? JOBS_PROPS = musicData : "";
+    assetsData.length > 0 ? ASSETS = assetsData : "";
 
-    musicData.length <= 0 ? CATEGORIES = [
+    (musicData.length <= 0 || assetsData.length <= 0) ? CATEGORIES = [
       {
         id: "1",
         imgSong: "/image/default-picture.jpg",

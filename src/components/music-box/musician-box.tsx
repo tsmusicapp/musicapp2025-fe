@@ -68,16 +68,16 @@ function MusicianBox({
     console.log("Clicked on music box with source:", source, "ID:", id);
 
     // Reset states first
-    dispatch(musicAssets(false));
+    // dispatch(musicAssets(false));
     dispatch(setSelectedId(null));
 
     // Set the ID and appropriate state based on source
     if (source === "assets") {
       dispatch(setSelectedId(id));
-      dispatch(musicAssets(true)); // This indicates we should use music-asset endpoint
+      // dispatch(musicAssets(true)); // This indicates we should use music-asset endpoint
     } else {
       dispatch(setSelectedId(id));
-      dispatch(musicAssets(false)); // This indicates we should use music-creation endpoint
+      // dispatch(musicAssets(false)); // This indicates we should use music-creation endpoint
     }
 
     dispatch(musicPlayerDialog());
@@ -115,13 +115,13 @@ function MusicianBox({
               </div> */}
                 <div className="flex justify-center items-center flex-row gap-2">
                   <Avatar
-                    src={imagePath }
+                    src={imagePath}
                     size="md"
                     alt={songName || "Music"}
                     variant="rounded"
-                    // onError={(e: any) => {
-                    //   e.target.src = "/image/default-picture.jpg";
-                    // }}
+                  // onError={(e: any) => {
+                  //   e.target.src = "/image/default-picture.jpg";
+                  // }}
                   />
                   <div className="w-[12rem] max-w-[12rem]">
                     <Typography
@@ -152,9 +152,8 @@ function MusicianBox({
                   />
                 </div>
                 <div
-                  className={`${
-                    removeClass ? "" : "invisible"
-                  } group absolute top-1 right-1 cursor-pointer`}
+                  className={`${removeClass ? "" : "invisible"
+                    } group absolute top-1 right-1 cursor-pointer`}
                 >
                   <EllipsisVerticalIcon className="menu-hover h-[1.6rem] cursor-pointer hover:bg-gray-200 group-hover:bg-gray-200 group-hover:rounded-full hover:rounded-full text-black" />
                   <div className="invisible z-50 absolute group-hover:visible bg-white divide-gray-100 rounded-lg shadow w-[6rem] top-5 right-0 dark:bg-gray-700">

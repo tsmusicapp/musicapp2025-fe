@@ -52,6 +52,8 @@ function MediaPlayerV2() {
     }
   }, [musicDetail]);
 
+  console.log(musicDetail, "details")
+
   const handleLike = async (e: React.MouseEvent) => {
     e.stopPropagation();
     try {

@@ -1,6 +1,7 @@
 "use client";
 
 import SalesCard from "@/components/sales/sales-card";
+import { getSales } from "@/redux/features/offer/offerSlice";
 import { getCompletedOrders } from "@/redux/features/order/orderSlice";
 import { AppDispatch, RootState } from "@/redux/store";
 import { Spinner } from "@material-tailwind/react";
@@ -9,11 +10,13 @@ import { useDispatch, useSelector } from "react-redux";
 
 export function SalesPage() {
   const dispatch = useDispatch<AppDispatch>();
-  const sales = useSelector((state: RootState) => state.order.sales);
+  const { sales } = useSelector((state: RootState) => state.offer);
 
   useEffect(() => {
-    dispatch(getCompletedOrders() as any);
+    dispatch(getSales() as any);
   }, [dispatch]);
+
+  console.log(sales?.sales, 'sales')
 
   if (!sales || sales == null) {
     return <Spinner className="h-10 w-10" />
@@ -25,7 +28,7 @@ export function SalesPage() {
         <h1 className="font-bold text-2xl">My Sales</h1>
         {
           sales ?
-            sales.map((sale: any) => {
+            sales?.sales.map((sale: any) => {
               return (
                 <SalesCard saleData={sale} />)
             }

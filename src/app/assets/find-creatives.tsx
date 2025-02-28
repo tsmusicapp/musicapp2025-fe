@@ -1,5 +1,5 @@
 "use client";
-import { fetchMusicData } from "../../conf/music";
+import { ASSETS, fetchMusicData } from "../../conf/music";
 import AssetMusicianBox from "@/components/music-box/asset-musician-box";
 import MusicPlayerDialog from "../../components/music-player/music-player-dialog";
 import { useEffect, useState } from "react";
@@ -21,23 +21,23 @@ interface MusicAsset {
 }
 
 export function FindCreatives() {
-  const [musicData, setMusicData] = useState<MusicAsset[]>([]);
+  // const [musicData, setMusicData] = useState<MusicAsset[]>([]);
 
-  useEffect(() => {
-    const loadData = async () => {
-      try {
-        const data = await fetchMusicData();
-        console.log("Fetched music data:", data);
-        if (Array.isArray(data)) {
-          setMusicData(data);
-        }
-      } catch (error) {
-        console.error("Error loading music data:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const loadData = async () => {
+  //     try {
+  //       const data = await fetchMusicData();
+  //       console.log("Fetched music data:", data);
+  //       if (Array.isArray(data)) {
+  //         setMusicData(data);
+  //       }
+  //     } catch (error) {
+  //       console.error("Error loading music data:", error);
+  //     }
+  //   };
 
-    loadData();
-  }, []);
+  //   loadData();
+  // }, []);
 
   return (
     <>
@@ -46,7 +46,7 @@ export function FindCreatives() {
         <div className="py-4 flex justify-items-start items-start sm:justify-start">
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-1">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
-              {musicData.map((item) => (
+              {ASSETS.map((item) => (
                 <AssetMusicianBox
                   key={item.id}
                   id={item.id}
@@ -55,7 +55,7 @@ export function FindCreatives() {
                   musicStyle={item.musicStyle}
                   tags={
                     item.tags
-                      ? item.tags.split(",").map((tag) => tag.trim())
+                      ? item.tags.split(",").map((tag: any) => tag.trim())
                       : []
                   }
                 />

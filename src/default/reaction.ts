@@ -96,7 +96,7 @@ export const reactionArrangementMediaPlayer = {
     },
   ],
 };
-
+// add to cart icons
 export const reactionAddShopping = {
   main: {
     id: 1,
@@ -117,7 +117,7 @@ export const reactionAddShopping = {
       icon: "/icons/personal-license.png",
       height: 50,
       width: 50,
-      counter: 23,
+      counter: 22,
     },
     {
       id: 3,

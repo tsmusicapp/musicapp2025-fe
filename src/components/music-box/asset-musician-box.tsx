@@ -6,7 +6,9 @@ import { AppDispatch } from "@/redux/store";
 import {
   musicPlayerDialog,
   setMusicAssetId,
+  setSelectedId,
 } from "@/redux/features/offer/offerSlice";
+import { getImageUrl } from "@/conf/music";
 
 interface AssetMusicianBoxProps {
   id: string;
@@ -25,10 +27,13 @@ function AssetMusicianBox({
 }: AssetMusicianBoxProps) {
   const dispatch = useDispatch<AppDispatch>();
 
+  console.log(tags, 'tags')
+
   const handleClick = () => {
     if (!id) return;
     console.log("Clicked on asset music box, ID:", id);
     dispatch(setMusicAssetId(id));
+    dispatch(setSelectedId(id));
     dispatch(musicPlayerDialog());
   };
 
@@ -40,7 +45,7 @@ function AssetMusicianBox({
       <CardBody className={`relative flex flex-col justify-center p-3`}>
         <div className="flex justify-center items-center flex-row gap-2">
           <Avatar
-            src={imgSong || "/image/default-picture.jpg"}
+            src={getImageUrl(imgSong) || "/image/default-picture.jpg"}
             size="md"
             alt={musicName || "Music"}
             variant="rounded"
