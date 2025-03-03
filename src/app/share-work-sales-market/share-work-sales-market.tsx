@@ -819,7 +819,7 @@ export default function ShareWorkSalesMarket() {
                 {...register("description", {
                   required: "Description is required",
                 })}
-                className="!border !border-black !rounded-none"
+                // className="!border !border-black !rounded-none"
 
                 onChange={handleChange}
               />

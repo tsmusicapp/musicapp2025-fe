@@ -51,6 +51,9 @@ export function HomeMusicianBox({
   const [isPlaying, setIsPlaying] = React.useState(false);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
+  const likesLength = likes?.toString().length;
+
+  console.log(likesLength, "likesLengthValues");
   const FeatherPencil = () => {
     return (
       <div

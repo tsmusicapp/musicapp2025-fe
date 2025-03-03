@@ -61,6 +61,7 @@ const cultureArea = [
 interface JobFormData {
   projectTitle: string;
   category: string[];
+  lyric: string;
   isHaveLyric: string;
   lyricLanguage?: string;
   musicUse: string[];
@@ -91,6 +92,16 @@ export function CreativeHire() {
     reset,
     control
   } = useForm<JobFormData>();
+
+  const [selected, setSelected] = useState(null);
+
+  // ...existing code...
+
+  const handleCheckboxChange = (value: string) => {
+    setSelected((prevSelected) => (prevSelected === value ? null : value));
+  };
+
+  // ...existing code...
 
   const onSubmit = async (data: JobFormData) => {
     debugger
@@ -232,7 +243,7 @@ export function CreativeHire() {
                 color="blue-gray"
                 className="-mb-2 font-semibold"
               >
-                Work Content (Multiple Choice)
+                Creative Content (Multiple Choice)
               </Typography>
               <div className="flex mt-0">
                 {[
@@ -258,6 +269,8 @@ export function CreativeHire() {
                   </div>
                 ))}
               </div>
+
+
 
               <div className="flex flex-col gap-2">
                 <Typography
@@ -286,7 +299,58 @@ export function CreativeHire() {
                 )}
               </div>
 
+              <Typography variant="small" color="blue-gray" className="-mb-2 font-semibold">
+                Does the music have lyrics?
+              </Typography>
+              <div className="flex mt-0">
+                {["Yes", "No"].map((content) => (
+                  <div key={content} className="flex items-center me-10">
+                    <input
+                      type="checkbox"
+                      id={`category-${content.toLowerCase()}`}
+                      value={content}
+                      checked={selected === content} // Only one can be checked
+                      onChange={() => handleCheckboxChange(content)} // Toggle selection
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
+                    />
+                    <label
+                      htmlFor={`category-${content.toLowerCase()}`}
+                      className="ms-2 text-sm font-medium text-gray-900"
+                    >
+                      {content}
+                    </label>
+                  </div>
+                ))}
+              </div>
 
+              <div className="flex flex-col gap-1">
+                <label
+                  htmlFor="default"
+                  className="block text-sm font-semibold text-gray-900 "
+                >
+                  Lyric Language (Optional)
+                </label>
+                <select
+                  id="default"
+                  className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                  {...register("lyricLanguage", {
+                    required: "Please select a lyric language",
+                  })}
+                >
+                  <option defaultValue={"Select Language"}>
+                    Lyrics Language
+                  </option>
+                  <option value="EN">English</option>
+                  <option value="JP">Japanese</option>
+                  <option value="GR">German</option>
+                  <option value="FR">French</option>
+                  <option value="IT">Italian</option>
+                  <option value="SP">Spanish</option>
+                  <option value="KR">Korean</option>
+                  <option value="CH">Chinese</option>
+                  <option value="AR">Arabic</option>
+                </select>
+              </div>
               <label
                 htmlFor="default"
                 className="block text-sm font-semibold text-gray-900 "
@@ -323,7 +387,7 @@ export function CreativeHire() {
                       mode="multiple"
                       allowClear
                       placeholder="Select music styles"
-                      className="w-[740px] h-[40px] py-4 border border-gray-300 rounded-md" 
+                      className="w-[740px] h-[40px] py-4 border border-gray-300 rounded-md"
                     >
                       {musicUse.map((style, index) => (
                         <Option key={index} value={style}>

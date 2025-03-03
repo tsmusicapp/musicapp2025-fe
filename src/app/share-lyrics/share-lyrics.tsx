@@ -17,13 +17,80 @@ import { AppDispatch } from "@/redux/store";
 import { musicBackgroundDialog } from "@/redux/features/offer/offerSlice";
 import MusicBackgroundDialog from "@/components/share-work-creation/music-background-dialog";
 import RichTextEditor from "@/components/ui/RichTextEditor";
+import { useForm } from "react-hook-form";
+
+export interface LyricsWordFormData {
+  lyricName: string;
+  musicImage: any;
+  lyricLanguage: string;
+  coverImage: any;
+  lyricStyle: string;
+  writeLyric: string;
+  lyricMood: string;
+  tags: string;
+  description: string;
+  softwareTool: string;
+}
 
 export function ShareLyrics() {
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    watch,
+    setValue,
+  } = useForm<LyricsWordFormData>({ mode: 'onChange' });
+
+
+  const [musicImagePreview, setMusicImagePreview] = React.useState<string>("");
+  const musicSizeLimit = 20 * 1024 * 1024; // 20MB  
+  const imageSizeLimit = 1024 * 1024; // 1MB
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setMusicImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  const onSubmit = async (data: LyricsWordFormData) => {
+
+    console.log(data, "checkDataValue")
+    const formData = new FormData();
+    formData.append("lyricName", data.lyricName);
+    formData.append("lyricLanguage", data.lyricLanguage);
+    formData.append("lyricStyle", data.lyricStyle);
+    formData.append("lyricMood", data.lyricMood);
+    formData.append("writeLyric", data.writeLyric);
+    formData.append("tags", data.tags);
+    formData.append("description", data.description);
+    formData.append("tools", data.softwareTool);
+    
+    if(data.musicImage && data.musicImage[0]){
+      formData.append("musicImage", data.musicImage[0]);
+    }
+
+    try {
+      const response  = await fetch("http://localhost:5000/v1/music/lyrics", {
+        method: "POST",
+        body: formData,
+      });
+      if(response.ok){
+        console.log("Lyrics created successfully")
+      }
+    } catch (error) {
+      console.log(error, "error")
+    }
+  }
   const dispatch = useDispatch<AppDispatch>();
   return (
     <section className="flex flex-row justify-center items-center my-8">
       {/* <MusicBackgroundDialog /> */}
-      <form className="flex flex-col gap-2">
+      <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-row gap-8">
           <div className="w-96">
             {/* LEFT */}
@@ -38,6 +105,7 @@ export function ShareLyrics() {
               <Input
                 crossOrigin={""}
                 size="lg"
+                {...register("lyricName", { required: "Lyric name is required" })}
                 placeholder=""
                 className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
                 labelProps={{
@@ -54,6 +122,9 @@ export function ShareLyrics() {
                 <select
                   id="default"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
+                  {...register("lyricLanguage", {
+                    required: "Please select a lyric language",
+                  })}
                 >
                   <option defaultValue={"Select Language"}>
                     Song Language
@@ -71,23 +142,57 @@ export function ShareLyrics() {
               </div>
               <div className="flex flex-col gap-10">
                 <div className="flex justify-center items-center gap-2 mt-10">
-                  <div className="w-[18rem] flex flex-col justify-center items-center gap-2 font-semibold text-sm">
+                  <div className="w-[18rem] flex flex-col gap-2 font-semibold text-sm">
                     Upload Cover Image
                     <label
-                      htmlFor="dropzone-file"
-                      className="flex flex-col items-center justify-center w-[10rem] h-[10rem] border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50"
+                      htmlFor="musicImage"
+                      className="flex flex-col items-center justify-center w-[10rem] h-[10rem] border-2 border-gray-500 border-dashed rounded-lg cursor-pointer  hover:bg-gray-100"
                     >
-                      <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                        <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                          <span className="font-semibold">Less than 1M</span>
-                        </p>
-                      </div>
+                      {musicImagePreview ? (
+                        <img
+                          src={musicImagePreview}
+                          alt="Preview"
+                          className="w-full h-full object-cover rounded-lg"
+                        />
+                      ) : (
+                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                          <p className="mb-2 text-sm text-gray-500">
+                            <span className="font-semibold">Less than 1MB</span>
+                          </p>
+                        </div>
+                      )}
                       <input
-                        id="dropzone-file"
+                        id="musicImage"
                         type="file"
                         className="hidden"
+                        accept="image/*"
+                        {...register("musicImage", {
+                          required: "Music image is required",
+                          onChange: (e) => {
+                            const file = e.target.files?.[0];
+                            if (file) {
+                              if (file.size > imageSizeLimit) {
+                                e.target.value = "";
+                                // You can add a state for error message instead of alert here
+                                alert("Image must be less than 1MB");
+                                return;
+                              }
+                              if (!file.type.startsWith("image/")) {
+                                e.target.value = "";
+                                alert("File must be an image");
+                                return;
+                              }
+                              handleImageChange(e);
+                            }
+                          },
+                        })}
                       />
                     </label>
+                    {errors.musicImage && (
+                      <span className="text-red-500 text-xs">
+                        {errors.musicImage.message as string}
+                      </span>
+                    )}
                   </div>
                 </div>
                 {/* music background upload removed */}
@@ -101,7 +206,10 @@ export function ShareLyrics() {
                     Suitable Music Style
                   </label>
                   <select
-                    id="default"
+                    id="lyricStyle"
+                    {...register("lyricStyle", {
+                      required: "Please select a music style",
+                    })}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                   >
                     <option defaultValue={"Select Music Style"}>
@@ -148,7 +256,10 @@ export function ShareLyrics() {
                     Lyric Mood
                   </label>
                   <select
-                    id="default"
+                    id="lyricMood"
+                    {...register("lyricMood", {
+                      required: "Please select a music mood",
+                    })}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
                   >
                     <option defaultValue={"Select Music Usage"}>
@@ -222,8 +333,8 @@ export function ShareLyrics() {
                 Write Lyric
               </Typography>
               <RichTextEditor
-                value={''}
-                onChange={()=>{}}
+                value={watch("writeLyric") || ""}
+                onChange={(newValue) => setValue("writeLyric", newValue)}
               />
             </div>
           </div>
@@ -245,6 +356,15 @@ export function ShareLyrics() {
                 size="lg"
                 placeholder=""
                 className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                {...register("tags", {
+                  required: "Tags are required",
+                  validate: (value) => {
+                    if (value.split(",").length < 3) {
+                      return "Please enter at least 3 tags";
+                    }
+                    return true;
+                  }
+                })}
                 labelProps={{
                   className: "before:content-none after:content-none",
                 }}
@@ -256,7 +376,9 @@ export function ShareLyrics() {
               >
                 Description
               </Typography>
-              <Textarea className="w-96 h-56" />
+              <Textarea className="w-96 h-56"
+                {...register("description", { required: "Description is required", minLength: { value: 1, message: "Description is required" } })}
+              />
               <Typography
                 variant="small"
                 color="blue-gray"
@@ -269,6 +391,7 @@ export function ShareLyrics() {
                 size="lg"
                 placeholder=""
                 className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
+                {...register("softwareTool")}
                 labelProps={{
                   className: "before:content-none after:content-none",
                 }}
@@ -296,7 +419,7 @@ export function ShareLyrics() {
             >
               Save as Draft
             </Button>
-            <Button className="w-[14rem]" color="blue" fullWidth>
+            <Button className="w-[14rem]" color="blue" fullWidth type="submit">
               Publish
             </Button>
           </div>
