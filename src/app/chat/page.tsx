@@ -5,6 +5,7 @@ import ChatRoom from "@/components/chat/chat-room";
 import ChatInput from "@/components/chat/chat-input";
 import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
+import OfferDialog from "@/components/offer/offer-dialog";
 
 export default function Page() {
   const selectedChatId = useSelector((state: RootState) => state.chat.chatId);
@@ -14,6 +15,7 @@ export default function Page() {
       {/* Left Sidebar */}
       <div className="w-[24rem] border-r border-gray-200">
         <SidebarChat />
+        <OfferDialog />
       </div>
 
       {/* Main Chat Area */}

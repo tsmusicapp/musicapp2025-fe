@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import {
   Button,
   Dialog,
@@ -11,12 +11,67 @@ import {
 import { RootState, AppDispatch } from "@/redux/store";
 import { useSelector, useDispatch } from "react-redux";
 import { updateDialog } from "@/redux/features/offer/offerSlice";
+import { useForm } from "react-hook-form";
+import { Order } from '@/types/Order'
+import { createOrder } from "@/redux/features/order/orderSlice";
+import { useAuth } from "@/utils/useAuth";
+import { Toast } from "primereact/toast";
+import { chatService } from "@/services/chatService";
+
 
 export default function OfferDialog() {
+  const toast = useRef<Toast>(null);
+
+  const { getCurrentUser } = useAuth()
+  const { register, handleSubmit, reset } = useForm<Order>({
+    defaultValues: {
+      title: '',
+      description: "",
+      price: 0,
+      delivery_time: 0
+    }
+  })
   const dispatch = useDispatch<AppDispatch>();
   const isOfferDialog = useSelector(
     (state: RootState) => state.offer.offerDialog
   );
+  const chatData = useSelector(
+    (state: RootState) => state.chat
+  );
+  console.log(chatData, 'chat data')
+
+
+  const onSubmit = async (data: any) => {
+    const user = getCurrentUser();
+    const updatedData: Order = {
+      ...data,
+      createdBy: user?.id,
+      chat_id: chatData?.recruiterId,
+      recruiterId: chatData.chatId,
+      status: 'inprogress'
+    };
+
+    try {
+      const res = await dispatch(createOrder(updatedData));
+      await chatService.sendMessage(chatData.chatId, `${data.title}||OrderRequestCard`);
+      console.log(res, "res from order");
+
+      if (res?.meta.requestStatus === "fulfilled") {
+        reset()
+        dispatch(updateDialog());
+        toast.current?.show({ severity: "success", summary: "Success", detail: "Order created successfully!", life: 3000 });
+      } else {
+        dispatch(updateDialog());
+        toast.current?.show({ severity: "error", summary: "Error", detail: "Failed to create order. Please try again.", life: 3000 });
+      }
+    } catch (error) {
+      toast.current?.show({ severity: "error", summary: "Error", detail: "Something went wrong!", life: 3000 });
+      console.error("Error creating order:", error);
+    }
+  };
+
+
+
   return (
     <>
       <Dialog
@@ -25,92 +80,103 @@ export default function OfferDialog() {
         handler={() => dispatch(updateDialog())}
         className="bg-transparent shadow-none"
       >
-        <Card className="mx-auto w-full max-w-[24rem]">
-          <CardBody className="flex flex-col gap-2 pb-0">
-            <div className="flex flex-col gap-1">
-              <Typography variant="h4" color="blue-gray" className="">
-                Send Order
-              </Typography>
-              <Typography
-                className="font-semibold"
-                variant="small"
-                color="black"
-              >
-                Outline the details of your collaboration below
-              </Typography>
-            </div>
-            <div className="flex flex-col gap-2">
-              <Typography className="-mb-2" color="black" variant="h6">
-                Title
-              </Typography>
-              <input
-                type="text"
-                className="border border-gray-400 w-full text-black text-sm rounded-lg p-2.5"
-              />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Typography className="-mb-2" color="black" variant="h6">
-                My Work Description
-              </Typography>
-              <Textarea className="w-[25rem] h-52 !text-black" />
-            </div>
-            <div className="flex flex-col gap-2">
-              <Typography className="-mb-2" color="black" variant="h6">
-                Delivery Time
-              </Typography>
-              <div className="flex flex-row items-center justify-start gap-2">
+        <Toast ref={toast} />
+
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Card className="mx-auto w-full max-w-[24rem]">
+            <CardBody className="flex flex-col gap-2 pb-0">
+              <div className="flex flex-col gap-1">
+                <Typography variant="h4" color="blue-gray" className="">
+                  Send Order
+                </Typography>
+                <Typography
+                  className="font-semibold"
+                  variant="small"
+                  color="black"
+                >
+                  Outline the details of your collaboration below
+                </Typography>
+              </div>
+              <div className="flex flex-col gap-2">
+                <Typography className="-mb-2" color="black" variant="h6">
+                  Title
+                </Typography>
                 <input
                   type="text"
-                  onKeyPress={(event) => {
-                    if (!/[0-9]/.test(event.key)) {
-                      event.preventDefault();
-                    }
-                  }}
-                  className="border border-gray-400 w-[5rem] max-w-[5rem] text-black text-sm rounded-lg p-2.5"
+                  {...register("title", { required: true })}
+                  className="border border-gray-400 w-full text-black text-sm rounded-lg p-2.5"
                 />
-                <p className="text-black font-semibold text-sm">days</p>
               </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <Typography className="-mb-2" color="black" variant="h6">
-                Price
-              </Typography>
-              <p className="text-black font-semibold text-[0.6rem]">
-                Your fees will be deducted from thi amount. Your client fees
-                will be billed to them separately.
-              </p>
-              <input
-                // onKeyDown={(event) => {
-                //   if (!/[0-9]/.test(event.key)) {
-                //     event.preventDefault();
-                //   }
-                // }}
-                type="text"
-                id="cvv-input"
-                aria-describedby="helper-text-explanation"
-                className="border border-gray-400 w-full h-[5rem] text-center font-bold text-black text-3xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
-              />
-            </div>
-          </CardBody>
-          <CardFooter className="flex flex-col px-5 py-4 pt-0">
-            <div className="flex flex-col gap-0 py-4">
-              <p className="text-[0.7rem] font-semibold text-black underline">
-                *Learn more about the fee
-              </p>
-              <p className="text-[0.6rem] font-semibold text-black">
-                Fees may vary according to location and payment method.
-                <span className="underline"> Learn More</span>
-              </p>
-            </div>
-            <Button
-              className="bg-green-400"
-              onClick={() => dispatch(updateDialog())}
-              fullWidth
-            >
-              Send Order
-            </Button>
-          </CardFooter>
-        </Card>
+              <div className="flex flex-col gap-2">
+                <Typography className="-mb-2" color="black" variant="h6">
+                  My Work Description
+                </Typography>
+                <Textarea
+                  {...register("description", { required: true })}
+                  className="w-[25rem] h-52 !text-black" />
+              </div>
+              <div className="flex flex-col gap-2">
+                <Typography className="-mb-2" color="black" variant="h6">
+                  Delivery Time
+                </Typography>
+                <div className="flex flex-row items-center justify-start gap-2">
+                  <input
+                    type="text"
+                    {...register("delivery_time", { required: true })}
+
+                    onKeyPress={(event) => {
+                      if (!/[0-9]/.test(event.key)) {
+                        event.preventDefault();
+                      }
+                    }}
+                    className="border border-gray-400 w-[5rem] max-w-[5rem] text-black text-sm rounded-lg p-2.5"
+                  />
+                  <p className="text-black font-semibold text-sm">days</p>
+                </div>
+              </div>
+              <div className="flex flex-col gap-2">
+                <Typography className="-mb-2" color="black" variant="h6">
+                  Price
+                </Typography>
+                <p className="text-black font-semibold text-[0.6rem]">
+                  Your fees will be deducted from thi amount. Your client fees
+                  will be billed to them separately.
+                </p>
+                <input
+                  // onKeyDown={(event) => {
+                  //   if (!/[0-9]/.test(event.key)) {
+                  //     event.preventDefault();
+                  //   }
+                  // }}
+                  {...register("price", { required: true })}
+
+                  type="text"
+                  id="cvv-input"
+                  aria-describedby="helper-text-explanation"
+                  className="border border-gray-400 w-full h-[5rem] text-center font-bold text-black text-3xl rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5"
+                />
+              </div>
+            </CardBody>
+            <CardFooter className="flex flex-col px-5 py-4 pt-0">
+              <div className="flex flex-col gap-0 py-4">
+                <p className="text-[0.7rem] font-semibold text-black underline">
+                  *Learn more about the fee
+                </p>
+                <p className="text-[0.6rem] font-semibold text-black">
+                  Fees may vary according to location and payment method.
+                  <span className="underline"> Learn More</span>
+                </p>
+              </div>
+              <Button
+                className="bg-green-400"
+                type="submit"
+                fullWidth
+              >
+                Send Order
+              </Button>
+            </CardFooter>
+          </Card>
+        </form>
       </Dialog>
     </>
   );

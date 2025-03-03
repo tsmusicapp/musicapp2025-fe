@@ -5,7 +5,7 @@ import { updateChatUsers } from "../redux/features/chat/chatSlice";
 const BASE_URL = "http://localhost:5000/v1";
 
 export const chatService = {
-  async getChatUsers(role : string): Promise<IChatUser[]> {
+  async getChatUsers(role: string): Promise<IChatUser[]> {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(`${BASE_URL}/chat-system/users/${role}`, {
@@ -27,7 +27,7 @@ export const chatService = {
     }
   },
 
-  async getChatMessages(currentUserId:string ,chatId: string): Promise<> {
+  async getChatMessages(currentUserId: string, chatId: string): Promise<> {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
@@ -45,6 +45,7 @@ export const chatService = {
       }
 
       const message = await response.json();
+      console.log(message , "message here")
       return message.data
     } catch (error) {
       console.error("Error fetching chat messages:", error);
@@ -52,12 +53,12 @@ export const chatService = {
     }
   },
 
-  async sendMessage(chatId: number, message: string): Promise<IMessage> {
+  async sendMessage(chatId: string, message: string): Promise<IMessage> {
     try {
       const token = localStorage.getItem("token");
       const auth = JSON.parse(localStorage.getItem("auth") || "{}");
       const currentUser = auth.user;
-    
+
       const response = await fetch(
         `${BASE_URL}/chat-system/${chatId}/messages?senderId=${currentUser?.id}`,
         {

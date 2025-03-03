@@ -126,27 +126,32 @@ export default function DropdownProfile({ user }: UserProps) {
             Edit My Availability
           </Typography>
         </MenuItem> */}
-        <MenuItem className="flex items-center gap-2">
-          <Link href={"/order"} onClick={() => dispatch(isCustomer(false))}>
-            <Typography variant="small" className="font-medium">
-              My Work Orders
-            </Typography>
-          </Link>
-        </MenuItem>
-        <MenuItem className="flex items-center gap-2">
-          <Link href={"/order"} onClick={() => dispatch(isCustomer(true))}>
-            <Typography variant="small" className="font-medium">
-              My Orders
-            </Typography>
-          </Link>
-        </MenuItem>
-        <MenuItem className="flex items-center gap-2">
-          <Link href={"/sales"}>
-            <Typography variant="small" className="font-medium">
-              My Sales
-            </Typography>
-          </Link>
-        </MenuItem>
+        {
+          auth.user.role == "recruiter" ?
+            <MenuItem className="flex items-center gap-2">
+              <Link href={"/order"} onClick={() => dispatch(isCustomer(false))}>
+                <Typography variant="small" className="font-medium">
+                  My Work Orders
+                </Typography>
+              </Link>
+            </MenuItem> :
+            <>
+              <MenuItem className="flex items-center gap-2">
+                <Link href={"/order"} onClick={() => dispatch(isCustomer(true))}>
+                  <Typography variant="small" className="font-medium">
+                    My Orders
+                  </Typography>
+                </Link>
+              </MenuItem>
+              <MenuItem className="flex items-center gap-2">
+                <Link href={"/sales"}>
+                  <Typography variant="small" className="font-medium">
+                    My Sales
+                  </Typography>
+                </Link>
+              </MenuItem>
+            </>
+        }
         <MenuItem className="flex items-center gap-2">
           <Link href={"/purchase"}>
             <Typography variant="small" className="font-medium">

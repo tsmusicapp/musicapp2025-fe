@@ -39,17 +39,17 @@ export function LoginPage() {
         },
         body: JSON.stringify(data),
       });
-  
+
       if (response.ok) {
         const result = await response.json();
-  
+
         // Store tokens in localStorage for future authentication
         localStorage.setItem("token", result.tokens.access.token);
         localStorage.setItem("refreshToken", result.tokens.refresh.token);
-  
+
         // Dispatch login action if you are using Redux
         dispatch(login(result));
-  
+
         // Show success message
         toast.current?.show({
           severity: "success",
@@ -57,12 +57,12 @@ export function LoginPage() {
           detail: "Login successful!",
           life: 3000,
         });
-  
+
         // Redirect based on user type
         if (result.isNewUser) {
-          window.location.href = "/user-space";
-        } else {
           window.location.href = "/";
+        } else {
+          window.location.href = "/user-space";
         }
       } else {
         const errorResult = await response.json();
@@ -83,7 +83,7 @@ export function LoginPage() {
       });
     }
   };
-  
+
 
   return (
     <>

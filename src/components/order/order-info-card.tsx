@@ -14,6 +14,7 @@ import {
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { cancelDialog } from "@/redux/features/offer/offerSlice";
+import Link from "next/link";
 
 function OrderInfoCard() {
   const dispatch = useDispatch<AppDispatch>();
@@ -92,13 +93,15 @@ function OrderInfoCard() {
                     Complete
                   </Button>
                 </div>
-                <Button
-                  variant="filled"
-                  size="sm"
-                  className="normal-case bg-gray-400 text-black text-center text-[0.6rem] w-[6rem] px-1 py-2"
-                >
-                  Go To order page
-                </Button>
+                <Link href={"/order"} >
+                  <Button
+                    variant="filled"
+                    size="sm"
+                    className="normal-case bg-gray-400 text-black text-center text-[0.6rem] w-[6rem] px-1 py-2"
+                  >
+                    Go To order page
+                  </Button>
+                </Link>
               </div>
               <p className="text-black text-[0.5rem] font-bold underline">
                 Submit to arbitration

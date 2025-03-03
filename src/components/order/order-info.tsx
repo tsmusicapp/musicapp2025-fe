@@ -14,8 +14,12 @@ import {
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { cancelDialog } from "@/redux/features/offer/offerSlice";
-
-function OrderInfo() {
+import { Order } from "@/types/Order";
+import Link from "next/link";
+interface props {
+  order: Order
+}
+function OrderInfo({ order }: props) {
   const dispatch = useDispatch<AppDispatch>();
   return (
     <>
@@ -26,7 +30,8 @@ function OrderInfo() {
           <CardBody className={`relative flex flex-col px-0 py-0`}>
             <div className="border-b-2 border-black/20 py-2 px-6 flex flex-row justify-between">
               <p className="text-[0.7rem] font-bold text-black">
-                I Will compose a pop up music
+                {/* I Will compose a pop up music */}
+                {order.title}
               </p>
               <p className="text-[0.7rem] font-bold text-green-600">
                 In Progress
@@ -34,22 +39,22 @@ function OrderInfo() {
             </div>
             <div className="border-b-2 border-black/20 flex flex-col justify-start py-2 mx-6 gap-1">
               <div className="flex flex-row justify-between">
-                <p className="text-[0.9rem] font-bold text-black">US$2000</p>
+                <p className="text-[0.9rem] font-bold text-black">US${order.price}</p>
                 <p className="text-[0.8rem] font-bold text-black">
                   Start Time
-                  <span className="text-[0.7rem] ml-3">07/08/2024</span>
+                  <span className="text-[0.7rem] ml-3">{order.startTime.split("T")[0]}</span>
                 </p>
               </div>
             </div>
             <div className="border-b-2 border-black/20 flex flex-col justify-start py-2 mx-6 gap-1">
               <div className="flex flex-row justify-between">
-                <p className="text-[0.6rem] font-bold text-black text-justify">{`Lorem Ipsum has been the industry's standard dummy text ever since the 1500s`}</p>
+                <p className="text-[0.6rem] font-bold text-black text-justify">{order.description}</p>
               </div>
             </div>
             <div className="border-b-2 border-black/20 flex flex-col justify-start py-2 mx-6 gap-1">
               <div className="flex flex-col">
                 <p className="text-[0.6rem] font-bold text-black">
-                  Your offer includes
+                  This offer includes
                 </p>
                 <div className="flex flex-row justify-start gap-4">
                   <div className="flex flex-row justify-center gap-1">
@@ -61,7 +66,7 @@ function OrderInfo() {
                   <div className="flex flex-row justify-center gap-1">
                     <ClockIcon color="black" className="h-4 w-4" />
                     <p className="text-[0.6rem] font-bold text-black">
-                      20 days delivery
+                      {order.delivery_time} days delivery
                     </p>
                   </div>
                 </div>
@@ -87,13 +92,15 @@ function OrderInfo() {
                     Complete
                   </Button>
                 </div>
-                <Button
-                  variant="filled"
-                  size="sm"
-                  className="normal-case bg-gray-400 text-black text-center text-[0.6rem] w-[6rem] px-1 py-2"
-                >
-                  Go To order page
-                </Button>
+                <Link href={"/order"} >
+                  <Button
+                    variant="filled"
+                    size="sm"
+                    className="normal-case bg-gray-400 text-black text-center text-[0.6rem] w-[6rem] px-1 py-2"
+                  >
+                    Go To order page
+                  </Button>
+                </Link>
               </div>
               <p className="text-black text-[0.5rem] font-bold underline">
                 Submit to arbitration

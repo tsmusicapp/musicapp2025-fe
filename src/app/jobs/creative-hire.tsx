@@ -104,7 +104,6 @@ export function CreativeHire() {
   // ...existing code...
 
   const onSubmit = async (data: JobFormData) => {
-    debugger
     try {
       setIsLoading(true);
 

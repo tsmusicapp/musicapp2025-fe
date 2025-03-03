@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Button,
   Dialog,
@@ -19,11 +19,27 @@ export default function CancelOrderConfirmation() {
   const isCancelDialog = useSelector(
     (state: RootState) => state.offer.cancelDialog
   );
+  const [countdown, setCountdown] = useState<number | null>(null);
+
+  const handleYesClick = () => {
+    dispatch(arbitrationDialog())
+    setCountdown(3); // Start countdown
+
+    const interval = setInterval(() => {
+      setCountdown((prev) => (prev !== null ? prev - 1 : null));
+    }, 1000); // Update countdown every second
+
+    setTimeout(() => {
+      dispatch(cancelDialog());
+      setCountdown(null); // Reset countdown
+      clearInterval(interval); // Stop the interval
+    }, 1000);
+  };
 
   return (
     <>
       <Dialog open={isCancelDialog} handler={() => dispatch(cancelDialog())}>
-        <DialogBody divider className="grid place-items-center h-[15rem]">
+        <DialogBody divider className="grid z-70 place-items-center h-[15rem]">
           <Typography color="black" variant="small">
             Do you agree to cancel the order?
           </Typography>
@@ -38,7 +54,7 @@ export default function CancelOrderConfirmation() {
             <Button
               variant="gradient"
               color="green"
-              onClick={() => dispatch(arbitrationDialog())}
+              onClick={handleYesClick}
             >
               Yes
             </Button>

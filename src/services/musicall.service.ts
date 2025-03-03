@@ -27,9 +27,8 @@ export class MusicallService {
 
     // Remove 'public/' from the path and ensure it starts with a slash
     const cleanPath = path.replace("public/", "");
-    return `${BASE_URL}${
-      cleanPath.startsWith("/") ? cleanPath : "/" + cleanPath
-    }`;
+    return `${BASE_URL}${cleanPath.startsWith("/") ? cleanPath : "/" + cleanPath
+      }`;
   }
 
   // Add new methods for API calls
@@ -68,7 +67,7 @@ export class MusicallService {
   static async getMusicDetails(id: string) {
     try {
       const token = this.getAuthToken();
-        const response = await fetch(`http://localhost:5000/v1/music/get-music/${id}`, {
+      const response = await fetch(`http://localhost:5000/v1/music/get-music/${id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -76,9 +75,8 @@ export class MusicallService {
       });
 
       const data = await response.json();
-      
-      console.log(data, "dataValueForCheck")
-      
+
+
 
       return {
         ...data,

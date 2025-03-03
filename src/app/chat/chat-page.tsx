@@ -76,6 +76,8 @@ export function ChatPage() {
           <div className="w-full h-[52.5rem] rounded-s-xl border-slate-100 border-b space-y-2 items-center">
             <div className="flex flex-row">
               <SidebarChat />
+              <OfferDialog />
+
               {parseInt(chatId) != 0 ? (
                 <div
                   className={`w-full h-[52.5rem] max-h-[52.5rem] flex flex-col rounded-e-xl border-l-2 border-black/10`}
@@ -89,7 +91,7 @@ export function ChatPage() {
                   <div
                     className={`flex flex-row justify-between h-[10rem] z-20 p-2 border-t-2 border-black/10 items-center`}
                   >
-                    <ChatInput />
+                    {/* <ChatInput /> */}
                   </div>
                 </div>
               ) : (

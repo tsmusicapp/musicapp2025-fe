@@ -94,7 +94,6 @@ function BoxWithInfo({
     try {
       const musicDetails = await MusicallService.getMusicDetails(id);
 
-      debugger
       dispatch(setSelectedId(id));
       dispatch(setMusicDetail(musicDetails));
       dispatch(musicPlayerDialog());
@@ -116,7 +115,7 @@ function BoxWithInfo({
     }
   };
 
-  const imagePath = getImageUrl(  musicImage  )
+  const imagePath = getImageUrl(musicImage)
 
   return (
     <>

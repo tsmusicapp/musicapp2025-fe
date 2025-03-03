@@ -15,14 +15,14 @@ interface ApiState {
   applyJob: ApplyJob;
   appliedJobIds: any;
   data: any;
-  myJobs: any;
+  myJobs: any[];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: ApiState = {
   fireGetJob: false,
-  myJobs: null,
+  myJobs: [],
   appliedJobIds: null,
   appliedJobs: null,
   applyJob: {
@@ -106,8 +106,8 @@ export const getMyJobs = createAsyncThunk(
   'job/getMyJobs',
   async () => {
     const accessToken = localStorage.getItem('token');
-    const userid = JSON.parse(localStorage.getItem('user') || '{}').id;
-    console.log(userid, "user id here ");
+    // const userid = JSON.parse(localStorage.getItem('user') || '{}').id;
+    // console.log(userid, "user id here ");
 
 
     const response = await axios.get(
@@ -122,7 +122,7 @@ export const getMyJobs = createAsyncThunk(
     if (response.status === 200) {
       console.log("Job saved successfully");
     } else {
-      console.error("FailedupdateJobStatus to save job");
+      console.error("Failed to get my jobs");
     }
 
     return response.data;

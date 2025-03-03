@@ -11,14 +11,17 @@ interface ChatUser {
 }
 
 interface ChatState {
+  // _id: String;
   chatDrawer: boolean;
   chatId: string;
+  recruiterId: string;
   chatUsers: ChatUser[];
 }
 
 const initialState: ChatState = {
   chatDrawer: false,
   chatId: "",
+  recruiterId: "",
   chatUsers: [],
 };
 
@@ -33,10 +36,13 @@ export const chatSlice = createSlice({
       state.chatId = action.payload;
     },
     updateChatUsers: (state, action: PayloadAction<ChatUser[]>) => {
-      state.chatUsers = [ ...action.payload];
+      state.chatUsers = [...action.payload];
+    },
+    recruiterId: (state, action: PayloadAction<string>) => {
+      state.recruiterId = action.payload;
     },
   },
 });
 
-export const { updateDrawer, chatId, updateChatUsers } = chatSlice.actions;
+export const { updateDrawer, chatId, updateChatUsers, recruiterId } = chatSlice.actions;
 export default chatSlice.reducer;

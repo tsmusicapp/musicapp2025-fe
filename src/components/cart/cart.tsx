@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useEffect } from "react";
 import {
   Popover,
   PopoverHandler,
@@ -7,20 +9,33 @@ import {
   Avatar,
   Typography,
   Badge,
+  Spinner,
 } from "@material-tailwind/react";
 import Link from "next/link";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch, RootState } from "@/redux/store";
+import { getImageUrl } from "@/conf/music";
+import { getCart } from "@/redux/features/offer/offerSlice";
 
 export default function Cart() {
+  const dispatch = useDispatch<AppDispatch>();
+  const { cart } = useSelector((state: RootState) => state.offer);
   const [openPopover, setOpenPopover] = React.useState(false);
 
   const triggers = {
-    onMouseEnter: () => setOpenPopover(true),
-    onMouseLeave: () => setOpenPopover(false),
+    onclick: () => setOpenPopover(!openPopover),
   };
+
+  const totalPrice = cart.length > 0 ? cart.reduce((total: number, item: any) => total + (!item.paid ? (item.quantity * Number(item.assetId.commercialUsePrice)) : 0), 0) : 0;
+
+  useEffect(() => {
+    dispatch(getCart())
+  }, [dispatch])
+
 
   return (
     <Popover open={openPopover} handler={setOpenPopover}>
-      <Badge content="2" color="red" withBorder>
+      <Badge content={cart.length} color="red" withBorder>
         <PopoverHandler {...triggers}>
           <img
             src={"/icons/cart-black.png"}
@@ -42,22 +57,27 @@ export default function Cart() {
           color="black"
           className="font-normal text-black"
         >
-          you have <span className="text-blue-200">2</span> items in your
+          you have <span className="text-blue-200">{cart ? cart.length : 0}</span> items in your
           shopping cart
         </Typography>
         <div className="mt-4 flex flex-col gap-2">
-          <div className="flex flex-row items-center justify-between mx-3">
-            <Avatar
-              variant="square"
-              alt="tania andrew"
-              size="sm"
-              className="cursor-pointer"
-              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
-            />
-            <p className="text-black font-medium">Every</p>
-            <p className="text-blue-300 font-medium">$20.00</p>
-          </div>
-          <div className="flex flex-row items-center justify-between mx-3">
+          {cart.length > 0 ? cart.map((item: any) => (
+            item.paid == false &&
+            <div className="flex flex-row items-center justify-between mx-3">
+              <Avatar
+                variant="square"
+                alt="tania andrew"
+                size="sm"
+                className="cursor-pointer"
+                src={getImageUrl(item.assetId.musicImage)}
+              />
+              <p className="text-black font-medium">{item.assetId.songName}</p>
+              <p className="text-blue-300 font-medium"> {item.quantity} X ${item.assetId.commercialUsePrice}</p>
+            </div>
+          )) : <div>Go to assets and Add to cart</div>
+          }
+
+          {/* <div className="flex flex-row items-center justify-between mx-3">
             <Avatar
               variant="square"
               alt="tania andrew"
@@ -67,9 +87,9 @@ export default function Cart() {
             />
             <p className="text-black font-medium">Hotel California</p>
             <p className="text-blue-300 font-medium">$35.00</p>
-          </div>
+          </div> */}
           <div className="flex flex-row items-center justify-end mx-3">
-            <p className="text-black font-bold">Total: $55.00</p>
+            <p className="text-black font-bold">Total: ${totalPrice}.00</p>
           </div>
           <div className="flex flex-col items-center justify-center gap-1 py-4">
             <Link href={"/checkout"}>
