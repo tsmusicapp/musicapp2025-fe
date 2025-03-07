@@ -44,7 +44,7 @@ interface Job {
   timeFrame: string;
   applicantName: string;
   createdAt: string;
-  savedBy:string[];
+  savedBy: string[];
 }
 
 interface CheckboxGroupProps {
@@ -98,17 +98,17 @@ export function Freelance() {
   const { data, loading, error } = useSelector((state: any) => state.job);
 
   // console.log(loading , "Loading")
-  
+
   const [searchText, setSearchText] = useState<string>("");
   const [selectedRegion, setSelectedRegion] = useState<string>("");
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
 
-  const activeJobs = data?.jobs.filter((job:Job)=> job.status === "active");
+  const activeJobs = data?.jobs.filter((job: Job) => job.status === "active");
 
-    useEffect(() => {
-        dispatch(getJobs());
-        dispatch(getAppliedJobs())
-    }, [dispatch , fireGetJob]);
+  useEffect(() => {
+    dispatch(getJobs());
+    dispatch(getAppliedJobs())
+  }, [dispatch, fireGetJob]);
 
   // Handle category checkbox changes
   const handleCategoryChange = (category: string, isChecked: boolean): void => {
@@ -120,9 +120,9 @@ export function Freelance() {
       }
     });
   };
-  
+
   // const regions = Array.from(new Set(JOBS_PROPS.map(job => job.musicculture)));
-  const regions:any = [];
+  const regions: any = [];
 
 
   return (
@@ -145,7 +145,7 @@ export function Freelance() {
               onChange={(value) => setSelectedRegion(value || "")}
             >
               <Option value="">All Regions</Option>
-              {regions.map((region) => (
+              {regions.map((region: any) => (
                 <Option key={region} value={region}>{region}</Option>
               ))}
             </Select>
@@ -160,11 +160,11 @@ export function Freelance() {
         <div className="py-4 flex justify-items-start items-start sm:justify-start">
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-1">
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-              {data ? activeJobs.map((props : Job, index:number) => (
+              {data ? activeJobs.map((props: any, index: number) => (
                 <JobsCard key={props.id || index} {...props} />
               )) : <div>
-                    <Spinner className="h-12 w-12"/>
-                  </div>
+                <Spinner className="h-12 w-12" />
+              </div>
               }
             </div>
           </div>

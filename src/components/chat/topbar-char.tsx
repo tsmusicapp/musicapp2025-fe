@@ -13,16 +13,19 @@ import {
   reportDialog,
   reportUserDialog,
 } from "@/redux/features/offer/offerSlice";
+import { useAuth } from "@/utils/useAuth";
 
 function TopbarChat() {
+  const { getCurrentUser } = useAuth()
+  const currentUser = getCurrentUser()
   const dispatch = useDispatch<AppDispatch>();
   const chatId = useSelector((state: RootState) => state.chat.chatId);
-  const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState<{ avatar?: string; userName?: string }>({});
 
   useEffect(() => {
-    if (chatId) {
+    if (chatId && currentUser) {
       chatService
-        .getChatUsers()
+        .getChatUsers(currentUser.role)
         .then((users) => {
           const user = users.find((u) => u.id === chatId);
           if (user) {
@@ -35,11 +38,11 @@ function TopbarChat() {
 
   return (
     <>
-      {chatId != 0 ? (
+      {chatId !== "" && chatId !== undefined ? (
         <div className="flex flex-row justify-between border-b-2 p-4 border-black/10 h-[4rem] max-h-[4rem]">
           <div className="flex flex-row items-center gap-2">
-            <Avatar src={userData?.avatar} alt="avatar" size="sm" />
-            <p className="font-semibold text-sm">{userData?.userName}</p>
+            <Avatar src={userData.avatar} alt="avatar" size="sm" />
+            <p className="font-semibold text-sm">{userData.userName}</p>
           </div>
           <div className="flex flex-row items-center justify-center">
             <Button variant="text" size="sm" className="text-md p-2">
@@ -74,5 +77,4 @@ function TopbarChat() {
     </>
   );
 }
-
 export default TopbarChat;

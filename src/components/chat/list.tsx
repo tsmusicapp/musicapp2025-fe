@@ -29,7 +29,7 @@ export interface IChatUser {
 }
 
 interface ListChatProps {
-  listChat: IChatUser[];
+  listChat: any;
   loading?: boolean;
   error?: string | null;
 }
@@ -69,7 +69,7 @@ export default function ListChat({ listChat, loading, error }: ListChatProps) {
 
   return (
     <List>
-      {listChat.length > 0 ? listChat.map((chat) => (
+      {listChat.length > 0 ? listChat.map((chat: any) => (
         <ListItem
           key={chat.id}
           className="group hover:bg-blue-gray-50 gap-3"

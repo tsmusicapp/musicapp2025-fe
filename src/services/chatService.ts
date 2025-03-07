@@ -27,7 +27,7 @@ export const chatService = {
     }
   },
 
-  async getChatMessages(currentUserId: string, chatId: string): Promise<> {
+  async getChatMessages(currentUserId: string, chatId: string): Promise<any> {
     try {
       const token = localStorage.getItem("token");
       const response = await fetch(
@@ -45,7 +45,7 @@ export const chatService = {
       }
 
       const message = await response.json();
-      console.log(message , "message here")
+      console.log(message, "message here")
       return message.data
     } catch (error) {
       console.error("Error fetching chat messages:", error);
@@ -82,18 +82,18 @@ export const chatService = {
     }
   },
 
-  startPolling(dispatch: any, interval = 3000) {
-    return setInterval(async () => {
-      try {
-        const users = await this.getChatUsers();
-        dispatch(updateChatUsers(users));
-      } catch (error) {
-        console.error("Error polling chat users:", error);
-      }
-    }, interval);
-  },
+  // startPolling(dispatch: any, interval = 3000) {
+  //   return setInterval(async () => {
+  //     try {
+  //       const users = await this.getChatUsers();
+  //       dispatch(updateChatUsers(users));
+  //     } catch (error) {
+  //       console.error("Error polling chat users:", error);
+  //     }
+  //   }, interval);
+  // },
 
-  stopPolling(intervalId: NodeJS.Timeout) {
-    clearInterval(intervalId);
-  },
+  // stopPolling(intervalId: NodeJS.Timeout) {
+  //   clearInterval(intervalId);
+  // },
 };

@@ -42,14 +42,14 @@ function ExploreContent() {
     <div className="flex justify-center">
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-1">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-2">
-          {Array.isArray(jobs) && jobs.length > 0 ? jobs.map((props: CategoryProps, key) => (
+          {Array.isArray(jobs) && jobs.length > 0 ? jobs.map((props: any, key) => (
             <BoxWithInfo
               key={key}
               {...props}
               withFindSimilar={true}
               withSale={false}
             />
-          )): ""}
+          )) : ""}
         </div>
       </div>
     </div>

@@ -113,7 +113,9 @@ function ContentLeftSideV2({ musicData }: ContentLeftSideV2Props) {
               {musicDetail?.tags
                 ? typeof musicDetail.tags === "string"
                   ? musicDetail.tags
-                  : Array.isArray(musicDetail.tags) ? musicDetail.tags.join(", ") : "N/A"
+                  : Array.isArray(musicDetail.tags)
+                    ? (musicDetail.tags as string[]).join(", ")
+                    : "N/A"
                 : "N/A"}
             </p>
           </div>
@@ -172,5 +174,4 @@ function ContentLeftSideV2({ musicData }: ContentLeftSideV2Props) {
     </>
   );
 }
-
 export default ContentLeftSideV2;

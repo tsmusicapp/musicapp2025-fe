@@ -70,32 +70,32 @@ function CardJobs(
     projectTitle,
     timeFrame
   }
-//   {
-//   title,
-//   workcontent,
-//   musicculture,
-//   descriptionjob,
-//   imgSong,
-//   singerName,
-//   songName,
-//   imgComposer,
-//   composerName,
-//   savedJobs,
-//   appliedJobs,
-//   activeJobs,
-//   id,
-//   username,
-//   fotoprofile,
-//   category,
-//   musicUse,
-//   cultureArea,
-//   lyricLanguage,
-//   budget,
-//   timeFrame,
-//   applicantName,
-//   createdAt,
-// }
-: CategoryCardProps) {
+    //   {
+    //   title,
+    //   workcontent,
+    //   musicculture,
+    //   descriptionjob,
+    //   imgSong,
+    //   singerName,
+    //   songName,
+    //   imgComposer,
+    //   composerName,
+    //   savedJobs,
+    //   appliedJobs,
+    //   activeJobs,
+    //   id,
+    //   username,
+    //   fotoprofile,
+    //   category,
+    //   musicUse,
+    //   cultureArea,
+    //   lyricLanguage,
+    //   budget,
+    //   timeFrame,
+    //   applicantName,
+    //   createdAt,
+    // }
+    : CategoryCardProps) {
   const router = useRouter();
   const toast = useRef<Toast>(null);
   const [openPopup, setOpenPopup] = React.useState(false);
@@ -111,7 +111,7 @@ function CardJobs(
 
   const [message, setMessage] = useState("");
 
-  const handleMessageChange = (event) => {
+  const handleMessageChange = (event: any) => {
     setMessage(event.target.value);
   };
 
@@ -122,21 +122,21 @@ function CardJobs(
 
     console.log(musicIds);
     console.log(message);
-  
+
     // if (musicIds.length < 2) {
     //   alert("Please select at least 2 pieces of music.");
     //   return;
     // }
-  
+
     const payload = { musicIds, message };
     const token = localStorage.getItem("token"); // Ambil token
-  
+
     console.log("Token:", token); // Debug token
     if (!token) {
       alert("No token found. Please log in.");
       return;
     }
-  
+
     try {
       const response = await fetch(`http://localhost:5000/v1/job/apply/${id}`, {
         method: "POST",
@@ -146,11 +146,11 @@ function CardJobs(
         },
         body: JSON.stringify(payload),
       });
-  
+
       if (!response.ok) {
         throw new Error("Failed to submit application");
       }
-  
+
       const result = await response.json();
       console.log("Application submitted successfully:", result);
       alert("Application submitted successfully!");
@@ -162,13 +162,13 @@ function CardJobs(
       // });
 
       setopenSmallbox(!openSmallbox);
-      setopenReviewisHaveLyric(!openReview);
+      // setopenReviewisHaveLyric(!openReview);
     } catch (error) {
       console.error("Error submitting application:", error);
       alert("Failed to submit application. Please try again.");
     }
   };
-  
+
 
   const [selected, setSelected] = React.useState(false);
   const handleClick = () => {
@@ -515,7 +515,7 @@ function CardJobs(
                   desktop publishing software like Aldus PageMaker including
                   versions of Lorem Ipsum.
                 </Typography> */}
-                {/* <div className="container mx-auto px-4 py-8">
+      {/* <div className="container mx-auto px-4 py-8">
                   <div className="w-full mb-10 md:flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Button
@@ -601,7 +601,7 @@ function CardJobs(
                   >
                     {timeFrame}
                   </Typography> */}
-                  {/* <Typography variant="small" color="gray" className="text-xs">
+      {/* <Typography variant="small" color="gray" className="text-xs">
                     Job Location
                   </Typography>
                   <Typography
@@ -611,7 +611,7 @@ function CardJobs(
                   >
                     Anywhere
                   </Typography> */}
-                  {/* <Typography variant="small" color="gray" className="text-xs">
+      {/* <Typography variant="small" color="gray" className="text-xs">
                     Aplicant Name
                   </Typography>
                   <Typography
@@ -636,8 +636,8 @@ function CardJobs(
             </div>
           </div>
         </DialogBody> */}
-        {/* <DialogFooter className="flex justify-center"> */}
-        {/* <Button
+      {/* <DialogFooter className="flex justify-center"> */}
+      {/* <Button
             variant="text"
             color="red"
             onClick={handleOpen}
@@ -645,10 +645,10 @@ function CardJobs(
           >
             <span>Cancel</span>
           </Button> */}
-        {/* <Button variant="gradient" onClick={handleOpen} className="w-[20rem]">
+      {/* <Button variant="gradient" onClick={handleOpen} className="w-[20rem]">
             <span>Submit Application</span>
           </Button> */}
-        {/* </DialogFooter> */}
+      {/* </DialogFooter> */}
       {/* </Dialog>
 
       <Dialog

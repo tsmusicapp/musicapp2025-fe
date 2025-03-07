@@ -93,12 +93,12 @@ export function CreativeHire() {
     control
   } = useForm<JobFormData>();
 
-  const [selected, setSelected] = useState(null);
+  const [selected, setSelected] = useState("");
 
   // ...existing code...
 
   const handleCheckboxChange = (value: string) => {
-    setSelected((prevSelected) => (prevSelected === value ? null : value));
+    setSelected((prevSelected) => (prevSelected === value ? " " : value));
   };
 
   // ...existing code...

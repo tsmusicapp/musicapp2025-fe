@@ -14,7 +14,6 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/redux/store";
 import {
-  musicAssets,
   musicPlayerDialog,
   musicCreation,
   setSelectedId,
@@ -236,7 +235,7 @@ function MusicianBox({
                 </div>
               </>
             )}
-            <ReactionBox withSale={true} />
+            <ReactionBox withSale={true} likesCount={0} isLiked={false} onLike={() => {}} />
           </div>
         ) : (
           ""
@@ -244,5 +243,4 @@ function MusicianBox({
       </div>
     </>
   );
-}
-export default MusicianBox;
+}export default MusicianBox;

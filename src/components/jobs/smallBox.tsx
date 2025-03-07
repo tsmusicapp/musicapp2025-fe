@@ -77,7 +77,7 @@ interface smallboxprops {
   handleOpen: (openPopup: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const smallBox = ({ openSmallbox, handleOpenSmallbox }: smallboxprops) => {
+const SmallBox = ({ openSmallbox, handleOpenSmallbox }: smallboxprops) => {
   const auth = JSON.parse(localStorage.getItem("auth") || "{}");
   const currentUser = auth.user;
   // console.log(currentUser)
@@ -151,7 +151,7 @@ const smallBox = ({ openSmallbox, handleOpenSmallbox }: smallboxprops) => {
         <DialogBody className="p-0 h-[30rem] overflow-y-scroll">
           <div className="flex items-center justify-center py-2">
             <div className="grid grid-cols-2 gap-4">
-              {data ? data.map((props:any, key:any) => (
+              {data ? data.map((props: any, key: any) => (
                 <SelectableBox key={key} {...props} />
               )) : <Spinner className="w-12 h-12" />
               }
@@ -249,7 +249,7 @@ const smallBox = ({ openSmallbox, handleOpenSmallbox }: smallboxprops) => {
                 <div className="grid grid-cols-1 gap-2">
                   <div className="grid grid-cols-2 gap-3">
                     {/* <PocketsizeBox /> */}
-                    {Musics ? Musics.selectedMusic.map((props:any, key:any) => (
+                    {Musics ? Musics.selectedMusic.map((props: any, key: any) => (
                       <PocketsizeBox key={key} {...props} />
                     )) :
                       <Spinner className="w-12 h-12" />
@@ -284,4 +284,4 @@ const smallBox = ({ openSmallbox, handleOpenSmallbox }: smallboxprops) => {
   )
 }
 
-export default smallBox
+export default SmallBox

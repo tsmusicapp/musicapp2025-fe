@@ -57,14 +57,14 @@ interface popoupProps {
 
 }
 
-const learnMore = ({ openPopup, handleOpen, handleOpenSmallbox, selectedJob }: popoupProps) => {
-  
+const LearnMore = ({ openPopup, handleOpen, handleOpenSmallbox, selectedJob }: popoupProps) => {
+
   const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     dispatch(updateJobId(selectedJob.id));
   }, [selectedJob]);
-  
+
   return (
     <Dialog
       dismiss={{ outsidePress: false }}
@@ -341,4 +341,4 @@ const learnMore = ({ openPopup, handleOpen, handleOpenSmallbox, selectedJob }: p
   )
 }
 
-export default learnMore
+export default LearnMore

@@ -17,7 +17,7 @@ interface CategoryProps {
 }
 
 export default function Collections() {
-  const [categories, setCategories] = useState<CategoryProps[]>([]);
+  const [categories, setCategories] = useState<any>([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -35,10 +35,10 @@ export default function Collections() {
   return (
     <>
       <div className="grid grid-cols-4 gap-4">
-        {!categories ? categories.map((props, key) => (
+        {!categories ? categories.map((props: any, key: number) => (
           <BoxWithInfo key={key} {...props} withSale={false} />
         )) : null
-      }
+        }
       </div>
     </>
   );

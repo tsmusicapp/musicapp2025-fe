@@ -7,7 +7,7 @@ import Image from "next/image";
 import {
     Card,
     CardBody,
-    
+
     Avatar,
     Typography,
 
@@ -50,7 +50,7 @@ interface CategoryCardProps {
 }
 
 
-const jobCard = ({
+const JobCard = ({
     applicantName,
     category,
     cultureArea,
@@ -292,4 +292,4 @@ const jobCard = ({
     )
 }
 
-export default jobCard
+export default JobCard

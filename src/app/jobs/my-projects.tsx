@@ -11,7 +11,7 @@ interface Job {
   applicantAvatar: string | null;
   applicantBackgroundImage: string | null;
   applicantSelectedSongs: string[] | null;
-  status : string;
+  status: string;
   budget: string[];
   category: string[];
   createdAt: string;
@@ -31,11 +31,11 @@ interface Job {
 }
 export function MyProjects() {
   const dispatch = useDispatch<AppDispatch>();
-  const {data} = useSelector((state:any) => state.job);
-  console.log(data , "data for my projects")
+  const { data } = useSelector((state: any) => state.job);
+  console.log(data, "data for my projects")
   const fireGetJob // const activeJobs = data != null ? data.filter((job:Job)=> job.status === "active"):[];
-  // const inactiveJobs = data != null ? data.filter((job:Job)=> job.status === "inactive"):[];
-= useSelector((state:any) => state.job.fireGetJob);
+    // const inactiveJobs = data != null ? data.filter((job:Job)=> job.status === "inactive"):[];
+    = useSelector((state: any) => state.job.fireGetJob);
   // const activeJobs = data != null ? data.filter((job:Job)=> job.status === "active"):[];
   // const inactiveJobs = data != null ? data.filter((job:Job)=> job.status === "inactive"):[];
 
@@ -44,7 +44,7 @@ export function MyProjects() {
 
   useEffect(() => {
     dispatch(getJobs());
-  }, [dispatch , fireGetJob ]);
+  }, [dispatch, fireGetJob]);
 
   // console.log(data, "my jobs");
   // if (loading) return <div>Loading...</div>;
@@ -66,11 +66,11 @@ export function MyProjects() {
               Active
             </Typography>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-              {data ? data.jobs.map((props : Job, index:number) => (
+              {data ? data.jobs.map((props: any, index: number) => (
                 props.status === "active" && <JobsCard key={props.id || index} {...props} />
               )) : <div>
-                    <Spinner className="h-12 w-12"/>
-                  </div>
+                <Spinner className="h-12 w-12" />
+              </div>
               }
             </div>
             <div className="pt-[4rem]"></div>
@@ -78,11 +78,11 @@ export function MyProjects() {
               Inactive
             </Typography>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-            {data ? data.jobs.map((props : Job, index:number) => (
+              {data ? data.jobs.map((props: any, index: number) => (
                 props.status != "active" && <JobsCard key={props.id || index} {...props} />
               )) : <div>
-                    <Spinner className="h-12 w-12"/>
-                  </div>
+                <Spinner className="h-12 w-12" />
+              </div>
               }
             </div>
           </div>

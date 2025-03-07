@@ -1,5 +1,6 @@
 export interface IMusicAsset {
   songName: string;
+  musicName: string;
   myRole?: Array<"composer" | "lyricist" | "arranger" | "producer">;
   creationTime: string;
   songLanguage: string;
@@ -21,6 +22,7 @@ export interface IMusicAsset {
 
 export const defaultMusicAsset: IMusicAsset = {
   musicName: "",
+  songName: "",
   myRole: [], // Default to an empty array
   creationTime: "", // Current date and time as ISO string
   songLanguage: "",

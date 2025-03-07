@@ -51,15 +51,15 @@ export function ChatPage() {
   const dispatch = useDispatch();
   const chatId = useSelector((state: RootState) => state.chat.chatId);
 
-  useEffect(() => {
-    // Start polling for chat updates
-    const pollInterval = chatService.startPolling(dispatch);
+  // useEffect(() => {
+  //   // Start polling for chat updates
+  //   const pollInterval = chatService.startPolling(dispatch);
 
-    // Cleanup on unmount
-    return () => {
-      chatService.stopPolling(pollInterval);
-    };
-  }, [dispatch]);
+  //   // Cleanup on unmount
+  //   return () => {
+  //     chatService.stopPolling(pollInterval);
+  //   };
+  // }, [dispatch]);
 
   return (
     <>

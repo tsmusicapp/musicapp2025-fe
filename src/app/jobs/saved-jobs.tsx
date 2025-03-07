@@ -29,7 +29,7 @@ interface Job {
   timeFrame: string;
   applicantName: string;
   createdAt: string;
-  savedBy:string[];
+  savedBy: string[];
 }
 
 export function SavedJobs() {
@@ -44,16 +44,16 @@ export function SavedJobs() {
     const userString = localStorage.getItem('auth');
     setAuth(userString ? JSON.parse(userString) : null);
     dispatch(getAppliedJobs())
-    
+
   }, [fireGetJob]);
 
   const allJobs = useSelector((state: RootState) => state.job.data);
 
-  const savedJobs = allJobs?.jobs.filter((job: any) => job.savedBy.includes(auth?.user?.id) );
+  const savedJobs = allJobs?.jobs.filter((job: any) => job.savedBy.includes(auth?.user?.id));
 
   const appliedJobIds = Applied_Jobs ? Applied_Jobs.map((job: any) => job.id) : [];
 
-  const onlySavedJobs =savedJobs ? savedJobs.filter((job: any) => !appliedJobIds.includes(job.id)) : []
+  const onlySavedJobs = savedJobs ? savedJobs.filter((job: any) => !appliedJobIds.includes(job.id)) : []
 
 
   // console.log(savedJobs, "saved jobs");
@@ -67,9 +67,9 @@ export function SavedJobs() {
               Saved Jobs
             </Typography>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-              {(!savedJobs == undefined) || allJobs ? onlySavedJobs.map((props : Job, key : number) => (
+              {(!savedJobs == undefined) || allJobs ? onlySavedJobs.map((props: any, key: number) => (
                 <JobCard key={key} {...props} />
-              )) : ( auth?.user.role !=='recruiter' ? <Spinner className="w-12 h-12" /> : <div>This feature is for musician only.</div> )
+              )) : (auth?.user.role !== 'recruiter' ? <Spinner className="w-12 h-12" /> : <div>This feature is for musician only.</div>)
               }
             </div>
             <div className="pt-[4rem]"></div>
@@ -77,10 +77,10 @@ export function SavedJobs() {
               My Application
             </Typography>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-              {Applied_Jobs ? Applied_Jobs.map((props : Job, key:number) => (
+              {Applied_Jobs ? Applied_Jobs.map((props: any, key: number) => (
                 <JobCard key={key} {...props} />
               )) : <Spinner className="w-12 h-12" />
-            }
+              }
             </div>
           </div>
         </div>

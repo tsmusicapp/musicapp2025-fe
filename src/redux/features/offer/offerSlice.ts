@@ -35,7 +35,7 @@ interface OfferState {
   reportUserDialog: boolean;
   filterExplore: string;
   selectedId: string;
-  musicDetail: MusicDetail | null;
+  musicDetail: any | null;
   isMusicCreation: boolean;
   source: "assets" | "home" | null;
   musicAsset: any;

@@ -3,10 +3,13 @@ import { Checkbox, Avatar } from "@material-tailwind/react";
 import { useDispatch } from "react-redux";
 import { chatService } from "@/services/chatService";
 import { setActiveChatId } from "@/redux/features/chatSlice"; // You'll need to create this
+import { useAuth } from "@/utils/useAuth";
 
 function ChatList() {
   const dispatch = useDispatch();
-  const [chatUsers, setChatUsers] = useState<IChatUser[]>([]);
+  const { getCurrentUser } = useAuth()
+  const user = getCurrentUser()
+  const [chatUsers, setChatUsers] = useState<any>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -14,8 +17,12 @@ function ChatList() {
     const fetchChatUsers = async () => {
       try {
         setLoading(true);
-        const users = await chatService.getChatUsers();
-        setChatUsers(users);
+        if (user) {
+
+          const users = await chatService.getChatUsers(user.role);
+          setChatUsers(users);
+        }
+        setChatUsers([]);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Failed to load chats");
       } finally {
@@ -31,7 +38,7 @@ function ChatList() {
 
   return (
     <div className="flex flex-col gap-2">
-      {chatUsers.map((user) => (
+      {chatUsers.map((user: any) => (
         <div
           key={user.id}
           className="flex items-center gap-4 p-2 hover:bg-blue-gray-50 cursor-pointer"

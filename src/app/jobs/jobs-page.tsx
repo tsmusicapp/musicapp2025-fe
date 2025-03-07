@@ -13,7 +13,6 @@ import CreativeHire from "@/app/jobs/creative-hire";
 import SavedJobs from "@/app/jobs/saved-jobs";
 import MyProjects from "@/app/jobs/my-projects";
 import { useSelector, useDispatch } from 'react-redux';
-import { setActiveTab } from "@/redux/features/job/jobSlice";
 interface TabItem {
   label: string;
   value: string;
@@ -56,7 +55,7 @@ export function JobsPage() {
       >
         {/* <TabsHeader className="h-10 !w-12/12 md:w-[50rem] border border-white/25 bg-opacity-90"> */}
         <TabsHeader className="h-10 !w-12/12 md:w-[55rem] border border-white/25 bg-opacity-90">
-          
+
           {data.map((tab: TabItem) => (
             <Tab key={tab.value} value={tab.value}>
               {tab.label}

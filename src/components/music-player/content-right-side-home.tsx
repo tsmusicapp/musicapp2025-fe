@@ -34,8 +34,8 @@ function ContentRightSideHome() {
     id: string;
     name: string;
   }
-  
-  const [userDetails, setUserDetails] = useState<UserType[]>([]);
+
+  const [userDetails, setUserDetails] = useState<any>([]);
 
   console.log(userDetails, "userDetails")
   useEffect(() => {
@@ -166,7 +166,7 @@ function ContentRightSideHome() {
       <div className="flex flex-col gap-4 ml-10 overflow-y-auto">
         {Array.isArray(musicDetails?.comments) &&
           musicDetails.comments.map((comment: CommentType) => {
-            const matchedUser = userDetails?.results?.find((user) => user.id === comment.userId);
+            const matchedUser = userDetails?.results?.find((user: any) => user.id === comment.userId);
             return (
               <Comment
                 key={comment._id}
