@@ -2,12 +2,10 @@ import { deleteCart, getCart, payCart, setCheckoutDialog } from '@/redux/feature
 import { AppDispatch, RootState } from '@/redux/store'
 import { useAuth } from '@/utils/useAuth'
 import { Button, Dialog, DialogBody, Typography } from '@material-tailwind/react'
-
-import { Root } from 'postcss'
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 
-const checkoutDialog = () => {
+const CheckoutDialog = () => {  // ✅ Capitalized function name
     const { getCurrentUser } = useAuth()
     const currentUser = getCurrentUser()
 
@@ -15,11 +13,10 @@ const checkoutDialog = () => {
     const [item, setItem] = React.useState<any>({})
     const { checkoutDialog, cart, sales } = useSelector((state: RootState) => state.offer)
 
-    // cart.filter((cartItem: any) => setItem(cartItem))
     let data: any;
     const handleYesClick = () => {
-        cart.length > 0 &&
-            cart.map(async (Item: any) => {
+        if (cart.length > 0) {
+            cart.forEach(async (Item: any) => {  // ✅ Changed `map` to `forEach` since `map` is not returning anything
                 console.log(Item, "item")
                 data = {
                     assetId: Item.assetId._id,
@@ -34,11 +31,12 @@ const checkoutDialog = () => {
                     dispatch(payCart(data))
                 }
             })
+        }
     }
 
     useEffect(() => {
         dispatch(getCart())
-    }, [dispatch, cart])
+    }, [dispatch])  // ✅ Removed `cart` from dependency array to avoid infinite re-renders
 
     return (
         <Dialog open={checkoutDialog} handler={() => dispatch(setCheckoutDialog())}>
@@ -66,4 +64,5 @@ const checkoutDialog = () => {
         </Dialog>
     )
 }
-export default checkoutDialog
+
+export default CheckoutDialog  // ✅ Exporting with uppercase name

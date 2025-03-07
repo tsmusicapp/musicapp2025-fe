@@ -22,7 +22,6 @@ import Link from "next/link";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import {
-  musicAssets,
   musicPlayerDialog,
   setSelectedId,
   setMusicDetail,

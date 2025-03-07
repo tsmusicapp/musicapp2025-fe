@@ -62,32 +62,20 @@ export default function Cart() {
         </Typography>
         <div className="mt-4 flex flex-col gap-2">
           {cart.length > 0 ? cart.map((item: any) => (
-            item.paid == false &&
-            <div className="flex flex-row items-center justify-between mx-3">
-              <Avatar
-                variant="square"
-                alt="tania andrew"
-                size="sm"
-                className="cursor-pointer"
-                src={getImageUrl(item.assetId.musicImage)}
-              />
-              <p className="text-black font-medium">{item.assetId.songName}</p>
-              <p className="text-blue-300 font-medium"> {item.quantity} X ${item.assetId.commercialUsePrice}</p>
-            </div>
-          )) : <div>Go to assets and Add to cart</div>
-          }
-
-          {/* <div className="flex flex-row items-center justify-between mx-3">
-            <Avatar
-              variant="square"
-              alt="tania andrew"
-              size="sm"
-              className="cursor-pointer"
-              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1480&q=80"
-            />
-            <p className="text-black font-medium">Hotel California</p>
-            <p className="text-blue-300 font-medium">$35.00</p>
-          </div> */}
+            item.paid == false && (
+              <div key={item.id} className="flex flex-row items-center justify-between mx-3">
+                <Avatar
+                  variant="square"
+                  alt="tania andrew"
+                  size="sm"
+                  className="cursor-pointer"
+                  src={getImageUrl(item.assetId.musicImage)}
+                />
+                <p className="text-black font-medium">{item.assetId.songName}</p>
+                <p className="text-blue-300 font-medium"> {item.quantity} X ${item.assetId.commercialUsePrice}</p>
+              </div>
+            )
+          )) : <div>Go to assets and Add to cart</div>}
           <div className="flex flex-row items-center justify-end mx-3">
             <p className="text-black font-bold">Total: ${totalPrice}.00</p>
           </div>

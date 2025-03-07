@@ -7,9 +7,10 @@ interface filterProps {
 
 interface dataProps {
   data: filterProps[];
+  onSelect:(title: string) => void;
 }
 
-function FilterContent({ data }: dataProps) {
+function FilterContent({ data, onSelect }: dataProps) {
   return (
     <div className="flex flex-col gap-2">
       {data
@@ -21,6 +22,7 @@ function FilterContent({ data }: dataProps) {
                 value=""
                 name="default-radio-work-content"
                 className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
+                onChange={()=>onSelect(item?.title)}
               />
               <label
                 htmlFor={`radio-work-content-${item.id}`}

@@ -35,7 +35,7 @@ import { applyJob, fireGetJobRequest, updateMessage } from "@/redux/features/job
 // }
 
 
-let Sdata = [
+let data = [
   {
     id: 1,
     imgSong: "https://picsum.photos/200/300",
@@ -151,7 +151,7 @@ const smallBox = ({ openSmallbox, handleOpenSmallbox }: smallboxprops) => {
         <DialogBody className="p-0 h-[30rem] overflow-y-scroll">
           <div className="flex items-center justify-center py-2">
             <div className="grid grid-cols-2 gap-4">
-              {data ? data.map((props, key) => (
+              {data ? data.map((props:any, key:any) => (
                 <SelectableBox key={key} {...props} />
               )) : <Spinner className="w-12 h-12" />
               }
@@ -249,7 +249,7 @@ const smallBox = ({ openSmallbox, handleOpenSmallbox }: smallboxprops) => {
                 <div className="grid grid-cols-1 gap-2">
                   <div className="grid grid-cols-2 gap-3">
                     {/* <PocketsizeBox /> */}
-                    {Musics ? Musics.selectedMusic.map((props, key) => (
+                    {Musics ? Musics.selectedMusic.map((props:any, key:any) => (
                       <PocketsizeBox key={key} {...props} />
                     )) :
                       <Spinner className="w-12 h-12" />

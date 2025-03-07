@@ -5,23 +5,30 @@ import {
   TabsBody,
   Tab,
   TabPanel,
-  Input,
 } from "@material-tailwind/react";
 import HiringMusician from "./hiring-musician";
-import FilterContent from "@/components/assets/filter-content";
-import { filterContent, filterMusicUsage } from "@/default/filter";
-import FilterMusicUsage from "@/components/assets/filter-music-usage";
 import FindCreatives from "./find-creatives";
-import MyFreelanceProjects from "./my-freelance-projects";
-import NewFreelanceProject from "./new-freelance-project";
-import { RootState } from "@/redux/store";
-import { useEffect } from "react";
-import { useSelector } from "react-redux";
-import React from "react";
 import Sidebar from "@/components/sidebar/sidebar";
+import { debounce } from "lodash";
+import { useCallback, useState } from "react";
 
 export function AssetsPage() {
-  const [section, setSection] = React.useState("find-creatives");
+  const [section, setSection] = useState("find-creatives");
+  const [filterTags, setFilterTags] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string | null>(null);
+  const [selectedInstrument, setSelectedInstruments] = useState<string[]>([]);
+  const [selectedMusicUsage, setSelectedMusicUsage] = useState<string[]>([]);
+  const [selectedMusicStyle, setSelectedMusicStyle] = useState<string[]>([]);
+  const [selectedMusicMood, setSelectedMusicMood] = useState<string[]>([]);
+
+  const debounceSearchTerm = useCallback(
+    debounce((value: string) => {
+      setSearchTerm(value);
+    }, 500),
+    []
+  );
+
+
   const data = [
     {
       label: "Hiring Musician",
@@ -31,16 +38,31 @@ export function AssetsPage() {
     {
       label: "Find Creatives",
       value: "find-creatives",
-      desc: <FindCreatives />,
+      desc: (
+        <FindCreatives
+          filterTags={filterTags}
+          searchTerm={searchTerm}
+          selectedInstrument={selectedInstrument}
+          selectedMusicUsage={selectedMusicUsage}
+          selectedMusicStyle={selectedMusicStyle}
+          selectedMusicMood={selectedMusicMood}
+        />
+      ),
     },
   ];
 
   return (
     <section className="flex justify-center min-h-screen px-4 py-2 gap-4">
-      <Sidebar />
+      <Sidebar
+        setFilterTags={setFilterTags}
+        debounceSearchTerm={debounceSearchTerm}
+        setSelectedInstruments={setSelectedInstruments}
+        setSelectedMusicUsage={setSelectedMusicUsage}
+        setSelectedMusicStyle={setSelectedMusicStyle}
+        setSelectedMusicMood={setSelectedMusicMood}
+      />
       <Tabs id="custom-animation" value={section} className="w-full mb-16">
         <div className="flex ml-[7rem] items-center mb-2">
-          {/* <TabsHeader className="flex justify-end bg-transparent h-10 md:w-[50rem] border border-white/25 bg-opacity-90"> */}
           <TabsHeader
             className="flex justify-end bg-transparent h-12 md:w-[50rem] my-1 border border-white/25 bg-opacity-90"
             indicatorProps={{

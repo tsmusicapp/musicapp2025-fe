@@ -13,14 +13,6 @@ import {
   Checkbox,
   Input,
 } from "@material-tailwind/react";
-import {
-  PresentationChartBarIcon,
-  ShoppingBagIcon,
-  UserCircleIcon,
-  Cog6ToothIcon,
-  InboxIcon,
-  PowerIcon,
-} from "@heroicons/react/24/solid";
 import { ChevronRightIcon, ChevronDownIcon } from "@heroicons/react/24/outline";
 import { filterContent } from "@/default/filter";
 import {
@@ -31,22 +23,76 @@ import {
 } from "@/default/sidebar-filter";
 import FilterContent from "../assets/filter-content";
 
-export default function Sidebar() {
+interface SidebarProps {
+  setFilterTags: (title: string) => void;
+  debounceSearchTerm: (value: string) => void;
+  setSelectedInstruments: React.Dispatch<React.SetStateAction<string[]>>;
+  setSelectedMusicUsage: React.Dispatch<React.SetStateAction<string[]>>;
+  setSelectedMusicStyle: React.Dispatch<React.SetStateAction<string[]>>;
+  setSelectedMusicMood: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+export default function Sidebar({ setFilterTags, debounceSearchTerm, setSelectedInstruments, setSelectedMusicUsage, setSelectedMusicStyle, setSelectedMusicMood }: SidebarProps) {
   const [open, setOpen] = React.useState(0);
 
   const handleOpen = (value: number) => {
     setOpen(open === value ? 0 : value);
   };
 
+  const handleSelectFilterTags = (title: string) => {
+    setFilterTags(title);
+  }
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    debounceSearchTerm(e.target.value);
+  };
+
+  const handleSelectInstruments = (instrument: string, checked: boolean) => {
+    setSelectedInstruments((prevSelected) => {
+      if (checked) {
+        return [...prevSelected, instrument]; // Add if checked
+      } else {
+        return prevSelected.filter((item) => item !== instrument); // Remove if unchecked
+      }
+    });
+  }
+  const handleSelectedMusicUsage = (musicUsage: string, checked: boolean) => {
+    setSelectedMusicUsage((prevSelected) => {
+      if (checked) {
+        return [...prevSelected, musicUsage]
+      } else {
+        return prevSelected.filter((item) => item !== musicUsage)
+      }
+    })
+  }
+  const handleSelectedMusicStyle = (musicStyle: string, checked: boolean) => {
+    setSelectedMusicStyle((prevSelected) => {
+      if (checked) {
+        return [...prevSelected, musicStyle]
+      }
+      else {
+        return prevSelected.filter((item) => item !== musicStyle)
+      }
+    })
+  }
+  const handleSelectedMusicMood = (musicMood: string, checked: boolean) => {
+    setSelectedMusicMood((prevSelected) => {
+      if (checked) {
+        return [...prevSelected, musicMood]
+      } else {
+        return prevSelected.filter((item) => item !== musicMood)
+      }
+    })
+  }
   return (
     <Card className="min-h-screen w-full max-w-[15rem] border-r-2 border-black/10 rounded-none shadow-none">
       <div className="flex my-4 p-4">
         <div className="flex flex-row gap-1 w-full">
-          <Input crossOrigin={""} label="Search" size="md" />
+          <Input crossOrigin={""} label="Search" size="md" onChange={handleChange}/>
         </div>
       </div>
       <div className="p-4">
-        <FilterContent data={filterContent} />
+        <FilterContent data={filterContent} onSelect={handleSelectFilterTags} />
       </div>
       <List>
         <Accordion
@@ -54,9 +100,8 @@ export default function Sidebar() {
           icon={
             <ChevronDownIcon
               strokeWidth={2.5}
-              className={`mx-auto h-4 w-4 transition-transform ${
-                open === 1 ? "rotate-180" : ""
-              }`}
+              className={`mx-auto h-4 w-4 transition-transform ${open === 1 ? "rotate-180" : ""
+                }`}
             />
           }
         >
@@ -65,9 +110,6 @@ export default function Sidebar() {
               onClick={() => handleOpen(1)}
               className="border-b-0 p-3"
             >
-              {/* <ListItemPrefix>
-                <PresentationChartBarIcon className="h-5 w-5" />
-              </ListItemPrefix> */}
               <Typography
                 color="blue-gray"
                 className="mr-auto font-normal text-sm"
@@ -90,6 +132,7 @@ export default function Sidebar() {
                     id={`instrument-${index}`}
                     containerProps={{ className: "p-0" }}
                     className="hover:before:content-none"
+                    onChange={(e) => handleSelectInstruments(item, e.target.checked)}
                   />
                   {item}
                 </label>
@@ -102,9 +145,8 @@ export default function Sidebar() {
           icon={
             <ChevronDownIcon
               strokeWidth={2.5}
-              className={`mx-auto h-4 w-4 transition-transform ${
-                open === 2 ? "rotate-180" : ""
-              }`}
+              className={`mx-auto h-4 w-4 transition-transform ${open === 2 ? "rotate-180" : ""
+                }`}
             />
           }
         >
@@ -134,6 +176,7 @@ export default function Sidebar() {
                     crossOrigin={""}
                     id={`musicGenres-${index}`}
                     containerProps={{ className: "p-0" }}
+                    onChange={(e) => handleSelectedMusicUsage(item, e.target.checked)}
                     className="hover:before:content-none"
                   />
                   {item}
@@ -147,9 +190,8 @@ export default function Sidebar() {
           icon={
             <ChevronDownIcon
               strokeWidth={2.5}
-              className={`mx-auto h-4 w-4 transition-transform ${
-                open === 3 ? "rotate-180" : ""
-              }`}
+              className={`mx-auto h-4 w-4 transition-transform ${open === 3 ? "rotate-180" : ""
+                }`}
             />
           }
         >
@@ -180,6 +222,7 @@ export default function Sidebar() {
                     id={`musicStyles-${index}`}
                     containerProps={{ className: "p-0" }}
                     className="hover:before:content-none"
+                    onChange={(e) => handleSelectedMusicStyle(item, e.target.checked)}
                   />
                   {item}
                 </label>
@@ -192,9 +235,8 @@ export default function Sidebar() {
           icon={
             <ChevronDownIcon
               strokeWidth={2.5}
-              className={`mx-auto h-4 w-4 transition-transform ${
-                open === 4 ? "rotate-180" : ""
-              }`}
+              className={`mx-auto h-4 w-4 transition-transform ${open === 4 ? "rotate-180" : ""
+                }`}
             />
           }
         >
@@ -225,6 +267,7 @@ export default function Sidebar() {
                     id={`moods-${index}`}
                     containerProps={{ className: "p-0" }}
                     className="hover:before:content-none"
+                    onChange={(e) => handleSelectedMusicMood(item, e.target.checked)}
                   />
                   {item}
                 </label>

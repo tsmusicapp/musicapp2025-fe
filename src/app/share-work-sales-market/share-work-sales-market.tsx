@@ -7,6 +7,7 @@ import { useForm, SubmitHandler } from "react-hook-form";
 import { useLocalStorage } from "@/context/LocalStorageContext";
 import { removeEmptyStrings } from "@/utils/utils";
 import { IMusicAsset, defaultMusicAsset } from "@/types/ShareMusicAsset"; // Adjust path as needed
+import { useRouter } from "next/navigation";
 
 const musicUse = [
   "Pop Music",
@@ -46,6 +47,7 @@ export default function ShareWorkSalesMarket() {
   const [tags, setTags] = useState<string>("");
   const [error, setError] = useState<string>("");
 
+  const router = useRouter();
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
@@ -348,7 +350,7 @@ export default function ShareWorkSalesMarket() {
 
         // Reload the page after success
         setTimeout(() => {
-          window.location.reload();
+          router.push('/assets')
         }, 5000);
       } else {
         const errorResult = await response.json();

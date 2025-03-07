@@ -7,20 +7,18 @@ import Image from "next/image";
 import {
     Card,
     CardBody,
-    CardFooter,
+    
     Avatar,
     Typography,
-    IconButton,
-    Textarea,
+
     Chip,
 } from "@material-tailwind/react";
 import { MapPinIcon, StarIcon as StaredIcon } from "@heroicons/react/24/solid";
 import { StarIcon, EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
-import { Badge, Button } from "@material-tailwind/react";
+import { Button } from "@material-tailwind/react";
 import { useAuth } from '@/utils/useAuth';
 import LearnMore from './learnMore';
 import SmallBox from './smallBox';
-import { create } from 'domain';
 import { useDispatch, useSelector } from 'react-redux';
 import { DeleteJob } from './deleteJob';
 import { AppDispatch, RootState } from '@/redux/store';
@@ -54,25 +52,12 @@ interface CategoryCardProps {
 
 const jobCard = ({
     applicantName,
-    applicantAvatar,
-    applicantBackgroundImage,
-    applicantSelectedSongs,
-    budget,
     category,
-    createdAt,
-    createdBy,
     cultureArea,
-    description,
-    isHaveLyric,
     id,
-    lyricLanguage,
-    musicUse,
-    preferredLocation,
     projectTitle,
-    timeFrame,
     savedBy,
     createdOn,
-    isApplied
 }: CategoryCardProps) => {
     const dispatch = useDispatch<AppDispatch>();
     const { data, loading, error } = useSelector((state: any) => state.job);

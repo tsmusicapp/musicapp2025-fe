@@ -36,28 +36,20 @@ function WorkingOrder() {
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
             {!isCustomer ? (
               <>
-                {
-                  myOrder ?
-                    myOrder.map((order: Order) => {
-                      if (order.status === "accepted") {
-                        return (
-                          <OfferConfirmation order={order} />
-                        )
-                      } else if (order.status === "delivring" || order.status === "revision") {
-                        return (
-                          <OrderUploadedWorks order={order} />
-                        )
-                      } else {
-                        return <></>
-                      }
-                      // return (
-                      //   order.status === "accepted" ?
-                      //     <OfferConfirmation order={order} /> : <></>
-                      // )
-                    })
-                    :
-                    <Spinner className="h-10 w-10" />
-                }
+                {myOrder ? (
+                  myOrder.map((order: Order) => {
+                    if (order.status === "accepted") {
+                      return <OfferConfirmation key={order.id.toString()} order={order} />;
+                    } else if (order.status === "delivring" || order.status === "revision") {
+                      return <OrderUploadedWorks key={order.id.toString()} order={order} />;
+                    } else {
+                      return null; // Avoid returning empty JSX elements like `<></>`
+                    }
+                  })
+                ) : (
+                  <Spinner className="h-10 w-10" />
+                )}
+
                 {/* <OrderInfoCard />
                 <OrderUploadedWorksCard /> */}
               </>

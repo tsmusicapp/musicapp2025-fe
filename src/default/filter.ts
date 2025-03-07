@@ -1,19 +1,23 @@
 export const filterContent = [
   {
     id: 1,
-    title: "Composition",
+    title: "Composer",
+    // title: "Composition",
   },
   {
     id: 2,
-    title: "Arrangement",
+    title: "Arranger",
+    // title: "Arrangement",
   },
   {
     id: 3,
-    title: "Write Lyrics",
+    title: "Lyricist",
+    // title: "Write Lyrics",
   },
   {
     id: 4,
-    title: "Produce",
+    title: "Producer",
+    // title: "Produce",
   },
 ];
 

@@ -113,7 +113,7 @@ function ContentLeftSideV2({ musicData }: ContentLeftSideV2Props) {
               {musicDetail?.tags
                 ? typeof musicDetail.tags === "string"
                   ? musicDetail.tags
-                  : musicDetail.tags.join(", ")
+                  : Array.isArray(musicDetail.tags) ? musicDetail.tags.join(", ") : "N/A"
                 : "N/A"}
             </p>
           </div>
@@ -142,7 +142,7 @@ function ContentLeftSideV2({ musicData }: ContentLeftSideV2Props) {
           <div className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
               <p className="text-sm font-semibold">Lyric Name:</p>
-              <p className="text-sm">{musicDetail?.lyricName || "N/A"}</p>
+              <p className="text-sm">{musicDetail?.songName || "N/A"}</p>
             </div>
 
             <div className="flex flex-col gap-2">
@@ -155,10 +155,10 @@ function ContentLeftSideV2({ musicData }: ContentLeftSideV2Props) {
               <p className="text-sm">{musicDetail?.musicMood || "N/A"}</p>
             </div>
 
-            <div className="flex flex-col gap-2">
+            {/* <div className="flex flex-col gap-2">
               <p className="text-sm font-semibold">Label:</p>
               <p className="text-sm">{musicDetail?.label || "N/A"}</p>
-            </div>
+            </div> */}
 
             <div className="flex flex-col gap-2">
               <p className="text-sm font-semibold">Describe:</p>

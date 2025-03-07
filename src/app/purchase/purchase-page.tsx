@@ -19,17 +19,16 @@ export function PurchasePage() {
     <div className="flex flex-col gap-6 min-h-screen items-center overflow-y-auto pt-8 bg-gray-100">
       <h1 className="font-bold text-2xl">My Purchase</h1>
       {
-        sales != null ?
+        sales != null ? (
           sales?.sales.map((item: any) => (
-            <PurchaseCard saleItem={item} />
-
-          )) :
+            <PurchaseCard key={item.id} saleItem={item} />
+          ))
+        ) : (
           <div>Go to assets and purchase some assets</div>
+        )
       }
-      {/* <PurchaseCard />
-      <PurchaseCard />
-      <PurchaseCard />
-      <PurchaseCard /> */}
+
+
     </div>
   );
 }

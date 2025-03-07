@@ -18,6 +18,7 @@ export function getImageUrl(path: string): string {
     }`;
 }
 
+
 // Fungsi untuk mengambil data dari backend
 export const fetchMusicData = async () => {
   try {
@@ -72,7 +73,6 @@ export const fetchAssetsData = async () => {
 
     const data = await response.json();
     console.log("Raw API response:", data);
-    debugger
     return data;
   } catch (error) {
     console.error("Error fetching music data:", error);
@@ -80,11 +80,31 @@ export const fetchAssetsData = async () => {
   }
 };
 
+export const fetchUsers = async () => {
+  try {
+    const token = getAuthToken();
+    if (!token) {
+      console.error("No authentication token found");
+      return [];
+    }
+
+    const response = await fetch('http://localhost:5000/v1/users/', {
+      headers: {
+        'Content-Type': "application/json",
+        Authorization: `Bearer ${token}`,
+      }
+    })
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error fetching user data", error)
+  }
+}
 // Variabel untuk menyimpan data
 export let CATEGORIES: any[] = [];
 export let JOBS_PROPS: any[] = [];
 export let ASSETS: any[] = [];
-
+export let USERS: any[] = [];
 
 // Inisialisasi data saat aplikasi dijalankan
 (async function initializeData() {
@@ -93,9 +113,12 @@ export let ASSETS: any[] = [];
     console.log(musicData, 'musicData')
     const assetsData = await fetchAssetsData();
     console.log(assetsData, 'musicData')
+    const userData = await fetchUsers();
+    console.log(userData, "checkUserDataValue")
     musicData.length > 0 ? CATEGORIES = musicData : "";
     musicData.length > 0 ? JOBS_PROPS = musicData : "";
     assetsData.length > 0 ? ASSETS = assetsData : "";
+    userData.length > 0 ? USERS = userData : "";
 
     (musicData.length <= 0 || assetsData.length <= 0) ? CATEGORIES = [
       {
