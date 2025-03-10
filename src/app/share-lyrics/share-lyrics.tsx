@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import { StarIcon } from "@heroicons/react/24/outline";
 import {
@@ -18,6 +18,8 @@ import { musicBackgroundDialog } from "@/redux/features/offer/offerSlice";
 import MusicBackgroundDialog from "@/components/share-work-creation/music-background-dialog";
 import RichTextEditor from "@/components/ui/RichTextEditor";
 import { useForm } from "react-hook-form";
+import { Toast } from "primereact/toast";
+import { resetWarned } from "antd/es/_util/warning";
 
 export interface LyricsWordFormData {
   lyricName: string;
@@ -40,10 +42,13 @@ export function ShareLyrics() {
     formState: { errors },
     watch,
     setValue,
+    reset,
   } = useForm<LyricsWordFormData>({ mode: 'onChange' });
 
 
   const [musicImagePreview, setMusicImagePreview] = React.useState<string>("");
+  const toast = useRef<Toast>(null);
+
   const musicSizeLimit = 20 * 1024 * 1024; // 20MB  
   const imageSizeLimit = 1024 * 1024; // 1MB
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -58,6 +63,8 @@ export function ShareLyrics() {
   }
 
   const onSubmit = async (data: LyricsWordFormData) => {
+    const auth = JSON.parse(localStorage.getItem("auth") || "{}");
+    const token = auth.tokens?.access?.token;
 
     console.log(data, "checkDataValue")
     const formData = new FormData();
@@ -69,17 +76,28 @@ export function ShareLyrics() {
     formData.append("tags", data.tags);
     formData.append("description", data.description);
     formData.append("tools", data.softwareTool);
-    
-    if(data.musicImage && data.musicImage[0]){
+
+    if (data.musicImage && data.musicImage[0]) {
       formData.append("musicImage", data.musicImage[0]);
     }
 
     try {
-      const response  = await fetch("http://localhost:5000/v1/music/lyrics", {
+      const response = await fetch("http://localhost:5000/v1/music/lyrics", {
         method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
         body: formData,
       });
-      if(response.ok){
+      if (response.ok) {
+        toast.current?.show({
+          severity: "success",
+          summary: "Success",
+          detail: "Lyrics created successfully!",
+          life: 3000,
+        });
+        reset();
+        setMusicImagePreview("");
         console.log("Lyrics created successfully")
       }
     } catch (error) {
@@ -89,6 +107,8 @@ export function ShareLyrics() {
   const dispatch = useDispatch<AppDispatch>();
   return (
     <section className="flex flex-row justify-center items-center my-8">
+      <Toast ref={toast} />
+
       {/* <MusicBackgroundDialog /> */}
       <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>
         <div className="flex flex-row gap-8">
