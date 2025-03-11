@@ -59,7 +59,7 @@ function ContentRightSideV2({ source = "home" }: ContentRightSideV2Props) {
     setIsSubmitting(true);
     try {
       const response = await fetch(
-        `http://localhost:5000/v1/music/comment/${selectedId}`,
+        `http://34.200.64.144:5000/v1/music/comment/${selectedId}`,
         {
           method: "POST",
           headers: {

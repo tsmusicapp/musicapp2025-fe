@@ -1,6 +1,6 @@
 import { getAuthToken } from "@/utils/auth";
 
-const BACKEND_URL = "http://localhost:5000/v1/music-asset";
+const BACKEND_URL = "http://34.200.64.144:5000/v1/music-asset";
 
 export const MusicAssetService = {
 

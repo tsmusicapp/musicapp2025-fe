@@ -82,7 +82,7 @@ export function ShareLyrics() {
     }
 
     try {
-      const response = await fetch("http://localhost:5000/v1/music/lyrics", {
+      const response = await fetch("http://34.200.64.144:5000/v1/music/lyrics", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

@@ -138,7 +138,7 @@ function CardJobs(
     }
 
     try {
-      const response = await fetch(`http://localhost:5000/v1/job/apply/${id}`, {
+      const response = await fetch(`http://34.200.64.144:5000/v1/job/apply/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

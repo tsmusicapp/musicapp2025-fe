@@ -1,7 +1,7 @@
 import { getAuthToken } from "@/utils/auth";
 
-const BACKEND_URL = "http://localhost:5000/v1/music-asset"; // Music asset endpoint
-const BASE_URL = "http://localhost:5000"; // Base URL backend Anda
+const BACKEND_URL = "http://34.200.64.144:5000/v1/music-asset"; // Music asset endpoint
+const BASE_URL = "http://34.200.64.144:5000"; // Base URL backend Anda
 
 export function getImageUrl(path: string): string {
   if (!path) {
@@ -28,7 +28,7 @@ export const fetchMusicData = async () => {
       return [];
     }
 
-    const response = await fetch("http://localhost:5000/v1/music/get-music", {
+    const response = await fetch("http://34.200.64.144:5000/v1/music/get-music", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -58,7 +58,7 @@ export const fetchAssetsData = async () => {
       return [];
     }
 
-    const response = await fetch("http://localhost:5000/v1/music-asset/", {
+    const response = await fetch("http://34.200.64.144:5000/v1/music-asset/", {
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
@@ -88,7 +88,7 @@ export const fetchUsers = async () => {
       return [];
     }
 
-    const response = await fetch('http://localhost:5000/v1/users/', {
+    const response = await fetch('http://34.200.64.144:5000/v1/users/', {
       headers: {
         'Content-Type': "application/json",
         Authorization: `Bearer ${token}`,

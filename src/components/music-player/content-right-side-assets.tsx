@@ -39,7 +39,7 @@ function ContentRightSideAssets({ musicData }: ContentRightSideAssetsProps) {
   const fetchUpdatedMusicAsset = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5000/v1/music-asset/${selectedId}`,
+        `http://34.200.64.144:5000/v1/music-asset/${selectedId}`,
         {
           headers: {
             Authorization: `Bearer ${getAuthToken()}`,
@@ -62,7 +62,7 @@ function ContentRightSideAssets({ musicData }: ContentRightSideAssetsProps) {
     setIsSubmitting(true);
     try {
       const response = await fetch(
-        `http://localhost:5000/v1/music-asset/comment/${selectedId}`,
+        `http://34.200.64.144:5000/v1/music-asset/comment/${selectedId}`,
         {
           method: "POST",
           headers: {

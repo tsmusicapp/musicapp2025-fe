@@ -153,7 +153,7 @@ export default function ShareWorkSalesMarket() {
 
       try {
         const response = await fetch(
-          "http://localhost:5000/v1/upload/music-image",
+          "http://34.200.64.144:5000/v1/upload/music-image",
           {
             method: "POST",
             headers: {
@@ -212,7 +212,7 @@ export default function ShareWorkSalesMarket() {
       console.log(formData, 'No music');
 
       try {
-        const response = await fetch("http://localhost:5000/v1/tracks/", {
+        const response = await fetch("http://34.200.64.144:5000/v1/tracks/", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${auth.tokens.access.token}`,
@@ -279,7 +279,7 @@ export default function ShareWorkSalesMarket() {
   //     console.log(formData, 'No music');
 
   //     try {
-  //       const response = await fetch("http://localhost:5000/v1/tracks", {
+  //       const response = await fetch("http://34.200.64.144:5000/v1/tracks", {
   //         method: "POST",
   //         headers: {
   //           Authorization: `Bearer ${auth.tokens.access.token}`,
@@ -330,7 +330,7 @@ export default function ShareWorkSalesMarket() {
     console.log(cleanedData, "cleaned");
 
     try {
-      const response = await fetch("http://localhost:5000/v1/music-asset", {
+      const response = await fetch("http://34.200.64.144:5000/v1/music-asset", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

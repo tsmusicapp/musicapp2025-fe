@@ -21,7 +21,7 @@ interface MusicCreationData {
   softwareTool?: string;
 }
 
-// const BACKEND_URL = "http://localhost:5000/v1/music-creation";
+// const BACKEND_URL = "http://34.200.64.144:5000/v1/music-creation";
 const BACKEND_URL = `${BASE_URL}/v1/music-creation`;
 
 export const MusicCreationService = {

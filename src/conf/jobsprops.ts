@@ -8,7 +8,7 @@ export const SELECTED: any[] = [];
 // Fungsi untuk mengambil data dari backend
 export const fetchJobsData = async () => {
   try {
-    const response = await fetch("http://localhost:5000/v1/job", {
+    const response = await fetch("http://34.200.64.144:5000/v1/job", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

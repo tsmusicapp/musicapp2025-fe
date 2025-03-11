@@ -1,7 +1,7 @@
-const BACKEND_URL = "http://localhost:5000/v1/music-creation";
-const BACKEND_URL_Assets = "http://localhost:5000/v1/music-asset";
+const BACKEND_URL = "http://34.200.64.144:5000/v1/music-creation";
+const BACKEND_URL_Assets = "http://34.200.64.144:5000/v1/music-asset";
 
-const BASE_URL = "http://localhost:5000";
+const BASE_URL = "http://34.200.64.144:5000";
 
 export class MusicallService {
   // Get auth token from localStorage
@@ -67,7 +67,7 @@ export class MusicallService {
   static async getMusicDetails(id: string) {
     try {
       const token = this.getAuthToken();
-      const response = await fetch(`http://localhost:5000/v1/music/get-music/${id}`, {
+      const response = await fetch(`http://34.200.64.144:5000/v1/music/get-music/${id}`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
