@@ -32,7 +32,7 @@ const fetchDataWithMapping = async (
 export const fetchCategories = async (token: string) => {
   try {
     CATEGORIES = await fetchDataWithMapping(
-      "http://34.200.64.144:5000/v1/music/small-box",
+      "https://34.200.64.144:5000/v1/music/small-box",
       token,
       (item) => ({
         id: item.id,
@@ -54,7 +54,7 @@ export const fetchCategories = async (token: string) => {
 export const fetchSelected = async (token: string) => {
   try {
     SELECTED = await fetchDataWithMapping(
-      "http://34.200.64.144:5000/v1/music/selected",
+      "https://34.200.64.144:5000/v1/music/selected",
       token,
       (item) => ({
         id: item.id,
@@ -74,7 +74,7 @@ export const fetchSelected = async (token: string) => {
 export const fetchJobsProps = async (token: string) => {
   try {
     JOBS_PROPS = await fetchDataWithMapping(
-      "http://34.200.64.144:5000/v1/job",
+      "https://34.200.64.144:5000/v1/job",
       token,
       (item) => ({
         id: item.id,
@@ -118,7 +118,7 @@ const fetchJobs = async (
 
 export const fetchSavedJobs = async (token: string) => {
   SAVED_JOBS = await fetchJobs(
-    "http://34.200.64.144:5000/v1/music/saved-jobs",
+    "https://34.200.64.144:5000/v1/music/saved-jobs",
     token,
     "savedJobs",
     true
@@ -127,7 +127,7 @@ export const fetchSavedJobs = async (token: string) => {
 
 export const fetchAppliedJobs = async (token: string) => {
   APPLIED_JOBS = await fetchJobs(
-    "http://34.200.64.144:5000/v1/music/applied-jobs",
+    "https://34.200.64.144:5000/v1/music/applied-jobs",
     token,
     "appliedJobs",
     true
@@ -136,7 +136,7 @@ export const fetchAppliedJobs = async (token: string) => {
 
 export const fetchActiveJobs = async (token: string) => {
   ACTIVE_JOBS = await fetchJobs(
-    "http://34.200.64.144:5000/v1/music/active-jobs",
+    "https://34.200.64.144:5000/v1/music/active-jobs",
     token,
     "activeJobs",
     true
@@ -145,7 +145,7 @@ export const fetchActiveJobs = async (token: string) => {
 
 export const fetchInactiveJobs = async (token: string) => {
   INACTIVE_JOBS = await fetchJobs(
-    "http://34.200.64.144:5000/v1/music/inactive-jobs",
+    "https://34.200.64.144:5000/v1/music/inactive-jobs",
     token,
     "activeJobs",
     false

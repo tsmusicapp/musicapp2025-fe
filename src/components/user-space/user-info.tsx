@@ -27,7 +27,7 @@ function UserInfo() {
       }
 
       try {
-        const response = await fetch("http://34.200.64.144:5000/v1/user-space", {
+        const response = await fetch("https://34.200.64.144:5000/v1/user-space", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -44,7 +44,7 @@ function UserInfo() {
         // Set profile picture URL with the correct path
         console.log("profil", data);
         if (data.profilePicture && data.createdBy) {
-          const profileUrl = `http://34.200.64.144:5000/uploads/${data.createdBy}/profilePicture.png`;
+          const profileUrl = `https://34.200.64.144:5000/uploads/${data.createdBy}/profilePicture.png`;
           setImageUrl(profileUrl);
         } else {
           setImageUrl("/image/default-picture.jpg");
@@ -69,7 +69,7 @@ function UserInfo() {
   // useEffect(() => {
   //   if (formData.profilePicture && formData.id) {
   //     setImageUrl(
-  //       `http://34.200.64.144:5000/uploads/${formData.id}/profilePicture.png`
+  //       `https://34.200.64.144:5000/uploads/${formData.id}/profilePicture.png`
   //     );
   //   }
   // }, [formData]);

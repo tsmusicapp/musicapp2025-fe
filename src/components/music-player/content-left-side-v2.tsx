@@ -37,8 +37,8 @@ function ContentLeftSideV2({ musicData }: ContentLeftSideV2Props) {
 
       const endpoint =
         currentSource === "assets"
-          ? `http://34.200.64.144:5000/v1/music-asset/like/${musicData.id}`
-          : `http://34.200.64.144:5000/v1/music-creation/like/${musicData.id}`;
+          ? `https://34.200.64.144:5000/v1/music-asset/like/${musicData.id}`
+          : `https://34.200.64.144:5000/v1/music-creation/like/${musicData.id}`;
 
       const response = await fetch(endpoint, {
         method: "POST",

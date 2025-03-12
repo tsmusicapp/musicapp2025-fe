@@ -2,7 +2,7 @@
 import { IChatUser, IChatRoom, IMessage } from "../types/chat";
 import { updateChatUsers } from "../redux/features/chat/chatSlice";
 
-const BASE_URL = "http://34.200.64.144:5000/v1";
+const BASE_URL = "https://34.200.64.144:5000/v1";
 
 export const chatService = {
   async getChatUsers(role: string): Promise<IChatUser[]> {

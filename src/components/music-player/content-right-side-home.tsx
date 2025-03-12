@@ -78,7 +78,7 @@ function ContentRightSideHome() {
 
     try {
       const response = await fetch(
-        `http://34.200.64.144:5000/v1/music/comment/${selectedId}`,
+        `https://34.200.64.144:5000/v1/music/comment/${selectedId}`,
         {
           method: "POST",
           headers: {
@@ -115,7 +115,7 @@ function ContentRightSideHome() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://34.200.64.144:5000/v1/users/");
+        const response = await fetch("https://34.200.64.144:5000/v1/users/");
 
         if (!response.ok) {
           throw new Error(`Error: ${response.status} ${response.statusText}`);
