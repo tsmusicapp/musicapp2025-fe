@@ -1,5 +1,7 @@
 "use client";
 
+import { API_URL } from "@/utils/env_var";
+
 // Struktur data untuk JOBS_PROPS, CATEGORIES, dan SELECTED
 export const JOBS_PROPS: any[] = [];
 export const CATEGORIES: any[] = [];
@@ -8,7 +10,7 @@ export const SELECTED: any[] = [];
 // Fungsi untuk mengambil data dari backend
 export const fetchJobsData = async () => {
   try {
-    const response = await fetch("https://34.200.64.144:5000/v1/job", {
+    const response = await fetch(`${API_URL}/v1/job`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

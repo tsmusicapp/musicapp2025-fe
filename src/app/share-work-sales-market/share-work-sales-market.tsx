@@ -8,6 +8,7 @@ import { useLocalStorage } from "@/context/LocalStorageContext";
 import { removeEmptyStrings } from "@/utils/utils";
 import { IMusicAsset, defaultMusicAsset } from "@/types/ShareMusicAsset"; // Adjust path as needed
 import { useRouter } from "next/navigation";
+import { API_URL } from "@/utils/env_var";
 
 const musicUse = [
   "Pop Music",
@@ -153,7 +154,7 @@ export default function ShareWorkSalesMarket() {
 
       try {
         const response = await fetch(
-          "https://34.200.64.144:5000/v1/upload/music-image",
+          `${API_URL}/v1/upload/music-image`,
           {
             method: "POST",
             headers: {
@@ -212,7 +213,7 @@ export default function ShareWorkSalesMarket() {
       console.log(formData, 'No music');
 
       try {
-        const response = await fetch("https://34.200.64.144:5000/v1/tracks/", {
+        const response = await fetch(`${API_URL}/v1/tracks/`, {
           method: "POST",
           headers: {
             Authorization: `Bearer ${auth.tokens.access.token}`,
@@ -279,7 +280,7 @@ export default function ShareWorkSalesMarket() {
   //     console.log(formData, 'No music');
 
   //     try {
-  //       const response = await fetch("https://34.200.64.144:5000/v1/tracks", {
+  //       const response = await fetch(`${API_URL}/v1/tracks`, {
   //         method: "POST",
   //         headers: {
   //           Authorization: `Bearer ${auth.tokens.access.token}`,
@@ -330,7 +331,7 @@ export default function ShareWorkSalesMarket() {
     console.log(cleanedData, "cleaned");
 
     try {
-      const response = await fetch("https://34.200.64.144:5000/v1/music-asset", {
+      const response = await fetch(`${API_URL}/v1/music-asset`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

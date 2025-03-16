@@ -16,6 +16,7 @@ import { Toast } from "primereact/toast";
 import { logout } from "@/redux/features/auth/authSlice";
 import { useLocalStorage } from "@/context/LocalStorageContext";
 import { LOGOUTUSER } from "@/services/apiServices";
+import { API_URL } from "@/utils/env_var";
 
 interface UserProps {
   user: any;
@@ -84,7 +85,7 @@ export default function DropdownProfile({ user }: UserProps) {
           className="cursor-pointer"
           src={
             user?.profilePicture
-              ? `https://34.200.64.144:5000/uploads/${user.id}/profilePicture.png`
+              ? `${API_URL}/uploads/${user.id}/profilePicture.png`
               : "/image/default-picture.png"
           }
         />

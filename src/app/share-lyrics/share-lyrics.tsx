@@ -20,6 +20,7 @@ import RichTextEditor from "@/components/ui/RichTextEditor";
 import { useForm } from "react-hook-form";
 import { Toast } from "primereact/toast";
 import { resetWarned } from "antd/es/_util/warning";
+import { API_URL } from "@/utils/env_var";
 
 export interface LyricsWordFormData {
   lyricName: string;
@@ -82,7 +83,7 @@ export function ShareLyrics() {
     }
 
     try {
-      const response = await fetch("https://34.200.64.144:5000/v1/music/lyrics", {
+      const response = await fetch(`${API_URL}/v1/music/lyrics`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

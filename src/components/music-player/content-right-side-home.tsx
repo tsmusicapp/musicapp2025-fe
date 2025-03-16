@@ -9,6 +9,7 @@ import { MusicCreationService } from "@/services/music-creation.service";
 import { getAuthToken } from "@/utils/auth";
 import { toast } from "react-hot-toast";
 import { MusicDetail } from "@/types/music";
+import { API_URL } from "@/utils/env_var";
 
 interface CommentType {
   _id: string;
@@ -78,7 +79,7 @@ function ContentRightSideHome() {
 
     try {
       const response = await fetch(
-        `https://34.200.64.144:5000/v1/music/comment/${selectedId}`,
+        `${API_URL}/v1/music/comment/${selectedId}`,
         {
           method: "POST",
           headers: {
@@ -115,7 +116,7 @@ function ContentRightSideHome() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("https://34.200.64.144:5000/v1/users/");
+        const response = await fetch(`${API_URL}/v1/users/`);
 
         if (!response.ok) {
           throw new Error(`Error: ${response.status} ${response.statusText}`);

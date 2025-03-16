@@ -1,6 +1,7 @@
 import { getAuthToken } from "@/utils/auth";
+import { API_URL } from "@/utils/env_var";
 
-const BACKEND_URL = "https://34.200.64.144:5000/v1/music-asset";
+const BACKEND_URL = `${API_URL}/v1/music-asset`;
 
 export const MusicAssetService = {
 

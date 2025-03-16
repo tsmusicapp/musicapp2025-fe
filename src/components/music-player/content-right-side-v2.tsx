@@ -7,6 +7,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { CategoriesService } from "@/services/categories.service";
 import { useRouter } from "next/navigation";
+import { API_URL } from "@/utils/env_var";
 
 interface CommentType {
   _id: string;
@@ -59,7 +60,7 @@ function ContentRightSideV2({ source = "home" }: ContentRightSideV2Props) {
     setIsSubmitting(true);
     try {
       const response = await fetch(
-        `https://34.200.64.144:5000/v1/music/comment/${selectedId}`,
+        `${API_URL}/v1/music/comment/${selectedId}`,
         {
           method: "POST",
           headers: {

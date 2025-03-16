@@ -6,6 +6,7 @@ import { MusicAssetService } from "@/services/music-asset.service";
 import { MusicCreationService } from "@/services/music-creation.service";
 import { getAuthToken } from "@/utils/auth";
 import { MusicDetail } from "@/types/music";
+import { API_URL } from "@/utils/env_var";
 
 interface ContentLeftSideV2Props {
   musicData: any;
@@ -37,8 +38,8 @@ function ContentLeftSideV2({ musicData }: ContentLeftSideV2Props) {
 
       const endpoint =
         currentSource === "assets"
-          ? `https://34.200.64.144:5000/v1/music-asset/like/${musicData.id}`
-          : `https://34.200.64.144:5000/v1/music-creation/like/${musicData.id}`;
+          ? `${API_URL}/v1/music-asset/like/${musicData.id}`
+          : `${API_URL}/v1/music-creation/like/${musicData.id}`;
 
       const response = await fetch(endpoint, {
         method: "POST",

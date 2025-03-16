@@ -1,1 +1,3 @@
-export const BASE_URL = "https://34.200.64.144:5000";
+import { API_URL } from "@/utils/env_var";
+
+export const BASE_URL = API_URL;

@@ -1,7 +1,7 @@
-const BASE_URL = "https://34.200.64.144:5000";
+import { API_URL } from "@/utils/env_var";
+
 
 // AUTHENTICATION APIS 
-export const RESGISTERUSER = `${BASE_URL}/v1/auth/register`;
-export const LOGINUSER = `${BASE_URL}/v1/auth/login`;
-export const LOGOUTUSER = `${BASE_URL}/v1/auth/logout`;
-
+export const RESGISTERUSER = `${API_URL}/v1/auth/register`;
+export const LOGINUSER = `${API_URL}/v1/auth/login`;
+export const LOGOUTUSER = `${API_URL}/v1/auth/logout`;

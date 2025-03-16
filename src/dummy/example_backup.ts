@@ -1,3 +1,5 @@
+import { API_URL } from "@/utils/env_var";
+
 export let CATEGORIES: any[] = [];
 export let SELECTED: any[] = [];
 export let JOBS_PROPS: any[] = [];
@@ -32,7 +34,7 @@ const fetchDataWithMapping = async (
 export const fetchCategories = async (token: string) => {
   try {
     CATEGORIES = await fetchDataWithMapping(
-      "https://34.200.64.144:5000/v1/music/small-box",
+      `${API_URL}/v1/music/small-box`,
       token,
       (item) => ({
         id: item.id,
@@ -54,7 +56,7 @@ export const fetchCategories = async (token: string) => {
 export const fetchSelected = async (token: string) => {
   try {
     SELECTED = await fetchDataWithMapping(
-      "https://34.200.64.144:5000/v1/music/selected",
+      `${API_URL}/v1/music/selected`,
       token,
       (item) => ({
         id: item.id,
@@ -74,7 +76,7 @@ export const fetchSelected = async (token: string) => {
 export const fetchJobsProps = async (token: string) => {
   try {
     JOBS_PROPS = await fetchDataWithMapping(
-      "https://34.200.64.144:5000/v1/job",
+      `${API_URL}/v1/job`,
       token,
       (item) => ({
         id: item.id,
@@ -118,7 +120,7 @@ const fetchJobs = async (
 
 export const fetchSavedJobs = async (token: string) => {
   SAVED_JOBS = await fetchJobs(
-    "https://34.200.64.144:5000/v1/music/saved-jobs",
+    `${API_URL}/v1/music/saved-jobs`,
     token,
     "savedJobs",
     true
@@ -127,7 +129,7 @@ export const fetchSavedJobs = async (token: string) => {
 
 export const fetchAppliedJobs = async (token: string) => {
   APPLIED_JOBS = await fetchJobs(
-    "https://34.200.64.144:5000/v1/music/applied-jobs",
+    `${API_URL}/v1/music/applied-jobs`,
     token,
     "appliedJobs",
     true
@@ -136,7 +138,7 @@ export const fetchAppliedJobs = async (token: string) => {
 
 export const fetchActiveJobs = async (token: string) => {
   ACTIVE_JOBS = await fetchJobs(
-    "https://34.200.64.144:5000/v1/music/active-jobs",
+    `${API_URL}/v1/music/active-jobs`,
     token,
     "activeJobs",
     true
@@ -145,7 +147,7 @@ export const fetchActiveJobs = async (token: string) => {
 
 export const fetchInactiveJobs = async (token: string) => {
   INACTIVE_JOBS = await fetchJobs(
-    "https://34.200.64.144:5000/v1/music/inactive-jobs",
+    `${API_URL}/v1/music/inactive-jobs`,
     token,
     "activeJobs",
     false

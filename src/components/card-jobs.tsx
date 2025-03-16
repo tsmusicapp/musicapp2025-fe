@@ -29,6 +29,7 @@ import { CATEGORIES, SELECTED } from "@/conf/jobsprops";
 
 import PocketsizeBox from "@/components/music-box/pocketsize-box";
 import SelectableBox from "./music-box/selectable-box";
+import { API_URL } from '@/utils/env_var';
 
 interface CategoryCardProps {
   title: string;
@@ -138,7 +139,7 @@ function CardJobs(
     }
 
     try {
-      const response = await fetch(`https://34.200.64.144:5000/v1/job/apply/${id}`, {
+      const response = await fetch(`${API_URL}/v1/job/apply/${id}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

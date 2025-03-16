@@ -15,6 +15,7 @@ import { useRouter } from "next/navigation";
 import { LoginModal } from "../modals/AuthModal";
 import { isAuthenticated } from "@/checkAuth";
 import { Toaster, toast } from "react-hot-toast";
+import { API_URL } from "@/utils/env_var";
 
 interface ContentRightSideAssetsProps {
   musicData: any;
@@ -39,7 +40,7 @@ function ContentRightSideAssets({ musicData }: ContentRightSideAssetsProps) {
   const fetchUpdatedMusicAsset = async () => {
     try {
       const response = await fetch(
-        `https://34.200.64.144:5000/v1/music-asset/${selectedId}`,
+        `${API_URL}/v1/music-asset/${selectedId}`,
         {
           headers: {
             Authorization: `Bearer ${getAuthToken()}`,
@@ -62,7 +63,7 @@ function ContentRightSideAssets({ musicData }: ContentRightSideAssetsProps) {
     setIsSubmitting(true);
     try {
       const response = await fetch(
-        `https://34.200.64.144:5000/v1/music-asset/comment/${selectedId}`,
+        `${API_URL}/v1/music-asset/comment/${selectedId}`,
         {
           method: "POST",
           headers: {
