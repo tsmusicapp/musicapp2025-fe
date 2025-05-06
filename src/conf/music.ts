@@ -44,7 +44,6 @@ export const fetchMusicData = async () => {
 
     const data = await response.json();
     console.log("Raw API response:", data);
-    debugger
     return data;
   } catch (error) {
     console.error("Error fetching music data:", error);

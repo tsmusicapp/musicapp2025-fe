@@ -74,7 +74,7 @@ const LearnMore = ({ openPopup, handleOpen, handleOpenSmallbox, selectedJob }: p
     >
       <DialogHeader className="font-light text-md flex justify-between items-start p-2">
         <div></div>
-        <div className="flex flex-col z-10 justify-center items-center text-center gap-[0.1rem]">
+        <div className="flex flex-col z-10 justify-center items-center text-center gap-[0.1rem] mb-4">
           <Avatar
             src='https://picsum.photos/200/300'
             alt="avatar"
@@ -92,25 +92,7 @@ const LearnMore = ({ openPopup, handleOpen, handleOpenSmallbox, selectedJob }: p
           >
             {selectedJob.applicantName}
           </Typography>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="gradient"
-              color="blue"
-              size="sm"
-              className="hover:scale-110 w-[8rem] h-[1.8rem] p-1"
-              onClick={handleOpenSmallbox}
-            >
-              APPLY
-            </Button>
-            <StarIcon
-              color="black"
-              width={25}
-              height={25}
-              className="cursor-pointer hover:scale-125"
-            />
-          </div>
-        </div>
-        <div className="flex flex-row absolute mt-[3.5rem] right-[20rem] top-[2.7rem]">
+          <div className="flex items-center absolute mt-[3.5rem] top-[3.5rem]">
           <MapPinIcon height={12} color="black" />
           <Typography
             variant="small"
@@ -120,6 +102,8 @@ const LearnMore = ({ openPopup, handleOpen, handleOpenSmallbox, selectedJob }: p
             United Kingdom
           </Typography>
         </div>
+        </div>
+
         <div className="">
           <IconButton variant="text" onClick={handleOpen}>
             <svg
@@ -193,27 +177,6 @@ const LearnMore = ({ openPopup, handleOpen, handleOpenSmallbox, selectedJob }: p
                 desktop publishing software like Aldus PageMaker including
                 versions of Lorem Ipsum.
               </Typography>
-              <div className="container mx-auto px-4 py-8">
-                <div className="w-full mb-10 md:flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <Button
-                      variant="gradient"
-                      color="blue"
-                      size="sm"
-                      className="hover:scale-110 w-[8rem] h-[1.8rem] p-1"
-                      onClick={handleOpenSmallbox}
-                    >
-                      APPLY
-                    </Button>
-                    <StarIcon
-                      color="black"
-                      width={25}
-                      height={25}
-                      className="cursor-pointer hover:scale-125"
-                    />
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
           <div className="flex justify-center flex-wrap mb-2 p-2 w-[20rem] h-auto">
@@ -327,7 +290,16 @@ const LearnMore = ({ openPopup, handleOpen, handleOpenSmallbox, selectedJob }: p
           </div>
         </div>
       </DialogBody>
-      <DialogFooter className="flex justify-center">
+      <DialogFooter className="flex justify-center mb-4 space-x-4">
+        <Button
+          variant="gradient"
+          color="blue"
+          size="sm"
+          className="hover:scale-110 w-[8rem] h-[1.8rem] p-1"
+          onClick={handleOpenSmallbox}
+        >
+          APPLY
+        </Button>
         <Button
           variant="text"
           color="red"
