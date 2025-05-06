@@ -7,7 +7,7 @@ import {
   ListItem,
   ListItemPrefix,
   Typography,
-  Spinner
+  Spinner,
 } from "@material-tailwind/react";
 
 import CardJobs from "@/components/card-jobs";
@@ -17,8 +17,6 @@ import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { getAppliedJobs, getJobs } from "@/redux/features/job/jobSlice";
 import { AppDispatch } from "@/redux/store";
-
-
 
 interface Job {
   id: string;
@@ -52,7 +50,10 @@ interface CheckboxGroupProps {
   onCategoryChange: (category: string, isChecked: boolean) => void;
 }
 
-export function CheckboxHorizontalListGroup({ selectedCategories, onCategoryChange }: CheckboxGroupProps) {
+export function CheckboxHorizontalListGroup({
+  selectedCategories,
+  onCategoryChange,
+}: CheckboxGroupProps) {
   const categories = ["Compose", "Arrange", "Produce", "Write Lyrics"];
 
   return (
@@ -107,16 +108,16 @@ export function Freelance() {
 
   useEffect(() => {
     dispatch(getJobs());
-    dispatch(getAppliedJobs())
+    dispatch(getAppliedJobs());
   }, [dispatch, fireGetJob]);
 
   // Handle category checkbox changes
   const handleCategoryChange = (category: string, isChecked: boolean): void => {
-    setSelectedCategories(prev => {
+    setSelectedCategories((prev) => {
       if (isChecked) {
         return [...prev, category];
       } else {
-        return prev.filter(c => c !== category);
+        return prev.filter((c) => c !== category);
       }
     });
   };
@@ -124,48 +125,51 @@ export function Freelance() {
   // const regions = Array.from(new Set(JOBS_PROPS.map(job => job.musicculture)));
   const regions: any = [];
 
-
   return (
-
     <>
       <section className="grid min-h-screen">
-        <div className="flex flex-row justify-start gap-2">
-          <div className="flex flex-row justify-start gap-1 w-[37rem] max-w-[37rem]">
-            <Input
-              crossOrigin={""}
-              label="Search"
-              size="md"
-              value={searchText}
-              onChange={(e) => setSearchText(e.target.value)}
-            />
-            <Select
-              size="md"
-              label="Music Cultural Region"
-              value={selectedRegion}
-              onChange={(value) => setSelectedRegion(value || "")}
-            >
-              <Option value="">All Regions</Option>
-              {regions.map((region: any) => (
-                <Option key={region} value={region}>{region}</Option>
-              ))}
-            </Select>
-          </div>
-          <div className="w-[28rem]">
-            <CheckboxHorizontalListGroup
-              selectedCategories={selectedCategories}
-              onCategoryChange={handleCategoryChange}
-            />
-          </div>
-        </div>
         <div className="py-4 flex justify-items-start items-start sm:justify-start">
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-1">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
-              {data ? activeJobs.map((props: any, index: number) => (
-                <JobsCard key={props.id || index} {...props} />
-              )) : <div>
-                <Spinner className="h-12 w-12" />
+            <div className="flex flex-row justify-start gap-2">
+              <div className="flex flex-row justify-start gap-1 w-[37rem] max-w-[37rem]">
+                <Input
+                  crossOrigin={""}
+                  label="Search"
+                  size="md"
+                  value={searchText}
+                  onChange={(e) => setSearchText(e.target.value)}
+                />
+                <Select
+                  size="md"
+                  label="Music Cultural Region"
+                  value={selectedRegion}
+                  onChange={(value) => setSelectedRegion(value || "")}
+                >
+                  <Option value="">All Regions</Option>
+                  {regions.map((region: any) => (
+                    <Option key={region} value={region}>
+                      {region}
+                    </Option>
+                  ))}
+                </Select>
               </div>
-              }
+              <div className="w-[28rem]">
+                <CheckboxHorizontalListGroup
+                  selectedCategories={selectedCategories}
+                  onCategoryChange={handleCategoryChange}
+                />
+              </div>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
+              {data ? (
+                activeJobs.map((props: any, index: number) => (
+                  <JobsCard key={props.id || index} {...props} />
+                ))
+              ) : (
+                <div>
+                  <Spinner className="h-12 w-12" />
+                </div>
+              )}
             </div>
           </div>
         </div>
