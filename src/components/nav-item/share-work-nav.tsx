@@ -103,8 +103,8 @@ export default function ShareWorkNav({
             </Button>
           )}
         </MenuHandler>
-        <MenuList className=" hidden !absolute !top-[5%] w-[18rem] p-1 gap-3 overflow-visible lg:grid hover:outline-none focus:outline-none">
-          <ul className="flex w-full flex-col gap-1">
+        <MenuList className="hidden !absolute !top-[5%] !left-[60%] !mt-[29px] w-[18rem] p-1 gap-3 overflow-visible lg:grid hover:outline-none focus:outline-none">
+        <ul className="flex w-full flex-col gap-1">
             {menuItems.map(({ url, description, size, iconName }) => (
               <Link
                 href={"/" + url}
