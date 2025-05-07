@@ -10,6 +10,8 @@ import { AppDispatch, RootState } from "@/redux/store";
 import { reportDialog } from "@/redux/features/offer/offerSlice";
 import { isAuthenticated } from "@/checkAuth";
 import { LoginModal } from "@/components/modals/AuthModal";
+import { BASE_URL } from "@/conf/api";
+import axios from "axios";
 
 interface MusicPlayerV2Props {
   source?: "assets" | "home";
@@ -58,6 +60,40 @@ function MusicPlayerV2({ source = "home", hasLyrics }: MusicPlayerV2Props) {
       }
     }
   }, [isMusicPlayerDialog, source]);
+  const selectedId = useSelector((state: RootState) => state.offer.selectedId);
+  const [musicDetailInfo, setMuicDetailInfo] = useState<any>(null);
+
+  useEffect(() => {
+      console.log("selectedId", selectedId);
+    
+      const fetchMusicAsset = async () => {
+        try {
+          const accessToken = localStorage.getItem('token');
+    
+          const response = await axios.get(
+            `${BASE_URL}/v1/music-asset/${selectedId}`,
+            {
+              headers: {
+                Authorization: `Bearer ${accessToken}`,
+              },
+            }
+          );
+    
+          if (response.status === 200) {
+            console.log("Music Asset Data: hasan", response.data);
+            setMuicDetailInfo(response.data); 
+          } else {
+            console.error("Failed to fetch music asset");
+          }
+        } catch (error) {
+          console.error("Error fetching music asset:", error);
+        }
+      };
+    
+      if (selectedId) {
+        fetchMusicAsset(); // ✅ Call the async function
+      }
+    }, [selectedId]);
 
   return (
     <>
@@ -67,9 +103,9 @@ function MusicPlayerV2({ source = "home", hasLyrics }: MusicPlayerV2Props) {
           <div className="relative w-full h-fit space-y-2 items-center">
             <div className="flex flex-row">
               <div className="flex flex-col w-full">
-                <TopMusicPlayerV2 />
-                <ContentMusicPlayerV2 source={source} />
-                <MediaPlayerV2 />
+                <TopMusicPlayerV2 musicDetailInfo={musicDetailInfo}/>
+                {/* <ContentMusicPlayerV2 source={source} /> */}
+                <MediaPlayerV2 musicDetailInfo={musicDetailInfo}/>
               </div>
             </div>
           </div>

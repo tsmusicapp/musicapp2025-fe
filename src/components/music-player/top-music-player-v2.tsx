@@ -12,7 +12,7 @@ import { LoginModal } from "../modals/AuthModal";
 import { isAuthenticated } from "@/checkAuth";
 import { Toaster, toast } from "react-hot-toast";
 
-function TopMusicPlayerV2() {
+function TopMusicPlayerV2({musicDetailInfo}: any) {
   const dispatch = useDispatch<AppDispatch>();
   const router = useRouter();
 
@@ -66,7 +66,7 @@ function TopMusicPlayerV2() {
             />
             <div className="flex flex-col items-start justify-center gap-0">
               <p className="text-md font-notoCondensed">
-                Stef Jack{" "}
+                {musicDetailInfo?.songName}{" "}
                 <span className="text-xs ml-4 font-notoRegular">
                   Work Available
                 </span>
@@ -79,7 +79,7 @@ function TopMusicPlayerV2() {
               </p>
             </div>
           </div>
-          <div className="flex flex-col justify-center gap-1">
+          {/* <div className="flex flex-col justify-center gap-1">
             <Button
               variant="gradient"
               size="md"
@@ -87,9 +87,9 @@ function TopMusicPlayerV2() {
             >
               Follow
             </Button>
-          </div>
+          </div> */}
         </div>
-        <div className="flex flex-row gap-1 items-center justify-center">
+        {/* <div className="flex flex-row gap-1 items-center justify-center">
           <Button
             variant="outlined"
             size="md"
@@ -117,7 +117,7 @@ function TopMusicPlayerV2() {
               Get Touch
             </Button>
           )}
-        </div>
+        </div> */}
       </div>
     </>
   );
