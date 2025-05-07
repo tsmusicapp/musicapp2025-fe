@@ -96,7 +96,7 @@ const FilterExploreParts = () => {
           </button>
 
           {isAreaDropdownOpen && (
-            <div className="absolute z-10 w-full mt-1 bg-white border rounded-md shadow-lg max-h-[200px] overflow-auto">
+            <div className="absolute z-999 w-full mt-1 bg-white border rounded-md shadow-lg max-h-[200px] overflow-auto">
               <ul className="py-1">
                 <li className="w-full">
                   <label

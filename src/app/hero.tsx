@@ -1,7 +1,6 @@
 "use client";
 
-import { IconButton, Button, Typography } from "@material-tailwind/react";
-import { PlayIcon } from "@heroicons/react/24/solid";
+import { Button } from "@material-tailwind/react";
 import Link from "next/link";
 
 function Hero() {
@@ -17,7 +16,7 @@ function Hero() {
             Let more record companies, singers, game companies, movie companies,
             and entertainment companies discover for you
           </p>
-          <div className="flex flex-row gap-10 items-center">
+          <div className="flex flex-row gap-10 items-center mb-3">
             <Link href={"/share-work-creation"}>
               <Button variant="gradient" className="normal-case" color="white">
                 Share Your Music Work

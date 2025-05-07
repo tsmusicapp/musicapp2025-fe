@@ -26,8 +26,8 @@ export function TabsMenu() {
 
   return (
     <section className="flex justify-start px-3 w-full">
-      <Tabs id="custom-animation" value={"for-you"} className="w-full mb-16">
-        <div className="flex h-full flex-row items-start mb-2">
+      <Tabs id="custom-animation" value={"for-you"} className="w-full">
+        <div className="flex h-full flex-row items-start">
           <TabsHeader
             className="flex justify-end bg-transparent h-12 md:w-[20rem] border border-white/25 bg-opacity-90 font-notoSemibold"
             indicatorProps={{

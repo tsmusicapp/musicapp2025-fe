@@ -1,16 +1,12 @@
 "use client";
 
 // components
-import { Navbar, Footer } from "@/components";
-import Hero from "./hero";
-import ExplorePage from "./explore-page";
+import { Navbar } from "@/components";
 import HomeMusicianBox from "@/components/music-box/home-musician-box";
 import { CATEGORIES } from "@/conf/music";
-import AssetMusicianBox from "@/components/music-box/asset-musician-box";
-import BoxWithInfo from "@/components/music-box/box-with-info";
-import MusicianBox from "@/components/music-box/musician-box";
-import SelectableBox from "@/components/music-box/selectable-box";
 import { Spinner } from "@material-tailwind/react";
+import ExplorePage from "./explore-page";
+import Hero from "./hero";
 
 export default function Portfolio() {
   // Only show a few items on the home page
@@ -19,39 +15,28 @@ export default function Portfolio() {
   console.log(featuredMusic, "featuredMusic");
   return (
     <>
-      <Navbar />
-      <Hero />
-      <ExplorePage />
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
-        {featuredMusic ? featuredMusic.map((props, key) => (
-          <HomeMusicianBox
-            key={key}
-            {...props}
-            source="home"
-            lyrics={false}
-            isMusicAsset={false} // Explicitly set to false for home page
-          />
-        )) : <Spinner className="w-10 h-10" />}
-        {/* lyrics music box with feather icon */}
-        {/* {featuredMusic.map((props, key) => (
-          <HomeMusicianBox
-            key={key}
-            {...props}
-            source="home"
-            lyrics={true}
-            isMusicAsset={false} // Explicitly set to false for home page
-          />
-        ))} */}
-        {/* {featuredMusic.map((props, key) => (
-          <HomeMusicianBox
-            key={key}
-            {...props}
-            source="home"
-            lyrics={false}
-            isMusicAsset={false} // Explicitly set to false for home page
-          />
-        ))} */}
+    <Navbar />
+    <Hero />
+    <section className="grid min-h-screen">
+    <div className="py-4 flex justify-items-start items-start sm:justify-start">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-1">
+        <div className="flex flex-row justify-start gap-2">
+        <ExplorePage />
+        </div>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-5">
+          {featuredMusic ? featuredMusic.map((props, key) => (
+            <HomeMusicianBox
+              key={key}
+              {...props}
+              source="home"
+              lyrics={false}
+              isMusicAsset={false} // Explicitly set to false for home page
+            />
+          )) : <Spinner className="w-10 h-10" />}
+        </div>
       </div>
-    </>
+    </div>
+  </section>
+  </>
   );
 }
