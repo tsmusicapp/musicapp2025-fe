@@ -279,7 +279,7 @@ const JobCard = ({
                 (selectedJob != null && openPopup) && <LearnMore selectedJob={selectedJob} handleOpenSmallbox={handleOpenSmallbox} openPopup={openPopup} handleOpen={handleOpen} />
             }
             {
-                openSmallbox && <SmallBox handleOpen={handleOpen} openSmallbox={openSmallbox} handleOpenSmallbox={handleOpenSmallbox} />
+                openSmallbox && <SmallBox handleOpen={handleOpen} openSmallbox={openSmallbox} setopenSmallbox={setopenSmallbox} handleOpenSmallbox={handleOpenSmallbox} />
             }
             {
                 (selectedJob != null && openDelete) && <DeleteJob jobId={selectedJob?.id} delModal={delModal} openDelete={openDelete} />

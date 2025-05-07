@@ -73,11 +73,12 @@ let data = [
 
 interface smallboxprops {
   openSmallbox: boolean;
+  setopenSmallbox: React.Dispatch<React.SetStateAction<boolean>>;
   handleOpenSmallbox: (openPopup: React.MouseEvent<HTMLButtonElement>) => void;
   handleOpen: (openPopup: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const SmallBox = ({ openSmallbox, handleOpenSmallbox }: smallboxprops) => {
+const SmallBox = ({ openSmallbox, handleOpenSmallbox, setopenSmallbox }: smallboxprops) => {
   const auth = JSON.parse(localStorage.getItem("auth") || "{}");
   const currentUser = auth.user;
   // console.log(currentUser)
@@ -106,7 +107,8 @@ const SmallBox = ({ openSmallbox, handleOpenSmallbox }: smallboxprops) => {
     dispatch(fireGetJobRequest(!fireGetJob));
     dispatch(applyJob(jobData.applyJob))
     setOpenPopup(false);
-    handleOpenSmallbox
+    setopenSmallbox(false);
+    // handleOpenSmallbox
   };
 
   useEffect(() => {
