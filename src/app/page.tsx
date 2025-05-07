@@ -3,16 +3,48 @@
 // components
 import { Navbar } from "@/components";
 import HomeMusicianBox from "@/components/music-box/home-musician-box";
-import { CATEGORIES } from "@/conf/music";
+import { CATEGORIES, MUSIC_GENRES } from "@/conf/music";
 import { Spinner } from "@material-tailwind/react";
 import ExplorePage from "./explore-page";
 import Hero from "./hero";
+import { useEffect, useState } from "react";
+import { getAuthToken } from "@/utils/auth";
+import { API_URL } from "@/utils/env_var";
 
 export default function Portfolio() {
-  // Only show a few items on the home page
-  const featuredMusic = CATEGORIES // Show only first 5 items
 
-  console.log(featuredMusic, "featuredMusic");
+   const [featuredMusic, setFeaturedMusic] = useState<any[]>([]);
+    useEffect(() => {
+      const fetchMusic = async () => {
+        try {
+          const token = getAuthToken();
+          if (!token) {
+            console.error("No authentication token found");
+            return [];
+          }
+  
+          const response = await fetch(`${API_URL}/v1/music/get-music`, {
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+          });
+  
+          if (!response.ok) {
+            const errorData = await response.json();
+            console.error("API Error:", errorData);
+            throw new Error(errorData.message || "Failed to fetch music data");
+          }
+  
+          const data = await response.json();
+          setFeaturedMusic(data.length > 0 ? data : MUSIC_GENRES);
+        } catch (error) {
+          console.error("Error fetching music data:", error);
+          return [];
+        }
+      };
+      fetchMusic();
+    }, []);
   return (
     <>
     <Navbar />

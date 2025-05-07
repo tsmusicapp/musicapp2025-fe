@@ -1,9 +1,9 @@
 "use client";
-import { ASSETS, fetchMusicData } from "../../conf/music";
 import AssetMusicianBox from "@/components/music-box/asset-musician-box";
-import MusicPlayerDialog from "../../components/music-player/music-player-dialog";
+import { getAuthToken } from "@/utils/auth";
+import { API_URL } from "@/utils/env_var";
 import { useEffect, useState } from "react";
-
+import MusicPlayerDialog from "../../components/music-player/music-player-dialog";
 
 
 interface FindCreativesProps {
@@ -31,12 +31,41 @@ export function FindCreatives({
     selectedMusicStyle,
     selectedMusicMood,
   });
+  const [assets, setAssets] = useState<any[]>([]);
 
   // Filter the ASSETS array
+  useEffect(() => {
+    const fetchAssets = async () => {
+      try {
+        const token = getAuthToken();
+        if (!token) {
+          console.error("No authentication token found");
+          return [];
+        }
 
-  console.log(ASSETS, "checkAssets")
-  const filteredAssets = ASSETS.filter((item) => {
-    // Filter by search term (matches in name or description)
+        const response = await fetch(`${API_URL}/v1/music-asset/`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          console.error("API Error:", errorData);
+          throw new Error(errorData.message || "Failed to fetch music data");
+        }
+
+        const data = await response.json();
+        setAssets(data);
+      } catch (error) {
+        console.error("Error fetching music data:", error);
+        return [];
+      }
+    };
+    fetchAssets();
+  }, []);
+  const filteredAssets = assets.filter((item) => {
 
     const normalizedSelectedStyles = selectedMusicStyle.map((style) =>
       style.trim().toLowerCase()
@@ -48,12 +77,14 @@ export function FindCreatives({
 
     const matchesSearch =
       !searchTerm ||
-      item.songName.toLowerCase().includes(searchTerm.toLowerCase())
+      item.songName.toLowerCase().includes(searchTerm.toLowerCase());
     // Filter by tags
     const matchesMyRole: boolean =
       !filterTags ||
       (Array.isArray(item.myRole) &&
-      item.myRole.some((role: string) => role.toLowerCase() === filterTags.toLowerCase()));
+        item.myRole.some(
+          (role: string) => role.toLowerCase() === filterTags.toLowerCase()
+        ));
     // Filter by selected instrument
     const matchesInstrument =
       selectedInstrument.length === 0 ||
@@ -68,7 +99,6 @@ export function FindCreatives({
     const matchesMusicUsage =
       selectedMusicUsage.length === 0 ||
       normalizedSelectedStyles.includes(item.musicUsage.trim().toLowerCase());
-
 
     // Filter by music style
     const matchesMusicStyle =
@@ -88,15 +118,14 @@ export function FindCreatives({
     );
   });
 
-
-  console.log(filteredAssets, "chec")
+  console.log(filteredAssets, "chec");
 
   return (
     <section className="grid min-h-screen">
       <MusicPlayerDialog source="assets" />
       <div className="py-4 flex justify-items-start items-start sm:justify-start">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-1">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5">
             {filteredAssets.map((item) => (
               <AssetMusicianBox
                 key={item.id}

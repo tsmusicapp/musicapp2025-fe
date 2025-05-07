@@ -72,7 +72,7 @@ export const fetchAssetsData = async () => {
     }
 
     const data = await response.json();
-    console.log("Raw API response:", data);
+    console.log("Raw API response assets:", data);
     return data;
   } catch (error) {
     console.error("Error fetching music data:", error);
@@ -180,3 +180,54 @@ export let USERS: any[] = [];
     JOBS_PROPS = CATEGORIES;
   }
 })();
+
+export const MUSIC_GENRES = [
+  {
+    id: "1",
+    imgSong: "/image/default-picture.jpg",
+    songName: "Melodic Dreams",
+    singerName: "Sarah Chen",
+    composerName: "Michael Brooks",
+    musicStyle: "Pop",
+    personalUsePrice: "29",
+    commercialUsePrice: "99",
+    musicUsage: "Background Music",
+    musicMood: "Uplifting",
+    personalUse: true,
+    commercialUse: true,
+    collaborationContact: true,
+    musicInstrument: "Piano, Guitar",
+    tags: ["Pop", "Upbeat"],
+    description: "A melodic pop song with uplifting vibes",
+    softwareTool: "Logic Pro X",
+    myRole: ["composer"],
+    creationTime: new Date().toISOString(),
+    createdBy: "Michael Brooks",
+    updatedBy: "Michael Brooks",
+  },
+  {
+    id: "2",
+    imgSong: "/image/default-picture.jpg",
+    songName: "Urban Rhythm",
+    singerName: "Marcus King",
+    composerName: "David Wilson",
+    musicStyle: "Hip Hop",
+    personalUsePrice: "39",
+    commercialUsePrice: "149",
+    musicUsage: "Commercial",
+    musicMood: "Energetic",
+    personalUse: true,
+    commercialUse: true,
+    collaborationContact: true,
+    musicInstrument: "Drums, Synth",
+    tags: ["Hip Hop", "Urban"],
+    description: "Modern hip hop track with strong beats",
+    softwareTool: "Ableton Live",
+    myRole: ["composer", "producer"],
+    creationTime: new Date().toISOString(),
+    createdBy: "David Wilson",
+    updatedBy: "David Wilson",
+  },
+
+
+]
