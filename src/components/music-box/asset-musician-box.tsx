@@ -100,7 +100,7 @@ function AssetMusicianBox({
             {/* Album Art */}
             <div className="relative w-20 h-20 rounded-md overflow-hidden bg-muted">
               <img
-                src={getImageUrl(imgSong) || "/image/default-picture.jpg"}
+                src={imgSong || "/image/default-picture.jpg"}
                 alt={imgSong}
                 className="object-cover w-full h-full"
                 onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
