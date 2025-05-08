@@ -12,7 +12,7 @@ const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const audioSrc = musicDetailInfo?.music;
+  const audioSrc = musicDetailInfo?.music ?musicDetailInfo?.music : musicDetailInfo?.musicAudio;
 
   const handlePlayPause = () => {
     const audio = document.getElementById("audio-player") as HTMLAudioElement;
