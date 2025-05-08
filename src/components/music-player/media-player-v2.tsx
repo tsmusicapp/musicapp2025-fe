@@ -33,40 +33,44 @@ const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
   };
 
   return (
-    <div className="flex flex-row justify-between p-4 gap-16 w-full border-t-2 border-b-2 border-black/10">
+    <div className="w-[28rem] mx-auto mt-[5rem] border border-gray-300 rounded-xl shadow-md bg-white p-6">
       <audio
         id="audio-player"
         src={audioSrc}
         onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
         onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
       />
-
-      <div className="flex items-center gap-4">
+  
+      <div className="flex items-center justify-center gap-4">
         {isPlaying ? (
           <PauseIcon
-            height={40}
-            width={40}
-            className="border-2 rounded-full p-2 border-black/30 cursor-pointer"
+            height={36}
+            width={36}
+            className="border rounded-full p-2 border-gray-400 cursor-pointer"
             onClick={handlePlayPause}
           />
         ) : (
           <PlayIcon
-            height={40}
-            width={40}
-            className="border-2 rounded-full p-2 border-black/30 cursor-pointer"
+            height={36}
+            width={36}
+            className="border rounded-full p-2 border-gray-400 cursor-pointer"
             onClick={handlePlayPause}
           />
         )}
-
-        <p className="text-xs">{formatTime(currentTime)}</p>
-        <div className="w-[20rem]">
+  
+        <p className="text-sm text-gray-700">{formatTime(currentTime)}</p>
+  
+        <div className="w-[12rem]">
           <Progress value={(currentTime / duration) * 100 || 0} color="blue" />
         </div>
-        <p className="text-xs">{formatTime(duration)}</p>
-        <SpeakerWaveIcon height={24} width={24} />
+  
+        <p className="text-sm text-gray-700">{formatTime(duration)}</p>
+  
+        <SpeakerWaveIcon height={24} width={24} className="text-gray-600" />
       </div>
     </div>
   );
+  
 };
 
 export default MediaPlayerV2;

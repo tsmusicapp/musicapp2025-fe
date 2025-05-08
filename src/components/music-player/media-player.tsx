@@ -18,7 +18,7 @@ import ReactionShopping from "../reaction/reaction-shopping";
 
 function MediaPlayer() {
   return (
-    <div className="flex flex-row justify-center items-center px-4 py-1 border-t-2 border-black/10">
+    <div className="flex flex-row justify-center items-center px-4 py-1 border-t-2 border-black/10 mt-5">
       <div className="flex flex-row justify-between gap-16">
         <div className="min-w-0 flex flex-row items-center font-semibold gap-3">
           <img

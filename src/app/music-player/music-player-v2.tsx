@@ -44,55 +44,41 @@ function MusicPlayerV2({ source = "home", hasLyrics }: MusicPlayerV2Props) {
     (state: RootState) => state.offer.isMusicAssets
   );
 
-  useEffect(() => {
-    // Only fetch when dialog is open
-    if (isMusicPlayerDialog) {
-      if (source === "assets") {
-        console.log(
-          "MusicPlayerV2: On assets page, should fetch music-asset data"
-        );
-        // Add your music-asset fetch logic here
-      } else if (source === "home") {
-        console.log(
-          "MusicPlayerV2: On home page, should fetch music-creation data"
-        );
-        // Add your music-creation fetch logic here
-      }
-    }
-  }, [isMusicPlayerDialog, source]);
   const selectedId = useSelector((state: RootState) => state.offer.selectedId);
   const [musicDetailInfo, setMuicDetailInfo] = useState<any>(null);
-
   useEffect(() => {
-    
-      const fetchMusicAsset = async () => {
-        try {
-          const accessToken = localStorage.getItem('token');
-    
-          const response = await axios.get(
-            `${BASE_URL}/v1/music-asset/${selectedId}`,
-            {
-              headers: {
-                Authorization: `Bearer ${accessToken}`,
-              },
-            }
-          );
-    
-          if (response.status === 200) {
-            console.log("Music Asset Data: hasan", response.data);
-            setMuicDetailInfo(response.data); 
-          } else {
-            console.error("Failed to fetch music asset");
-          }
-        } catch (error) {
-          console.error("Error fetching music asset:", error);
+    const fetchMusicData = async () => {
+      try {
+        const accessToken = localStorage.getItem('token');
+        const headers = {
+          Authorization: `Bearer ${accessToken}`,
+        };
+  
+        let response;
+        if (source === "assets") {
+          console.log("Fetching from music-asset endpoint");
+          response = await axios.get(`${BASE_URL}/v1/music-asset/${selectedId}`, { headers });
+        } else if (source === "home") {
+          console.log("Fetching from get-music endpoint");
+          response = await axios.get(`${BASE_URL}/v1/music/get-music/${selectedId}`, { headers });
         }
-      };
-    
-      if (selectedId) {
-        fetchMusicAsset(); // ✅ Call the async function
+  
+        if (response && response.status === 200) {
+          console.log("Music Data:", response.data);
+          setMuicDetailInfo(response.data);
+        } else {
+          console.error("Failed to fetch music data");
+        }
+      } catch (error) {
+        console.error("Error fetching music data:", error);
       }
-    }, [selectedId]);
+    };
+  
+    if (isMusicPlayerDialog && selectedId) {
+      fetchMusicData();
+    }
+  }, [isMusicPlayerDialog, source, selectedId]);
+  
 
   return (
     <>
