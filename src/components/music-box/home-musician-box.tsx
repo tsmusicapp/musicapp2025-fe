@@ -120,7 +120,6 @@ export function HomeMusicianBox({
       }
     };
   }, [audioSrc]);
-
   return (
     <Card className="w-full max-w-2xl border-0 hover:shadow-lg transition-shadow shadow-none duration-200">
       <CardContent className="p-4 space-y-4">
@@ -130,7 +129,7 @@ export function HomeMusicianBox({
             {/* Album Art */}
             <div className="relative w-20 h-20 rounded-md overflow-hidden bg-muted">
               <img
-                src={getImageUrl(musicImage) || "/image/default-picture.jpg"}
+                src={musicImage}
                 alt={songName}
                 className="object-cover w-full h-full"
                 onError={(e: React.SyntheticEvent<HTMLImageElement>) => {

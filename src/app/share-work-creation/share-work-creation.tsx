@@ -129,6 +129,7 @@ export function ShareWorkCreationPage() {
         detail: "Work shared successfully!",
         life: 3000,
       });
+      router.push('/');
     } catch (error) {
       console.error("Submission error:", error);
       toast.current?.show({

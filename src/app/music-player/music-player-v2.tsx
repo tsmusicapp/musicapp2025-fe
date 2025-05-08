@@ -64,7 +64,6 @@ function MusicPlayerV2({ source = "home", hasLyrics }: MusicPlayerV2Props) {
   const [musicDetailInfo, setMuicDetailInfo] = useState<any>(null);
 
   useEffect(() => {
-      console.log("selectedId", selectedId);
     
       const fetchMusicAsset = async () => {
         try {
@@ -98,7 +97,7 @@ function MusicPlayerV2({ source = "home", hasLyrics }: MusicPlayerV2Props) {
   return (
     <>
       <ReportDialog />
-      <div className="flex flex-col h-[46rem] text-black">
+      <div className="flex flex-col h-[20rem] text-black">
         <div className="flex flex-row w-full h-full border-black/10 border-2">
           <div className="relative w-full h-fit space-y-2 items-center">
             <div className="flex flex-row">

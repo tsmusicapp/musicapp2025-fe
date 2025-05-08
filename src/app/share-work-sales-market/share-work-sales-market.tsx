@@ -350,9 +350,8 @@ export default function ShareWorkSalesMarket() {
         });
 
         // Reload the page after success
-        setTimeout(() => {
-          router.push('/assets')
-        }, 5000);
+        router.push('/assets');
+
       } else {
         const errorResult = await response.json();
         toast.current?.show({

@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 import {
   PlayIcon,
+  PauseIcon,
   SpeakerWaveIcon,
   ArrowTopRightOnSquareIcon,
 } from "@heroicons/react/24/solid";
 import { Progress } from "@material-tailwind/react";
 
-const MediaPlayerV2 = ({musicDetailInfo}: any) => {
-  console.log(musicDetailInfo, "musicDetailInfo")
+const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
+  console.log(musicDetailInfo, "musicDetailInfo");
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -41,12 +42,22 @@ const MediaPlayerV2 = ({musicDetailInfo}: any) => {
       />
 
       <div className="flex items-center gap-4">
-        <PlayIcon
-          height={40}
-          width={40}
-          className="border-2 rounded-full p-2 border-black/30 cursor-pointer"
-          onClick={handlePlayPause}
-        />
+        {isPlaying ? (
+          <PauseIcon
+            height={40}
+            width={40}
+            className="border-2 rounded-full p-2 border-black/30 cursor-pointer"
+            onClick={handlePlayPause}
+          />
+        ) : (
+          <PlayIcon
+            height={40}
+            width={40}
+            className="border-2 rounded-full p-2 border-black/30 cursor-pointer"
+            onClick={handlePlayPause}
+          />
+        )}
+
         <p className="text-xs">{formatTime(currentTime)}</p>
         <div className="w-[20rem]">
           <Progress value={(currentTime / duration) * 100 || 0} color="blue" />
