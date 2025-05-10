@@ -32,7 +32,8 @@ export default function ShareWorkSalesMarket() {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<IMusicAsset>();
+    clearErrors
+  } = useForm<IMusicAsset>({ mode: "onChange" });
 
   const [formData, setFormData] = useState<IMusicAsset>(defaultMusicAsset);
 
@@ -47,16 +48,21 @@ export default function ShareWorkSalesMarket() {
   const [isContract, setIsContract] = useState(false);
   const [tags, setTags] = useState<string>("");
   const [error, setError] = useState<string>("");
+const [imageError, setImageError] = useState<string | null>(null);
+const [musicError, setMusicError] = useState<string | null>(null);
 
   const router = useRouter();
   const handleChange = (
-    e: React.ChangeEvent<
-      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-    >
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
+  e: React.ChangeEvent<
+    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+  >
+) => {
+  const { name, value } = e.target;
+
+  setFormData((prev) => ({ ...prev, [name]: value }));
+
+  clearErrors(name);
+};
 
   const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, checked } = e.target;
@@ -107,42 +113,32 @@ export default function ShareWorkSalesMarket() {
     setFormData((prev) => ({ ...prev, tags: tagValue }));
   };
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0];
-    if (selectedFile) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(selectedFile);
-      setFileImage(selectedFile);
-    }
-  };
-
-  const handleFileMusicChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const selectedFile: Blob | File | undefined = event.target.files?.[0];
+const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const selectedFile = event.target.files?.[0];
+  if (selectedFile) {
     const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result as string);
+    };
+    reader.readAsDataURL(selectedFile);
+    setFileImage(selectedFile);
+    setImageError(null); // reset on valid file
+  } else {
+    setImageError("Please upload an image file.");
+  }
+};
 
-    if (selectedFile) {
-      // console.log(selectedFile, "music here1");
-      reader.readAsDataURL(selectedFile);
-      console.log(selectedFile, "after reader");
-      setFileMusic(selectedFile);
-    } else {
-      console.error("No file selected");
-    }
-    // if (selectedFile?.type.split('/')[0] == "image") {
-    //   console.log(selectedFile, "reader inside condition");
-    //   reader.onloadend = () => {
-    //     setMusicPreview(reader.result as string);
-    //   };
-    // }
-    // reader.readAsDataURL(selectedFile);
-
-
-  };
+const handleFileMusicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const selectedFile = event.target.files?.[0];
+  if (selectedFile) {
+    const reader = new FileReader();
+    reader.readAsDataURL(selectedFile);
+    setFileMusic(selectedFile);
+    setMusicError(null); // reset on valid file
+  } else {
+    setMusicError("Please upload a music file.");
+  }
+};
 
   useEffect(() => {
     const uploadImage = async () => {
@@ -440,6 +436,10 @@ export default function ShareWorkSalesMarket() {
                       />
                     </label>
                   </div>
+                  {imageError && (
+  <p className="text-red-500 text-sm mt-1">{imageError}</p>
+)}
+
                 </div>
 
                 <div className="flex justify-start items-start gap-2">
@@ -472,6 +472,10 @@ export default function ShareWorkSalesMarket() {
                       />
                     </label>
                   </div>
+                  {musicError && (
+  <p className="text-red-500 text-sm mt-1">{musicError}</p>
+)}
+
                 </div>
 
                 <div className="flex justify-start items-start gap-2 max-w-[28rem]">
@@ -582,9 +586,7 @@ export default function ShareWorkSalesMarket() {
                     id="inline-checkbox"
                     type="checkbox"
                     className="w-4 h-4"
-                    {...register("myRole", {
-                      required: "At least one Role is required",
-                    })}
+                    {...register("myRole")}
                     value="composer"
                     checked={checkedItems.includes("composer")}
                     onChange={handleCheckbox}
@@ -652,9 +654,6 @@ export default function ShareWorkSalesMarket() {
                   </label>
                 </div>
               </div>
-              {errors.myRole && (
-                <p style={{ color: "red" }}>{errors.myRole.message}</p>
-              )}
 
               <Typography
                 variant="small"
