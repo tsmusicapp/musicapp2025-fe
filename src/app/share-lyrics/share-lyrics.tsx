@@ -36,7 +36,6 @@ export interface LyricsWordFormData {
 }
 
 export function ShareLyrics() {
-
   const {
     register,
     handleSubmit,
@@ -44,13 +43,12 @@ export function ShareLyrics() {
     watch,
     setValue,
     reset,
-  } = useForm<LyricsWordFormData>({ mode: 'onChange' });
-
+  } = useForm<LyricsWordFormData>({ mode: "onChange" });
 
   const [musicImagePreview, setMusicImagePreview] = React.useState<string>("");
   const toast = useRef<Toast>(null);
 
-  const musicSizeLimit = 20 * 1024 * 1024; // 20MB  
+  const musicSizeLimit = 20 * 1024 * 1024; // 20MB
   const imageSizeLimit = 1024 * 1024; // 1MB
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -61,13 +59,13 @@ export function ShareLyrics() {
       };
       reader.readAsDataURL(file);
     }
-  }
+  };
 
   const onSubmit = async (data: LyricsWordFormData) => {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
     const token = auth.tokens?.access?.token;
 
-    console.log(data, "checkDataValue")
+    console.log(data, "checkDataValue");
     const formData = new FormData();
     formData.append("lyricName", data.lyricName);
     formData.append("lyricLanguage", data.lyricLanguage);
@@ -99,12 +97,13 @@ export function ShareLyrics() {
         });
         reset();
         setMusicImagePreview("");
-        console.log("Lyrics created successfully")
+        
+        console.log("Lyrics created successfully");
       }
     } catch (error) {
-      console.log(error, "error")
+      console.log(error, "error");
     }
-  }
+  };
   const dispatch = useDispatch<AppDispatch>();
   return (
     <section className="flex flex-row justify-center items-center my-8">
@@ -126,13 +125,20 @@ export function ShareLyrics() {
               <Input
                 crossOrigin={""}
                 size="lg"
-                {...register("lyricName", { required: "Lyric name is required" })}
+                {...register("lyricName", {
+                  required: "Lyric name is required",
+                })}
                 placeholder=""
                 className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
                 labelProps={{
                   className: "before:content-none after:content-none",
                 }}
               />
+              {errors.lyricName && (
+                <span className="text-red-500 text-xs">
+                  {errors.lyricName.message as string}
+                </span>
+              )}
               <div className="flex flex-col gap-1">
                 <label
                   htmlFor="default"
@@ -143,9 +149,7 @@ export function ShareLyrics() {
                 <select
                   id="default"
                   className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 "
-                  {...register("lyricLanguage", {
-                    required: "Please select a lyric language",
-                  })}
+                  {...register("lyricLanguage")}
                 >
                   <option defaultValue={"Select Language"}>
                     Song Language
@@ -268,6 +272,11 @@ export function ShareLyrics() {
                     <option value="video-game">Video Game</option>
                     <option value="world">World</option>
                   </select>
+                  {errors.lyricStyle && (
+                    <span className="text-red-500 text-xs">
+                      {errors.lyricStyle.message as string}
+                    </span>
+                  )}
                 </div>
                 <div className="flex flex-col gap-1">
                   <label
@@ -326,6 +335,11 @@ export function ShareLyrics() {
                     <option value="warm">Warm</option>
                     <option value="whimsical">Whimsical</option>
                   </select>
+                  {errors.lyricMood && (
+                    <span className="text-red-500 text-xs">
+                      {errors.lyricMood.message as string}
+                    </span>
+                  )}
                 </div>
 
                 <div className="flex justify-center items-center gap-2 max-w-[28rem]">
@@ -384,12 +398,17 @@ export function ShareLyrics() {
                       return "Please enter at least 3 tags";
                     }
                     return true;
-                  }
+                  },
                 })}
                 labelProps={{
                   className: "before:content-none after:content-none",
                 }}
               />
+              {errors.tags && (
+                <span className="text-red-500 text-xs">
+                  {errors.tags.message as string}
+                </span>
+              )}
               <Typography
                 variant="small"
                 color="blue-gray"
@@ -397,9 +416,18 @@ export function ShareLyrics() {
               >
                 Description
               </Typography>
-              <Textarea className="w-96 h-56"
-                {...register("description", { required: "Description is required", minLength: { value: 1, message: "Description is required" } })}
+              <Textarea
+                className="w-96 h-56"
+                {...register("description", {
+                  required: "Description is required",
+                  minLength: { value: 1, message: "Description is required" },
+                })}
               />
+              {errors.description && (
+                <span className="text-red-500 text-xs">
+                  {errors.description.message as string}
+                </span>
+              )}
               <Typography
                 variant="small"
                 color="blue-gray"
