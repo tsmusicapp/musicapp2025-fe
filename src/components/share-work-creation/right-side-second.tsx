@@ -212,9 +212,7 @@ function RightSideSecond({
         </label>
         <select
           id="songLanguage"
-          {...register("songLanguage", {
-            required: "Please select a music language",
-          })}
+          {...register("songLanguage")}
           className=" border border-black text-gray-900 text-sm focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5"
         >
           <option value="">Select Music Language</option>
@@ -279,11 +277,11 @@ function RightSideSecond({
             </div>
           )}
         </div>
-        {errors.musicUse && (
-          <span className="text-red-500 text-xs mt-1">
-            {errors.musicUse.message as string}
-          </span>
-        )}
+      {errors.musicUsage && (
+        <span className="text-red-500 text-xs mt-1">
+          {errors.musicUsage.message as string}
+        </span>
+      )}
       </div>
 
       {/* Music Style Section */}

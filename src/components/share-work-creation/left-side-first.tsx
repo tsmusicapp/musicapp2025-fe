@@ -145,9 +145,9 @@ function LeftSideFirst({ register, errors }: LeftSideFirstProps) {
                   })}
                 />
               </label>
-              {errors.music && (
+              {errors.musicAudio && (
                 <span className="text-red-500 text-xs">
-                  {errors.music.message as string}
+                  {errors.musicAudio.message as string}
                 </span>
               )}
             </div>
