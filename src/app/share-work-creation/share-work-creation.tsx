@@ -20,9 +20,9 @@ export interface ShareWorkFormData {
   description: string;
   musicImage: any;
   musicAudio: any;
-  language:string;
+  language: string;
   music: any;
-  albumname:any;
+  albumname: any;
   musicLyric?: any;
   musicBackground?: FileList;
   musicUsage: string[];
@@ -84,7 +84,7 @@ export function ShareWorkCreationPage() {
   const onSubmit = async (data: ShareWorkFormData) => {
     try {
       console.log("Submitting data:", data);
-
+      setIsLoading(true);
       // Prepare FormData to handle files and other form fields
       const formData = new FormData();
       // Append form data fields
@@ -95,7 +95,7 @@ export function ShareWorkCreationPage() {
       formData.append("publisher", data.singerName || "");
       formData.append("albumname", data.albumname || "");
       formData.append("songLanguage", data.songLanguage || "");
-      formData.append("musicUsage", JSON.stringify(data.musicUsage)); 
+      formData.append("musicUsage", JSON.stringify(data.musicUsage));
       formData.append("musicStyle", data.musicStyle);
       formData.append("musicMood", data.musicMood || "");
       formData.append("musicInstrument", data.musicInstrument || "");
@@ -129,7 +129,10 @@ export function ShareWorkCreationPage() {
         detail: "Work shared successfully!",
         life: 3000,
       });
-      router.push('/');
+      setIsLoading(false);
+      setTimeout(() => {
+        router.push("/");
+      }, 5000);
     } catch (error) {
       console.error("Submission error:", error);
       toast.current?.show({
@@ -139,9 +142,9 @@ export function ShareWorkCreationPage() {
           error instanceof Error ? error.message : "Failed to submit form",
         life: 3000,
       });
+      setIsLoading(false);
     }
   };
-
 
   if (!isAuthenticated) {
     return null;
@@ -152,11 +155,18 @@ export function ShareWorkCreationPage() {
       <Toast ref={toast} />
       <MusicBackgroundDialog setValue={setValue} />
 
-      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2 px-24">
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col gap-2 px-24"
+      >
         <div className="flex flex-row gap-24">
           <div className="flex flex-col gap- w-1/2">
             <LeftSideFirst register={register} errors={errors} />
-            <LeftSideSecond register={register} errors={errors} setValue={setValue} />
+            <LeftSideSecond
+              register={register}
+              errors={errors}
+              setValue={setValue}
+            />
           </div>
 
           <div className="flex flex-col gap-8 w-1/2">
@@ -203,7 +213,6 @@ export function ShareWorkCreationPage() {
             </Button>
           </div>
         </div>
-
         {Object.keys(errors).length > 0 && (
           <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4">
             <strong className="font-bold">

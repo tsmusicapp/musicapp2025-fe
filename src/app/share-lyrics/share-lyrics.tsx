@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import Image from "next/image";
 import { StarIcon } from "@heroicons/react/24/outline";
 import {
@@ -47,6 +47,7 @@ export function ShareLyrics() {
 
   const [musicImagePreview, setMusicImagePreview] = React.useState<string>("");
   const toast = useRef<Toast>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const musicSizeLimit = 20 * 1024 * 1024; // 20MB
   const imageSizeLimit = 1024 * 1024; // 1MB
@@ -62,6 +63,7 @@ export function ShareLyrics() {
   };
 
   const onSubmit = async (data: LyricsWordFormData) => {
+    setIsLoading(true); 
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
     const token = auth.tokens?.access?.token;
 
@@ -97,11 +99,12 @@ export function ShareLyrics() {
         });
         reset();
         setMusicImagePreview("");
-        
+        setIsLoading(false); 
         console.log("Lyrics created successfully");
       }
     } catch (error) {
       console.log(error, "error");
+      setIsLoading(false); 
     }
   };
   const dispatch = useDispatch<AppDispatch>();
@@ -455,6 +458,7 @@ export function ShareLyrics() {
               color="blue-gray"
               variant="outlined"
               fullWidth
+              disabled={isLoading}
             >
               Cancel
             </Button>
@@ -465,11 +469,18 @@ export function ShareLyrics() {
               color="blue-gray"
               variant="outlined"
               fullWidth
+              disabled={isLoading}
             >
               Save as Draft
             </Button>
-            <Button className="w-[14rem]" color="blue" fullWidth type="submit">
-              Publish
+            <Button
+              className="w-[14rem]"
+              color="blue"
+              fullWidth
+              type="submit"
+              disabled={isLoading}
+            >
+              {isLoading ? "Publishing..." : "Publish"}
             </Button>
           </div>
         </div>

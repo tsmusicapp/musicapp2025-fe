@@ -32,13 +32,15 @@ export default function ShareWorkSalesMarket() {
     register,
     handleSubmit,
     formState: { errors },
-    clearErrors
+    clearErrors,
   } = useForm<IMusicAsset>({ mode: "onChange" });
 
   const [formData, setFormData] = useState<IMusicAsset>(defaultMusicAsset);
 
   const [fileImage, setFileImage] = useState<File | null>(null);
-  const [fileMusic, setFileMusic] = useState<File | undefined | Blob>(undefined);
+  const [fileMusic, setFileMusic] = useState<File | undefined | Blob>(
+    undefined
+  );
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [musicPreview, setMusicPreview] = useState<string | null>(null);
 
@@ -48,21 +50,22 @@ export default function ShareWorkSalesMarket() {
   const [isContract, setIsContract] = useState(false);
   const [tags, setTags] = useState<string>("");
   const [error, setError] = useState<string>("");
-const [imageError, setImageError] = useState<string | null>(null);
-const [musicError, setMusicError] = useState<string | null>(null);
+  const [imageError, setImageError] = useState<string | null>(null);
+  const [musicError, setMusicError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const router = useRouter();
   const handleChange = (
-  e: React.ChangeEvent<
-    HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
-  >
-) => {
-  const { name, value } = e.target;
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
+    >
+  ) => {
+    const { name, value } = e.target;
 
-  setFormData((prev) => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
 
-  clearErrors(name);
-};
+    clearErrors(name);
+  };
 
   const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, checked } = e.target;
@@ -113,32 +116,34 @@ const [musicError, setMusicError] = useState<string | null>(null);
     setFormData((prev) => ({ ...prev, tags: tagValue }));
   };
 
-const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const selectedFile = event.target.files?.[0];
-  if (selectedFile) {
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreview(reader.result as string);
-    };
-    reader.readAsDataURL(selectedFile);
-    setFileImage(selectedFile);
-    setImageError(null); // reset on valid file
-  } else {
-    setImageError("Please upload an image file.");
-  }
-};
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(selectedFile);
+      setFileImage(selectedFile);
+      setImageError(null); // reset on valid file
+    } else {
+      setImageError("Please upload an image file.");
+    }
+  };
 
-const handleFileMusicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  const selectedFile = event.target.files?.[0];
-  if (selectedFile) {
-    const reader = new FileReader();
-    reader.readAsDataURL(selectedFile);
-    setFileMusic(selectedFile);
-    setMusicError(null); // reset on valid file
-  } else {
-    setMusicError("Please upload a music file.");
-  }
-};
+  const handleFileMusicChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.readAsDataURL(selectedFile);
+      setFileMusic(selectedFile);
+      setMusicError(null); // reset on valid file
+    } else {
+      setMusicError("Please upload a music file.");
+    }
+  };
 
   useEffect(() => {
     const uploadImage = async () => {
@@ -149,16 +154,13 @@ const handleFileMusicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       console.log(musicImageForm, "music image here in form data");
 
       try {
-        const response = await fetch(
-          `${API_URL}/v1/upload/music-image`,
-          {
-            method: "POST",
-            headers: {
-              Authorization: `Bearer ${auth.tokens.access.token}`,
-            },
-            body: musicImageForm,
-          }
-        );
+        const response = await fetch(`${API_URL}/v1/upload/music-image`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${auth.tokens.access.token}`,
+          },
+          body: musicImageForm,
+        });
 
         if (response.ok) {
           const result = await response.json();
@@ -178,8 +180,9 @@ const handleFileMusicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
           toast.current?.show({
             severity: errorResult.code === 422 ? "warn" : "error",
             summary: errorResult.code === 422 ? "Warning" : "Error",
-            detail: `Error: ${errorResult.message || "Failed to upload Music Image"
-              }`,
+            detail: `Error: ${
+              errorResult.message || "Failed to upload Music Image"
+            }`,
             life: 3000,
           });
         }
@@ -196,17 +199,17 @@ const handleFileMusicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 
     const uploadMusic = async () => {
       if (!fileMusic) {
-        return
-      };
-      console.log(fileMusic, "music here2")
+        return;
+      }
+      console.log(fileMusic, "music here2");
       const formData = new FormData();
       formData.append("music", fileMusic);
 
-      console.log(formData, 'music here in data ');
+      console.log(formData, "music here in data ");
 
       // Log the FormData contents
 
-      console.log(formData, 'No music');
+      console.log(formData, "No music");
 
       try {
         const response = await fetch(`${API_URL}/v1/tracks/`, {
@@ -234,8 +237,9 @@ const handleFileMusicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
           toast.current?.show({
             severity: errorResult.code === 422 ? "warn" : "error",
             summary: errorResult.code === 422 ? "Warning" : "Error",
-            detail: `Error: ${errorResult.message || "Failed to upload Music Track"
-              }`,
+            detail: `Error: ${
+              errorResult.message || "Failed to upload Music Track"
+            }`,
             life: 3000,
           });
         }
@@ -256,8 +260,6 @@ const handleFileMusicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (fileImage) {
       uploadImage();
     }
-
-
   }, [fileMusic, fileImage, auth]);
 
   // useEffect(() => {
@@ -320,8 +322,8 @@ const handleFileMusicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   //   }
   // }, [fileMusic, auth]);
 
-
   const onSubmit: SubmitHandler<IMusicAsset> = async (data) => {
+    setIsLoading(true);
     const finalData = { ...formData, ...data, myRole: checkedItems };
     const cleanedData = removeEmptyStrings(finalData);
     console.log(cleanedData, "cleaned");
@@ -344,22 +346,26 @@ const handleFileMusicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
           detail: "Music Asset Created successfully!",
           life: 5000,
         });
-
+        setIsLoading(false);
         // Reload the page after success
-        router.push('/assets');
-
+        setTimeout(() => {
+          router.push("/assets");
+        }, 5000);
       } else {
         const errorResult = await response.json();
         toast.current?.show({
           severity: errorResult.code == 422 ? "warn" : "error",
           summary: errorResult.code == 422 ? "Warning" : "Error",
-          detail: `Error: ${errorResult.message || "Failed to create music asset"
-            }`,
+          detail: `Error: ${
+            errorResult.message || "Failed to create music asset"
+          }`,
           life: 3000,
         });
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Error creating music asset:", error);
+      setIsLoading(false);
       toast.current?.show({
         severity: "error",
         summary: "Error",
@@ -437,9 +443,8 @@ const handleFileMusicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                     </label>
                   </div>
                   {imageError && (
-  <p className="text-red-500 text-sm mt-1">{imageError}</p>
-)}
-
+                    <p className="text-red-500 text-sm mt-1">{imageError}</p>
+                  )}
                 </div>
 
                 <div className="flex justify-start items-start gap-2">
@@ -473,9 +478,8 @@ const handleFileMusicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                     </label>
                   </div>
                   {musicError && (
-  <p className="text-red-500 text-sm mt-1">{musicError}</p>
-)}
-
+                    <p className="text-red-500 text-sm mt-1">{musicError}</p>
+                  )}
                 </div>
 
                 <div className="flex justify-start items-start gap-2 max-w-[28rem]">
@@ -689,7 +693,6 @@ const handleFileMusicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                   {...register("musicUsage", {
                     required: "Music usage is required.",
                   })}
-
                   onChange={handleChange}
                 >
                   <option value="">Select Music Use</option>
@@ -802,7 +805,6 @@ const handleFileMusicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
                 value={tags}
                 onChange={handleTagChange}
                 className="!border !border-black !rounded-none"
-
               />
               {error && (
                 <label className="text-red-500 -mt-4 text-xs">{error}</label>
@@ -853,6 +855,7 @@ const handleFileMusicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
             variant="outlined"
             fullWidth
             type="button"
+            disabled={isLoading}
           >
             Cancel
           </Button>
@@ -863,6 +866,7 @@ const handleFileMusicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
               variant="outlined"
               fullWidth
               type="button"
+              disabled={isLoading}
             >
               Save as Draft
             </Button>
@@ -872,8 +876,9 @@ const handleFileMusicChange = (event: React.ChangeEvent<HTMLInputElement>) => {
               className="w-[14rem]"
               color="blue"
               fullWidth
+              disabled={isLoading}
             >
-              Publish
+              {isLoading ? "Publishing..." : "Publish"}
             </Button>
           </div>
         </div>

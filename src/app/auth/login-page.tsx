@@ -19,6 +19,7 @@ interface FormLogin {
 export function LoginPage() {
   const dispatch = useDispatch();
   const toast = useRef<Toast>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [passwordShown, setPasswordShown] = useState(false);
   const togglePasswordVisiblity = () => setPasswordShown((cur) => !cur);
@@ -31,6 +32,7 @@ export function LoginPage() {
   } = useForm<FormLogin>();
 
   const onSubmit = async (data: FormLogin) => {
+    setIsLoading(true);
     try {
       const response = await fetch(LOGINUSER, {
         method: "POST",
@@ -57,6 +59,7 @@ export function LoginPage() {
           detail: "Login successful!",
           life: 3000,
         });
+        setIsLoading(false);
 
         // Redirect based on user type
         if (result.isNewUser) {
@@ -72,6 +75,7 @@ export function LoginPage() {
           detail: `Error: ${errorResult.message || "Failed to log in"}`,
           life: 3000,
         });
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -83,7 +87,6 @@ export function LoginPage() {
       });
     }
   };
-
 
   return (
     <>
@@ -203,8 +206,9 @@ export function LoginPage() {
                 className="mt-6 normal-case rounded-full"
                 type="submit"
                 fullWidth
+                disabled={isLoading}
               >
-                Sign In
+                {isLoading ? "Sign In..." : "Sign In"}
               </Button>
               <Link href={"auth/register"}>
                 <Typography
