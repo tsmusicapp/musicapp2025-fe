@@ -171,7 +171,7 @@ export function Navbar() {
               {auth?.user ? (
                 <DropdownProfile user={auth.user} />
               ) : (
-                <Link href="/auth">
+                <Link href="/auth/login">
                   <Button
                     color="gray"
                     variant="outlined"

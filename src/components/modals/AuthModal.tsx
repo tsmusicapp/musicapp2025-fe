@@ -39,7 +39,7 @@ export function LoginModal({ isOpen, onClose }: LoginModalProps) {
   }, [isOpen, closeMusicPlayer]);
 
   const handleLogin = () => {
-    router.push("/auth");
+    router.push("/auth/login");
     onClose();
   };
 

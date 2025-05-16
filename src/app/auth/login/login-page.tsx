@@ -210,7 +210,7 @@ export function LoginPage() {
               >
                 {isLoading ? "Sign In..." : "Sign In"}
               </Button>
-              <Link href={"auth/register"}>
+              <Link href={"/auth/register"}>
                 <Typography
                   variant="small"
                   color="gray"

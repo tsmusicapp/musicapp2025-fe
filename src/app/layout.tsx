@@ -43,7 +43,6 @@ export default function RootLayout({
                 name="viewport"
                 content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover"
               ></meta>
-              {/* <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script> */}
             </head>
             <body className={"font-notoRegular"}>
               <Layout>
@@ -57,10 +56,6 @@ export default function RootLayout({
                 crossOrigin="anonymous"
                 referrerPolicy="no-referrer"
               />
-              {/* <link
-          href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css"
-          rel="stylesheet"
-        /> */}
             </body>
           </html>
         </StoreProvider>

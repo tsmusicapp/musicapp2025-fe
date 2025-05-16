@@ -70,7 +70,7 @@ export function RegisterPage() {
           detail: "Account created successfully!",
           life: 3000,
         });
-        window.location.href = "/auth";
+        window.location.href = "/auth/login";
       } else {
         const errorResult = await response.json();
         toast.current?.show({
@@ -277,7 +277,7 @@ export function RegisterPage() {
               >
                 Create an Account
               </Button>
-              <Link href={"/auth"}>
+              <Link href={"/auth/login"}>
                 <Typography
                   variant="small"
                   color="gray"
