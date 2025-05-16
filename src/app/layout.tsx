@@ -1,9 +1,9 @@
-import "./globals.css";
-import type { Metadata } from "next";
-import { Layout, FixedPlugin, Navbar } from "@/components";
-import { StoreProvider } from "@/redux/StoreProvider";
+import { Layout, Navbar } from "@/components";
+import ToasterWrapper from "@/components/ToasterWrapper";
 import { LocalStorageProvider } from "@/context/LocalStorageContext";
-import ToasterWrapper from "@/components/ToasterWrapper"; 
+import { StoreProvider } from "@/redux/StoreProvider";
+import type { Metadata } from "next";
+import "./globals.css";
 
 
 export const metadata: Metadata = {
