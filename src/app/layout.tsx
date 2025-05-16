@@ -6,7 +6,7 @@ import { StoreProvider } from "@/redux/StoreProvider";
 import { PrimeReactProvider } from "primereact/api";
 import Tailwind from "primereact/passthrough/tailwind";
 import { LocalStorageProvider } from "@/context/LocalStorageContext";
-
+import ToasterWrapper from "@/components/ToasterWrapper"; // Import the ToasterWrapper
 // const roboto = Roboto({
 //   subsets: ["latin"],
 //   weight: ["300", "400", "500", "700", "900"],
@@ -48,6 +48,7 @@ export default function RootLayout({
               <Layout>
                 <Navbar />
                 {children}
+                <ToasterWrapper />
               </Layout>
               <link
                 rel="stylesheet"

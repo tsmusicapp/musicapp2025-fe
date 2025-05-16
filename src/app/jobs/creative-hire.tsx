@@ -1,24 +1,19 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Controller, useForm } from "react-hook-form";
-import { Toast } from "primereact/toast";
-import Image from "next/image";
-import { StarIcon } from "@heroicons/react/24/outline";
 import { BASE_URL } from "@/conf/api";
 import { Select } from "antd";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 const { Option } = Select;
 
 import {
-  Card,
-  Input,
-  Checkbox,
   Button,
-  Typography,
+  Input,
   Textarea,
-
+  Typography
 } from "@material-tailwind/react";
+import toast from "react-hot-toast";
 
 const musicUse = [
   "Pop Music",
@@ -31,31 +26,6 @@ const musicUse = [
   "Travel Music",
   "Animation Music",
   "Light Music",
-];
-
-const options = [
-  { label: "Pop Music", value: "Pop Music" },
-  { label: "Folk Music", value: "Folk Music" },
-  { label: "Game Music", value: "Game Music" },
-  { label: "Movie Music", value: "Movie Music" },
-  { label: "Classical Music", value: "Classical Music" },
-  { label: "Children Music", value: "Children Music" },
-  { label: "Dance Music", value: "Dance Music" },
-  { label: "Travel Music", value: "Travel Music" },
-  { label: "Animation Music", value: "Animation Music" },
-  { label: "Light Music", value: "Light Music" },
-];
-
-
-const cultureArea = [
-  "North America",
-  "Europe",
-  "East Asia",
-  "South Asia",
-  "Ocenia",
-  "West Asia and North Africa",
-  "Africa",
-  "Latin America",
 ];
 
 interface JobFormData {
@@ -81,7 +51,6 @@ interface JobFormData {
 
 export function CreativeHire() {
   const router = useRouter();
-  const toast = useRef<Toast>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   const {
@@ -95,13 +64,11 @@ export function CreativeHire() {
 
   const [selected, setSelected] = useState("");
 
-  // ...existing code...
 
   const handleCheckboxChange = (value: string) => {
     setSelected((prevSelected) => (prevSelected === value ? " " : value));
   };
 
-  // ...existing code...
 
   const onSubmit = async (data: JobFormData) => {
     try {
@@ -137,20 +104,6 @@ export function CreativeHire() {
 
       });
 
-      console.log("Payload to be sent:", {
-        projectTitle: data.projectTitle,
-        category: data.category,
-        isHaveLyric: data.isHaveLyric === "true",
-        lyricLanguage: data.lyricLanguage,
-        musicUse: data.musicUse,
-        cultureArea: data.cultureArea,
-        budget: `${data.budget.min}-${data.budget.max} USD`,
-        timeFrame: formattedTimeFrame,
-        description: data.description,
-        position: data.position,
-        applicantName: data.applicantName,
-      });
-
       if (!response.ok) {
         const errorData = await response.json();
         if (response.status === 401) {
@@ -161,27 +114,13 @@ export function CreativeHire() {
         }
         throw new Error(errorData.message || "Failed to create job");
       }
-
-      toast.current?.show({
-        severity: "success",
-        summary: "Success",
-        detail: "Job created successfully!",
-        life: 3000,
-      });
-
+      toast.success("Job created successfully!");
       reset();
       router.push("/jobs");
     } catch (error) {
       console.error("Error creating job:", error);
-      toast.current?.show({
-        severity: "error",
-        summary: "Error",
-        detail:
-          error instanceof Error
-            ? error.message
-            : "An unexpected error occurred",
-        life: 3000,
-      });
+      toast.error("An unexpected error occurred")
+     
     } finally {
       setIsLoading(false);
     }
@@ -189,7 +128,6 @@ export function CreativeHire() {
 
   return (
     <section className="flex flex-row justify-center items-center !w-12/12 md:w-[50rem] overflow-auto scrollbar-none">
-      <Toast ref={toast} />
       <form
         className="flex flex-col gap-2 px-8"
         onSubmit={handleSubmit(onSubmit)}

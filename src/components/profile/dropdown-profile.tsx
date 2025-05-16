@@ -1,22 +1,22 @@
-import {
-  Menu,
-  MenuHandler,
-  MenuList,
-  MenuItem,
-  Avatar,
-  Typography,
-  Button,
-} from "@material-tailwind/react";
-import Link from "next/link";
-import { useState, useRef, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
-import { isCustomer } from "@/redux/features/offer/offerSlice";
-import { Toast } from "primereact/toast";
-import { logout } from "@/redux/features/auth/authSlice";
 import { useLocalStorage } from "@/context/LocalStorageContext";
+import { isCustomer } from "@/redux/features/offer/offerSlice";
 import { LOGOUTUSER } from "@/services/apiServices";
 import { API_URL } from "@/utils/env_var";
+import {
+  Avatar,
+  Button,
+  Menu,
+  MenuHandler,
+  MenuItem,
+  MenuList,
+  Typography,
+} from "@material-tailwind/react";
+import { Router } from "lucide-react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useRef, useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 
 interface UserProps {
   user: any;
@@ -24,10 +24,9 @@ interface UserProps {
 
 export default function DropdownProfile({ user }: UserProps) {
   const dispatch = useDispatch();
-  const toast = useRef<Toast>(null);
   const { getItem, removeItem } = useLocalStorage();
   const [auth, setAuth] = useState<any>(getItem("auth", null)); // Load initial user from local storage
-
+  const router = useRouter();
   const onLogout = async () => {
     try {
       const refreshToken = auth.tokens.refresh.token;
@@ -43,40 +42,19 @@ export default function DropdownProfile({ user }: UserProps) {
       });
 
       if (response.status == 204) {
-        //   reset();
-        // const result = await response.json();
         removeItem("auth");
-        // dispatch(logout());
-        toast.current?.show({
-          severity: "success",
-          summary: "Success",
-          detail: "Logout successful!",
-          life: 3000,
-        });
-        window.location.href = "/";
+        toast.success("Logout successful!")
+        
+        router.push("/");
       }
-      //  else {
-      //   const errorResult = await response.json();
-      //   toast.current?.show({
-      //     severity: `${errorResult.code == 422 ? "warn" : "error"}`,
-      //     summary: `${errorResult.code == 422 ? "Warning" : "Error"}`,
-      //     detail: `Error: ${errorResult.message || "Failed to logout"}`,
-      //     life: 3000,
-      //   });
-      // }
+      
     } catch (error) {
       console.error("Error during logout:", error);
-      toast.current?.show({
-        severity: "error",
-        summary: "Error",
-        detail: "An unexpected error occurred.",
-        life: 3000,
-      });
+      toast.error("An unexpected error occurred.")
     }
   };
   return (
     <Menu>
-      <Toast ref={toast} />
       <MenuHandler>
         <Avatar
           variant="circular"

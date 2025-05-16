@@ -5,12 +5,12 @@ import { useState, useRef } from "react";
 import { Typography, Input, Button } from "@material-tailwind/react";
 import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
 import Link from "next/link";
-import { Toast } from "primereact/toast";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { login } from "@/redux/features/auth/authSlice";
 import { LOGINUSER } from "@/services/apiServices";
-
+import { toast } from "react-hot-toast";
+import { useRouter } from "next/navigation";
 interface FormLogin {
   email: string;
   password: string;
@@ -18,8 +18,8 @@ interface FormLogin {
 
 export function LoginPage() {
   const dispatch = useDispatch();
-  const toast = useRef<Toast>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
+const router = useRouter();
+const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [passwordShown, setPasswordShown] = useState(false);
   const togglePasswordVisiblity = () => setPasswordShown((cur) => !cur);
@@ -49,49 +49,33 @@ export function LoginPage() {
         localStorage.setItem("token", result.tokens.access.token);
         localStorage.setItem("refreshToken", result.tokens.refresh.token);
 
-        // Dispatch login action if you are using Redux
         dispatch(login(result));
 
-        // Show success message
-        toast.current?.show({
-          severity: "success",
-          summary: "Success",
-          detail: "Login successful!",
-          life: 3000,
-        });
+        toast.success("Login successful!");
+
         setIsLoading(false);
 
-        // Redirect based on user type
         if (result.isNewUser) {
-          window.location.href = "/";
+          // router.push("/");
+        window.location.href = "/";
         } else {
-          window.location.href = "/user-space";
+          router.push("/user-space");
         }
       } else {
         const errorResult = await response.json();
-        toast.current?.show({
-          severity: `${errorResult.code == 422 ? "warn" : "error"}`,
-          summary: `${errorResult.code == 422 ? "Warning" : "Error"}`,
-          detail: `Error: ${errorResult.message || "Failed to log in"}`,
-          life: 3000,
-        });
+        toast.error(`Error: ${errorResult.message || "Failed to log in"}`);
+
         setIsLoading(false);
       }
     } catch (error) {
       console.error("Error during login:", error);
-      toast.current?.show({
-        severity: "error",
-        summary: "Error",
-        detail: "An unexpected error occurred.",
-        life: 3000,
-      });
+      toast.error(`An unexpected error occurred.`);
     }
   };
 
   return (
     <>
       <div className="flex flex-row justify-between">
-        <Toast ref={toast} />
         <div className="relative w-4/12 bg-[url('/image/login.jpg')] bg-cover bg-no-repeat"></div>
         <section className="grid text-center h-screen w-9/12 items-center p-8">
           <div>

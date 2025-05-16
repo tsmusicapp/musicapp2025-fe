@@ -1,26 +1,16 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import Image from "next/image";
-import { StarIcon } from "@heroicons/react/24/outline";
-import {
-  Card,
-  Input,
-  Checkbox,
-  Button,
-  Typography,
-  Select,
-  Textarea,
-} from "@material-tailwind/react";
-import { useDispatch } from "react-redux";
-import { AppDispatch } from "@/redux/store";
-import { musicBackgroundDialog } from "@/redux/features/offer/offerSlice";
-import MusicBackgroundDialog from "@/components/share-work-creation/music-background-dialog";
 import RichTextEditor from "@/components/ui/RichTextEditor";
-import { useForm } from "react-hook-form";
-import { Toast } from "primereact/toast";
-import { resetWarned } from "antd/es/_util/warning";
 import { API_URL } from "@/utils/env_var";
+import {
+  Button,
+  Input,
+  Textarea,
+  Typography
+} from "@material-tailwind/react";
+import React, { useRef, useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 export interface LyricsWordFormData {
   lyricName: string;
@@ -46,10 +36,8 @@ export function ShareLyrics() {
   } = useForm<LyricsWordFormData>({ mode: "onChange" });
 
   const [musicImagePreview, setMusicImagePreview] = React.useState<string>("");
-  const toast = useRef<Toast>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const musicSizeLimit = 20 * 1024 * 1024; // 20MB
   const imageSizeLimit = 1024 * 1024; // 1MB
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -67,7 +55,6 @@ export function ShareLyrics() {
     const auth = JSON.parse(localStorage.getItem("auth") || "{}");
     const token = auth.tokens?.access?.token;
 
-    console.log(data, "checkDataValue");
     const formData = new FormData();
     formData.append("lyricName", data.lyricName);
     formData.append("lyricLanguage", data.lyricLanguage);
@@ -91,26 +78,20 @@ export function ShareLyrics() {
         body: formData,
       });
       if (response.ok) {
-        toast.current?.show({
-          severity: "success",
-          summary: "Success",
-          detail: "Lyrics created successfully!",
-          life: 3000,
-        });
+        toast.success("Lyrics created successfully!");
+        
         reset();
         setMusicImagePreview("");
         setIsLoading(false); 
-        console.log("Lyrics created successfully");
       }
     } catch (error) {
+      toast.error("Faild to create");
       console.log(error, "error");
       setIsLoading(false); 
     }
   };
-  const dispatch = useDispatch<AppDispatch>();
   return (
     <section className="flex flex-row justify-center items-center my-8">
-      <Toast ref={toast} />
 
       {/* <MusicBackgroundDialog /> */}
       <form className="flex flex-col gap-2" onSubmit={handleSubmit(onSubmit)}>

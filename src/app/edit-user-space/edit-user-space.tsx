@@ -1,35 +1,24 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import Image from "next/image";
-import { StarIcon } from "@heroicons/react/24/outline";
-import {
-  Card,
-  Input,
-  Checkbox,
-  Button,
-  Typography,
-  Select,
-  Textarea,
-} from "@material-tailwind/react";
-import Link from "next/link";
 import SelectMultiple from "@/components/dropdown/select-multiple";
+import { useLocalStorage } from "@/context/LocalStorageContext";
 import {
   collaborativeOptions,
   instrumentsOptions,
   musicStylesOptions,
 } from "@/default/dropdown-multiple";
-import { useLocalStorage } from "@/context/LocalStorageContext";
-import { Toast } from "primereact/toast";
-import { defaultStateUser, IUserProfile } from "@/types/UserSpace";
-import { SubmitHandler, useForm } from "react-hook-form";
 import { RootState } from "@/redux/store";
-import { useSelector } from "react-redux";
-import { removeEmptyStrings } from "@/utils/utils";
+import { defaultStateUser, IUserProfile } from "@/types/UserSpace";
 import { API_URL } from "@/utils/env_var";
+import { removeEmptyStrings } from "@/utils/utils";
+import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
+import Link from "next/link";
+import React, { useEffect, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
 
 export function EditUserSpace() {
-  const toast = useRef<Toast>(null);
   const { getItem, setItem } = useLocalStorage();
   const [auth, setAuth] = useState<any>(getItem("auth", null));
   const {
@@ -83,12 +72,7 @@ export function EditUserSpace() {
 
   const handleUpload = async () => {
     if (!file) {
-      toast.current?.show({
-        severity: "warn",
-        summary: "Warning",
-        detail: "Please select a profile picture",
-        life: 3000,
-      });
+      toast.error("Please select a profile picture");
       return;
     }
 
@@ -112,30 +96,16 @@ export function EditUserSpace() {
           ...prev,
           profilePicture: result.data.profilePicture, // Use the path from the response
         }));
-
-        toast.current?.show({
-          severity: "success",
-          summary: "Success",
-          detail: "Profile picture uploaded successfully!",
-          life: 3000,
-        });
+        toast.success("Profile picture uploaded successfully!");
       } else {
         const errorResult = await response.json();
-        toast.current?.show({
-          severity: `${errorResult.code == 422 ? "warn" : "error"}`,
-          summary: `${errorResult.code == 422 ? "Warning" : "Error"}`,
-          detail: `Error: ${errorResult.message || "Failed to upload profile"}`,
-          life: 3000,
-        });
+        toast.error(
+          `Error: ${errorResult.message || "Failed to upload profile"}`
+        );
       }
     } catch (error) {
       console.error("Error during profile upload:", error);
-      toast.current?.show({
-        severity: "error",
-        summary: "Error",
-        detail: "An unexpected error occurred.",
-        life: 3000,
-      });
+      toast.error(`An unexpected error occurred.`);
     }
   };
 
@@ -150,27 +120,31 @@ export function EditUserSpace() {
 
   const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, checked } = e.target;
-    
+
     // Update checked items array
-    setCheckedItems(prev => {
-      const newCheckedItems = checked 
+    setCheckedItems((prev) => {
+      const newCheckedItems = checked
         ? [...prev, value]
-        : prev.filter(item => item !== value);
-        
+        : prev.filter((item) => item !== value);
+
       // Update formData with new checked items and business occupation
-      setFormData(prev => ({
+      setFormData((prev) => ({
         ...prev,
         creationOccupation: newCheckedItems,
         // Set business occupation based on first checked item if any exist
-        businessOccupation: newCheckedItems.length > 0 
-          ? `${newCheckedItems[0].charAt(0).toUpperCase() + newCheckedItems[0].slice(1)} Business`
-          : ''
+        businessOccupation:
+          newCheckedItems.length > 0
+            ? `${
+                newCheckedItems[0].charAt(0).toUpperCase() +
+                newCheckedItems[0].slice(1)
+              } Business`
+            : "",
       }));
-      
+
       return newCheckedItems;
     });
   };
-  
+
   // Initialize checkbox states from existing formData
   useEffect(() => {
     if (formData.creationOccupation?.length) {
@@ -194,18 +168,14 @@ export function EditUserSpace() {
   const onSubmit: SubmitHandler<IUserProfile> = async (data) => {
     // Check if profile picture exists
     if (!formData.profilePicture) {
-      toast.current?.show({
-        severity: "warn",
-        summary: "Warning",
-        detail: "Please upload a profile picture",
-        life: 3000,
-      });
+      toast.error("Please upload a profile picture");
+
       return;
     }
 
     let cleanedData = removeEmptyStrings(formData);
 
-    console.log(cleanedData)
+    console.log(cleanedData);
     try {
       const response = await fetch(`${API_URL}/v1/user-space/add`, {
         method: "POST",
@@ -221,97 +191,62 @@ export function EditUserSpace() {
 
         auth.isNewUser = false; // Update the key you want
         setItem("auth", auth);
-
-        toast.current?.show({
-          severity: "success",
-          summary: "Success",
-          detail: "Space Created successfully!",
-          life: 3000,
-        });
+        toast.success("Space Created successfully!");
         window.location.href = "/user-space";
       } else {
         const errorResult = await response.json();
-        toast.current?.show({
-          severity: `${errorResult.code == 422 ? "warn" : "error"}`,
-          summary: `${errorResult.code == 422 ? "Warning" : "Error"}`,
-          detail: `Error: ${errorResult.message || "Failed to update space"}`,
-          life: 3000,
-        });
+        toast.error(
+          `Error: ${errorResult.message || "Failed to update space"}`
+        );
       }
     } catch (error) {
       console.error("Error during edit user space:", error);
-      toast.current?.show({
-        severity: "error",
-        summary: "Error",
-        detail: "An unexpected error occurred.",
-        life: 3000,
-      });
+      toast.error("An unexpected error occurred.");
     }
   };
 
   const onUpdate: SubmitHandler<IUserProfile> = async (data) => {
-    console.log(formData);
-    console.log("onUpdateSpace", data);
     let cleanedData = removeEmptyStrings(formData);
     try {
-      const response = await fetch(
-        `${API_URL}/v1/user-space/update`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${auth.tokens.access.token}`,
-          },
-          body: JSON.stringify(cleanedData),
-        }
-      );
+      const response = await fetch(`${API_URL}/v1/user-space/update`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.tokens.access.token}`,
+        },
+        body: JSON.stringify(cleanedData),
+      });
 
       if (response.ok) {
         const result = await response.json();
-        toast.current?.show({
-          severity: "success",
-          summary: "Success",
-          detail: "Space updated successfully!",
-          life: 3000,
-        });
+        toast.success("Space updated successfully!");
+
         window.location.href = "/user-space";
       } else {
         const errorResult = await response.json();
-        toast.current?.show({
-          severity: `${errorResult.code == 422 ? "warn" : "error"}`,
-          summary: `${errorResult.code == 422 ? "Warning" : "Error"}`,
-          detail: `Error: ${errorResult.message || "Failed to update space"}`,
-          life: 3000,
-        });
+        toast.error(
+          `Error: ${errorResult.message || "Failed to update space"}`
+        );
       }
     } catch (error) {
       console.error("Error during edit user space:", error);
-      toast.current?.show({
-        severity: "error",
-        summary: "Error",
-        detail: "An unexpected error occurred.",
-        life: 3000,
-      });
+      toast.error("An unexpected error occurred");
     }
   };
 
   const handleClick = async (event: React.MouseEvent<HTMLButtonElement>) => {
     console.log(formData);
     event.preventDefault();
-    console.log("Button clicked");
 
     if (auth.isNewUser) {
       const onSubmitResult = await handleSubmit(onSubmit)();
-      console.log("Submit Space:", onSubmitResult);
     } else {
       const onUpdateSpace = await handleSubmit(onUpdate)();
-      console.log("Update Space:", onUpdateSpace);
     }
 
     // Check if errors exist
     if (Object.keys(errors).length > 0) {
       console.log(selectMultipleValue);
-      console.log("Validation errors:", errors);
     }
   };
 
@@ -350,20 +285,13 @@ export function EditUserSpace() {
           delete data.updatedBy;
           delete data.id;
           delete data.occupation;
-          console.log(data, "data")
           setFormData(data);
           reset(data);
 
           // Rest of your existing code for setting other data...
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
-        toast.current?.show({
-          severity: "error",
-          summary: "Error",
-          detail: "Failed to fetch data.",
-          life: 5000,
-        });
+        toast.error("Failed to fetch data.");
       }
     };
 
@@ -372,19 +300,9 @@ export function EditUserSpace() {
     }
   }, [auth, reset, toast]);
 
-  console.log(formData);
-  console.log(imageUrl);
-  console.log(imagePreview);
-
-  console.log(formData.businessOccupation, "bussiness occupation");
-  console.log(formData.creationOccupation, "occupations");
-
-
-  if (auth === null) return null; // Render nothing until state is known
-  console.log(formData);
+  if (auth === null) return null;
   return (
     <section className="flex flex-row justify-center items-center my-8">
-      <Toast ref={toast} />
       <form className="flex flex-col gap-2">
         <div className="flex flex-row gap-8">
           <div className="w-96">
@@ -613,7 +531,9 @@ export function EditUserSpace() {
                 </div>
               </div>
               {errors.creationOccupation ? (
-                <p style={{ color: "red" }}>{errors.creationOccupation.message}</p>
+                <p style={{ color: "red" }}>
+                  {errors.creationOccupation.message}
+                </p>
               ) : (
                 ""
               )}

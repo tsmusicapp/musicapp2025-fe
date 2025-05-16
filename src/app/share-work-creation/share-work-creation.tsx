@@ -1,18 +1,17 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@material-tailwind/react";
-import { Toast } from "primereact/toast";
-import { useForm } from "react-hook-form";
-import LeftSideFirst from "../../components/share-work-creation/left-side-first";
-import RightSideFirst from "../../components/share-work-creation/right-side-first";
-import LeftSideSecond from "../../components/share-work-creation/left-side-second";
-import RightSideSecond from "../../components/share-work-creation/right-side-second";
-import BottomPart from "../../components/share-work-creation/bottom-part";
-import MusicBackgroundDialog from "../../components/share-work-creation/music-background-dialog";
-import { MusicallService } from "@/services/musicall.service";
 import { MusicCreationService } from "@/services/music-creation.service";
+import { Button } from "@material-tailwind/react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
+import BottomPart from "../../components/share-work-creation/bottom-part";
+import LeftSideFirst from "../../components/share-work-creation/left-side-first";
+import LeftSideSecond from "../../components/share-work-creation/left-side-second";
+import MusicBackgroundDialog from "../../components/share-work-creation/music-background-dialog";
+import RightSideFirst from "../../components/share-work-creation/right-side-first";
+import RightSideSecond from "../../components/share-work-creation/right-side-second";
 
 export interface ShareWorkFormData {
   musicName: string;
@@ -38,7 +37,6 @@ export interface ShareWorkFormData {
 
 export function ShareWorkCreationPage() {
   const router = useRouter();
-  const toast = useRef<Toast>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
@@ -62,12 +60,8 @@ export function ShareWorkCreationPage() {
     const token =
       localStorage.getItem("token") || sessionStorage.getItem("token");
     if (!token) {
-      toast.current?.show({
-        severity: "error",
-        summary: "Error",
-        detail: "No authentication token found. Please log in.",
-        life: 3000,
-      });
+      toast.success("No authentication token found. Please log in.");
+      
       router.push("/login");
     } else {
       setIsAuthenticated(true);
@@ -83,7 +77,6 @@ export function ShareWorkCreationPage() {
 
   const onSubmit = async (data: ShareWorkFormData) => {
     try {
-      console.log("Submitting data:", data);
       setIsLoading(true);
       // Prepare FormData to handle files and other form fields
       const formData = new FormData();
@@ -122,26 +115,13 @@ export function ShareWorkCreationPage() {
 
       // Call the createMusic service
       await MusicCreationService.createMusic(formData);
-
-      toast.current?.show({
-        severity: "success",
-        summary: "Success",
-        detail: "Work shared successfully!",
-        life: 3000,
-      });
+      toast.success("Work shared successfully!");
+      router.push("/");
       setIsLoading(false);
-      setTimeout(() => {
-        router.push("/");
-      }, 5000);
     } catch (error) {
       console.error("Submission error:", error);
-      toast.current?.show({
-        severity: "error",
-        summary: "Error",
-        detail:
-          error instanceof Error ? error.message : "Failed to submit form",
-        life: 3000,
-      });
+      toast.error( error instanceof Error ? error.message : "Failed to submit form")
+      
       setIsLoading(false);
     }
   };
@@ -152,7 +132,6 @@ export function ShareWorkCreationPage() {
 
   return (
     <section className="flex flex-row w-full justify-center items-center my-8">
-      <Toast ref={toast} />
       <MusicBackgroundDialog setValue={setValue} />
 
       <form

@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState } from "react";
 
-import { Typography, Input, Button } from "@material-tailwind/react";
-import { EyeSlashIcon, EyeIcon } from "@heroicons/react/24/solid";
-import Link from "next/link";
-import { Toast } from "primereact/toast";
-import { useForm } from "react-hook-form";
 import { RESGISTERUSER } from "@/services/apiServices";
+import { EyeIcon, EyeSlashIcon } from "@heroicons/react/24/solid";
+import { Button, Input, Typography } from "@material-tailwind/react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 interface FormData {
   name: string;
@@ -19,12 +20,12 @@ interface FormData {
 export function RegisterPage() {
   const [passwordShown, setPasswordShown] = useState(false);
   const togglePasswordVisiblity = () => setPasswordShown((cur) => !cur);
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const [confirmPasswordShown, setConfirmPasswordShown] = useState(false);
   const toggleConfirmPasswordVisiblity = () =>
     setConfirmPasswordShown((cur) => !cur);
-
-  const toast = useRef<Toast>(null);
 
   const [formData, setFormData] = useState<FormData>({
     name: "",
@@ -52,6 +53,7 @@ export function RegisterPage() {
 
   const onSubmit = async (data: FormData) => {
     try {
+      setIsLoading(true);
       delete data.confirmPassword;
       const response = await fetch(RESGISTERUSER, {
         method: "POST",
@@ -64,37 +66,27 @@ export function RegisterPage() {
       if (response.ok) {
         //   reset();
         const result = await response.json();
-        toast.current?.show({
-          severity: "success",
-          summary: "Success",
-          detail: "Account created successfully!",
-          life: 3000,
-        });
-        window.location.href = "/auth/login";
+        toast.success("Account created successfully!");
+
+        router.push("/auth/login");
+        setIsLoading(false);
       } else {
         const errorResult = await response.json();
-        toast.current?.show({
-          severity: `${errorResult.code == 422 ? "warn" : "error"}`,
-          summary: `${errorResult.code == 422 ? "Warning" : "Error"}`,
-          detail: `Error: ${errorResult.message || "Failed to create account"}`,
-          life: 3000,
-        });
+        toast.error(
+          `Error: ${errorResult.message || "Failed to create account"}`
+        );
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Error during registration:", error);
-      toast.current?.show({
-        severity: "error",
-        summary: "Error",
-        detail: "An unexpected error occurred.",
-        life: 3000,
-      });
+      toast.error(`An unexpected error occurred.`);
+      setIsLoading(false);
     }
   };
 
   return (
     <>
       <div className="flex flex-row justify-between">
-        <Toast ref={toast} />
         <div className="relative w-4/12 bg-[url('/image/login.jpg')] bg-cover bg-no-repeat"></div>
         <section className="grid text-center h-screen w-9/12 items-center p-8">
           <div>
@@ -274,8 +266,9 @@ export function RegisterPage() {
                 className="mt-6 normal-case rounded-full"
                 type="submit"
                 fullWidth
+                disabled={isLoading}
               >
-                Create an Account
+                {isLoading ? "Create an Account..." : "Create an Account"}
               </Button>
               <Link href={"/auth/login"}>
                 <Typography

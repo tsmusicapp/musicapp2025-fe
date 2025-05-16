@@ -1,45 +1,38 @@
-import React, { useRef } from "react";
+import { updateDialog } from "@/redux/features/offer/offerSlice";
+import { createOrder } from "@/redux/features/order/orderSlice";
+import { AppDispatch, RootState } from "@/redux/store";
+import { chatService } from "@/services/chatService";
+import { Order } from "@/types/Order";
+import { useAuth } from "@/utils/useAuth";
 import {
   Button,
-  Dialog,
   Card,
   CardBody,
   CardFooter,
-  Typography,
+  Dialog,
   Textarea,
+  Typography,
 } from "@material-tailwind/react";
-import { RootState, AppDispatch } from "@/redux/store";
-import { useSelector, useDispatch } from "react-redux";
-import { updateDialog } from "@/redux/features/offer/offerSlice";
 import { useForm } from "react-hook-form";
-import { Order } from '@/types/Order'
-import { createOrder } from "@/redux/features/order/orderSlice";
-import { useAuth } from "@/utils/useAuth";
-import { Toast } from "primereact/toast";
-import { chatService } from "@/services/chatService";
-
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function OfferDialog() {
-  const toast = useRef<Toast>(null);
-
-  const { getCurrentUser } = useAuth()
+  const { getCurrentUser } = useAuth();
   const { register, handleSubmit, reset } = useForm<Order>({
     defaultValues: {
-      title: '',
+      title: "",
       description: "",
       price: 0,
-      delivery_time: 0
-    }
-  })
+      delivery_time: 0,
+    },
+  });
   const dispatch = useDispatch<AppDispatch>();
   const isOfferDialog = useSelector(
     (state: RootState) => state.offer.offerDialog
   );
-  const chatData = useSelector(
-    (state: RootState) => state.chat
-  );
-  console.log(chatData, 'chat data')
-
+  const chatData = useSelector((state: RootState) => state.chat);
+  console.log(chatData, "chat data");
 
   const onSubmit = async (data: any) => {
     const user = getCurrentUser();
@@ -48,29 +41,29 @@ export default function OfferDialog() {
       createdBy: user?.id,
       chat_id: chatData?.recruiterId,
       recruiterId: chatData.chatId,
-      status: 'inprogress'
+      status: "inprogress",
     };
 
     try {
       const res = await dispatch(createOrder(updatedData));
-      await chatService.sendMessage(chatData.chatId, `${data.title}||OrderRequestCard`);
+      await chatService.sendMessage(
+        chatData.chatId,
+        `${data.title}||OrderRequestCard`
+      );
       console.log(res, "res from order");
 
       if (res?.meta.requestStatus === "fulfilled") {
-        reset()
+        reset();
         dispatch(updateDialog());
-        toast.current?.show({ severity: "success", summary: "Success", detail: "Order created successfully!", life: 3000 });
+        toast.success("Order created successfully!");
       } else {
         dispatch(updateDialog());
-        toast.current?.show({ severity: "error", summary: "Error", detail: "Failed to create order. Please try again.", life: 3000 });
+        toast.error("Failed to create order. Please try again.");
       }
     } catch (error) {
-      toast.current?.show({ severity: "error", summary: "Error", detail: "Something went wrong!", life: 3000 });
-      console.error("Error creating order:", error);
+      toast.error("Something went wrong!");
     }
   };
-
-
 
   return (
     <>
@@ -80,8 +73,6 @@ export default function OfferDialog() {
         handler={() => dispatch(updateDialog())}
         className="bg-transparent shadow-none"
       >
-        <Toast ref={toast} />
-
         <form onSubmit={handleSubmit(onSubmit)}>
           <Card className="mx-auto w-full max-w-[24rem]">
             <CardBody className="flex flex-col gap-2 pb-0">
@@ -113,7 +104,8 @@ export default function OfferDialog() {
                 </Typography>
                 <Textarea
                   {...register("description", { required: true })}
-                  className="w-[25rem] h-52 !text-black" />
+                  className="w-[25rem] h-52 !text-black"
+                />
               </div>
               <div className="flex flex-col gap-2">
                 <Typography className="-mb-2" color="black" variant="h6">
@@ -123,7 +115,6 @@ export default function OfferDialog() {
                   <input
                     type="text"
                     {...register("delivery_time", { required: true })}
-
                     onKeyPress={(event) => {
                       if (!/[0-9]/.test(event.key)) {
                         event.preventDefault();
@@ -149,7 +140,6 @@ export default function OfferDialog() {
                   //   }
                   // }}
                   {...register("price", { required: true })}
-
                   type="text"
                   id="cvv-input"
                   aria-describedby="helper-text-explanation"
@@ -167,11 +157,7 @@ export default function OfferDialog() {
                   <span className="underline"> Learn More</span>
                 </p>
               </div>
-              <Button
-                className="bg-green-400"
-                type="submit"
-                fullWidth
-              >
+              <Button className="bg-green-400" type="submit" fullWidth>
                 Send Order
               </Button>
             </CardFooter>

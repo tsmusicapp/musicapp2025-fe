@@ -1,35 +1,20 @@
 "use client";
-import React, { useRef, useState } from 'react';
-import { useRouter } from "next/navigation";
-import { Toast } from "primereact/toast";
-import Image from "next/image";
 import {
+  Avatar,
   Card,
   CardBody,
-  CardFooter,
-  Avatar,
-  Typography,
-  IconButton,
-  Textarea,
   Chip,
+  Typography
 } from "@material-tailwind/react";
+import { useRouter } from "next/navigation";
+import React, { useState } from 'react';
 
-import { MapPinIcon, StarIcon as StaredIcon } from "@heroicons/react/24/solid";
-import { StarIcon, EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
-import { Badge, Button } from "@material-tailwind/react";
-import Link from "next/link";
-import {
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
-} from "@material-tailwind/react";
-// import { CATEGORIES, SELECTED } from "@/dummy/example";
-import { CATEGORIES, SELECTED } from "@/conf/jobsprops";
+import { SELECTED } from "@/conf/jobsprops";
+import { MapPinIcon } from "@heroicons/react/24/solid";
+import { Button } from "@material-tailwind/react";
 
-import PocketsizeBox from "@/components/music-box/pocketsize-box";
-import SelectableBox from "./music-box/selectable-box";
 import { API_URL } from '@/utils/env_var';
+import toast from 'react-hot-toast';
 
 interface CategoryCardProps {
   title: string;
@@ -71,34 +56,9 @@ function CardJobs(
     projectTitle,
     timeFrame
   }
-    //   {
-    //   title,
-    //   workcontent,
-    //   musicculture,
-    //   descriptionjob,
-    //   imgSong,
-    //   singerName,
-    //   songName,
-    //   imgComposer,
-    //   composerName,
-    //   savedJobs,
-    //   appliedJobs,
-    //   activeJobs,
-    //   id,
-    //   username,
-    //   fotoprofile,
-    //   category,
-    //   musicUse,
-    //   cultureArea,
-    //   lyricLanguage,
-    //   budget,
-    //   timeFrame,
-    //   applicantName,
-    //   createdAt,
-    // }
+    
     : CategoryCardProps) {
   const router = useRouter();
-  const toast = useRef<Toast>(null);
   const [openPopup, setOpenPopup] = React.useState(false);
   const [openSmallbox, setopenSmallbox] = React.useState(false);
   const [openReview, setopenReview] = React.useState(false);
@@ -153,20 +113,10 @@ function CardJobs(
       }
 
       const result = await response.json();
-      console.log("Application submitted successfully:", result);
-      alert("Application submitted successfully!");
-      // toast.current?.show({
-      //   severity: "success",
-      //   summary: "Success",
-      //   detail: "Job created successfully!",
-      //   life: 3000,
-      // });
-
+      toast.success("Application submitted successfully!");
       setopenSmallbox(!openSmallbox);
-      // setopenReviewisHaveLyric(!openReview);
     } catch (error) {
-      console.error("Error submitting application:", error);
-      alert("Failed to submit application. Please try again.");
+      toast.error("Failed to submit application. Please try again.")
     }
   };
 

@@ -1,11 +1,10 @@
 import { ArrowTopRightOnSquareIcon } from "@heroicons/react/24/solid";
-import { Avatar, Typography, Button } from "@material-tailwind/react";
+import { Avatar, Button, Typography } from "@material-tailwind/react";
 import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useLocalStorage } from "../../context/LocalStorageContext";
-import { getValueByKey } from "../../utils/utils";
 import { defaultStateUser, IUserProfile } from "../../types/UserSpace";
-import { Toast } from "primereact/toast";
 import { API_URL } from "../../utils/env_var";
 
 function UserInfo() {
@@ -13,17 +12,12 @@ function UserInfo() {
   const [auth, setAuth] = useState<any>(getItem("auth", null));
   const [imageUrl, setImageUrl] = useState("/image/default-picture.png");
   const [formData, setFormData] = useState<IUserProfile>(defaultStateUser);
-  const toast = useRef<Toast>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       if (!auth?.tokens?.access?.token) {
-        toast.current?.show({
-          severity: "error",
-          summary: "Error",
-          detail: "Please log in to view your profile.",
-          life: 5000,
-        });
+        toast.error("Please log in to view your profile.");
+        
         return;
       }
 
@@ -43,7 +37,6 @@ function UserInfo() {
         const data = await response.json();
 
         // Set profile picture URL with the correct path
-        console.log("profil", data);
         if (data.profilePicture && data.createdBy) {
           const profileUrl = `${API_URL}/uploads/${data.createdBy}/profilePicture.png`;
           setImageUrl(profileUrl);
@@ -53,29 +46,14 @@ function UserInfo() {
 
         setFormData(data);
       } catch (error) {
-        console.error("Error fetching data:", error);
         setImageUrl("/image/default-picture.jpg");
-        toast.current?.show({
-          severity: "error",
-          summary: "Error",
-          detail: "Failed to fetch user data.",
-          life: 5000,
-        });
+        toast.error("Failed to fetch user data.")
+        
       }
     };
 
     fetchData();
   }, [auth, toast]);
-
-  // useEffect(() => {
-  //   if (formData.profilePicture && formData.id) {
-  //     setImageUrl(
-  //       `${API_URL}/uploads/${formData.id}/profilePicture.png`
-  //     );
-  //   }
-  // }, [formData]);
-
-  console.log(formData)
 
   return (
     <div className="absolute max-w-[22rem] top-[23.5rem] left-[2rem] z-30 border-2 border-black/10 rounded-lg">

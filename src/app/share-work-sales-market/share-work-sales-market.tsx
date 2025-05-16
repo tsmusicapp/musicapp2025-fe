@@ -1,14 +1,14 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
-import { Toast } from "primereact/toast";
-import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
-import { useForm, SubmitHandler } from "react-hook-form";
 import { useLocalStorage } from "@/context/LocalStorageContext";
-import { removeEmptyStrings } from "@/utils/utils";
 import { IMusicAsset, defaultMusicAsset } from "@/types/ShareMusicAsset"; // Adjust path as needed
-import { useRouter } from "next/navigation";
 import { API_URL } from "@/utils/env_var";
+import { removeEmptyStrings } from "@/utils/utils";
+import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
+import { useRouter } from "next/navigation";
+import React, { useEffect, useRef, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import toast from "react-hot-toast";
 
 const musicUse = [
   "Pop Music",
@@ -24,7 +24,6 @@ const musicUse = [
 ];
 
 export default function ShareWorkSalesMarket() {
-  const toast = useRef<Toast>(null);
   const { getItem } = useLocalStorage();
   const [auth] = useState<any>(getItem("auth", null));
 
@@ -164,36 +163,23 @@ export default function ShareWorkSalesMarket() {
 
         if (response.ok) {
           const result = await response.json();
-          // Use the 'profilePicture' field
           setFormData((prev) => ({
             ...prev,
             musicImage: result.data.profilePicture,
           }));
-          toast.current?.show({
-            severity: "success",
-            summary: "Success",
-            detail: "Upload Music Image successful!",
-            life: 3000,
-          });
+          toast.success("Upload Music Image successful!")
+          
         } else {
           const errorResult = await response.json();
-          toast.current?.show({
-            severity: errorResult.code === 422 ? "warn" : "error",
-            summary: errorResult.code === 422 ? "Warning" : "Error",
-            detail: `Error: ${
+          toast.error(`Error: ${
               errorResult.message || "Failed to upload Music Image"
-            }`,
-            life: 3000,
-          });
+            }`);
+         
         }
       } catch (error) {
         console.error("Error during Upload Music Image:", error);
-        toast.current?.show({
-          severity: "error",
-          summary: "Error",
-          detail: "An unexpected error occurred.",
-          life: 3000,
-        });
+        toast.error("An unexpected error occurred.")
+        
       }
     };
 
@@ -201,15 +187,8 @@ export default function ShareWorkSalesMarket() {
       if (!fileMusic) {
         return;
       }
-      console.log(fileMusic, "music here2");
       const formData = new FormData();
       formData.append("music", fileMusic);
-
-      console.log(formData, "music here in data ");
-
-      // Log the FormData contents
-
-      console.log(formData, "No music");
 
       try {
         const response = await fetch(`${API_URL}/v1/tracks/`, {
@@ -223,38 +202,21 @@ export default function ShareWorkSalesMarket() {
         if (response.ok) {
           const result = await response.json();
           // result.data is the Mongo ObjectID, use it as your music identifier
-          console.log(result, "music here returned", result?.data);
           setFormData((prev) => ({ ...prev, music: result?.data?.music }));
-          console.log(formData, "form data after uploading music");
-          toast.current?.show({
-            severity: "success",
-            summary: "Success",
-            detail: "Upload Music Track successful!",
-            life: 3000,
-          });
+          toast.success("Upload Music Track successful!")
+          
         } else {
           const errorResult = await response.json();
-          toast.current?.show({
-            severity: errorResult.code === 422 ? "warn" : "error",
-            summary: errorResult.code === 422 ? "Warning" : "Error",
-            detail: `Error: ${
+          toast.error(`Error: ${
               errorResult.message || "Failed to upload Music Track"
-            }`,
-            life: 3000,
-          });
+            }`)
         }
       } catch (error) {
-        console.error("Error during Upload Music:", error);
-        toast.current?.show({
-          severity: "error",
-          summary: "Error",
-          detail: "An unexpected error occurred.",
-          life: 3000,
-        });
+        toast.error("An unexpected error occurred.");
+        
       }
     };
     if (fileMusic) {
-      console.log(fileMusic, "music here3");
       uploadMusic();
     }
     if (fileImage) {
@@ -262,71 +224,10 @@ export default function ShareWorkSalesMarket() {
     }
   }, [fileMusic, fileImage, auth]);
 
-  // useEffect(() => {
-  //   const uploadMusic = async () => {
-  //     if (!fileMusic) {
-  //       return
-  //     };
-  //     console.log(fileMusic)
-  //     const formData = new FormData();
-  //     await formData.append("audio", fileMusic);
-
-  //     console.log(formData, 'music here in data ');
-
-  //     // Log the FormData contents
-
-  //     console.log(formData, 'No music');
-
-  //     try {
-  //       const response = await fetch(`${API_URL}/v1/tracks`, {
-  //         method: "POST",
-  //         headers: {
-  //           Authorization: `Bearer ${auth.tokens.access.token}`,
-  //         },
-  //         body: formData,
-  //       });
-
-  //       if (response.ok) {
-  //         const result = await response.json();
-  //         // result.data is the Mongo ObjectID, use it as your music identifier
-  //         setFormData((prev) => ({ ...prev, music: result.data }));
-  //         toast.current?.show({
-  //           severity: "success",
-  //           summary: "Success",
-  //           detail: "Upload Music Track successful!",
-  //           life: 3000,
-  //         });
-  //       } else {
-  //         const errorResult = await response.json();
-  //         toast.current?.show({
-  //           severity: errorResult.code === 422 ? "warn" : "error",
-  //           summary: errorResult.code === 422 ? "Warning" : "Error",
-  //           detail: `Error: ${errorResult.message || "Failed to upload Music Track"
-  //             }`,
-  //           life: 3000,
-  //         });
-  //       }
-  //     } catch (error) {
-  //       console.error("Error during Upload Music:", error);
-  //       toast.current?.show({
-  //         severity: "error",
-  //         summary: "Error",
-  //         detail: "An unexpected error occurred.",
-  //         life: 3000,
-  //       });
-  //     }
-  //   };
-  //   if (fileMusic) {
-  //     console.log(fileMusic, "music here3");
-  //     uploadMusic();
-  //   }
-  // }, [fileMusic, auth]);
-
   const onSubmit: SubmitHandler<IMusicAsset> = async (data) => {
     setIsLoading(true);
     const finalData = { ...formData, ...data, myRole: checkedItems };
     const cleanedData = removeEmptyStrings(finalData);
-    console.log(cleanedData, "cleaned");
 
     try {
       const response = await fetch(`${API_URL}/v1/music-asset`, {
@@ -340,38 +241,22 @@ export default function ShareWorkSalesMarket() {
 
       if (response.ok) {
         await response.json();
-        toast.current?.show({
-          severity: "success",
-          summary: "Success",
-          detail: "Music Asset Created successfully!",
-          life: 5000,
-        });
+        toast.success("Music Asset Created successfully!")
+        router.push("/assets");
         setIsLoading(false);
-        // Reload the page after success
-        setTimeout(() => {
-          router.push("/assets");
-        }, 5000);
+      
       } else {
         const errorResult = await response.json();
-        toast.current?.show({
-          severity: errorResult.code == 422 ? "warn" : "error",
-          summary: errorResult.code == 422 ? "Warning" : "Error",
-          detail: `Error: ${
+        toast.error(`Error: ${
             errorResult.message || "Failed to create music asset"
-          }`,
-          life: 3000,
-        });
+          }`)
+        
         setIsLoading(false);
       }
     } catch (error) {
-      console.error("Error creating music asset:", error);
       setIsLoading(false);
-      toast.current?.show({
-        severity: "error",
-        summary: "Error",
-        detail: "An unexpected error occurred.",
-        life: 3000,
-      });
+      toast.error("An unexpected error occurred.")
+      
     }
   };
 
@@ -385,7 +270,6 @@ export default function ShareWorkSalesMarket() {
 
   return (
     <section className="flex flex-row justify-center items-center my-8">
-      <Toast ref={toast} />
       <form className="flex flex-col gap-2">
         <div className="flex flex-row gap-8">
           <div className="w-96">

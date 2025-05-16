@@ -1,42 +1,35 @@
-import React, { useRef, useState } from "react";
+import { ratingDialog } from "@/redux/features/offer/offerSlice";
+import { addReviewAndRating, setFireGetMyOrder, updateOrderStatus } from "@/redux/features/order/orderSlice";
+import { AppDispatch, RootState } from "@/redux/store";
+import { StarIcon } from "@heroicons/react/24/outline";
 import {
   Button,
   Dialog,
-  DialogHeader,
   DialogBody,
-  DialogFooter,
-  Typography,
+  DialogHeader,
   Textarea,
+  Typography
 } from "@material-tailwind/react";
-import { RootState, AppDispatch } from "@/redux/store";
-import { useSelector, useDispatch } from "react-redux";
-import { ratingDialog } from "@/redux/features/offer/offerSlice";
-import { StarIcon } from "@heroicons/react/24/outline";
-import { useForm } from "react-hook-form";
-import { Toast } from "primereact/toast";
-import { addReviewAndRating, setFireGetMyOrder, updateOrderStatus } from "@/redux/features/order/orderSlice";
+import React, { useRef, useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function RatingDialog() {
   const dispatch = useDispatch<AppDispatch>();
   const id = useSelector((state: RootState) => state.order.currentOrderId);
 
   const fireGetMyOrder = useSelector((state: any) => state.order.fireGetMyOrder)
-  // const { register, handleSubmit } = useForm();
   const isRatingDialog = useSelector(
     (state: RootState) => state.offer.ratingDialog
   );
 
-  // State to track the selected rating (1-5)
   const [rating, setRating] = useState<number>(0);
 
-  // State to track the review text
   const [review, setReview] = useState<string>("");
 
   const [tip, setTip] = useState<number>(0);
 
-  const toast = useRef<Toast>(null);
 
-  // Handle star click
   const handleStarClick = (selectedRating: number) => {
     setRating(selectedRating);
   };
@@ -55,12 +48,8 @@ export default function RatingDialog() {
     try {
       // Validate rating (must be between 1 and 5)
       if (rating < 1 || rating > 5) {
-        toast.current?.show({
-          severity: "warn",
-          summary: "Validation Error",
-          detail: "Please select a rating between 1 and 5.",
-          life: 3000,
-        });
+        toast.error("Please select a rating between 1 and 5.")
+       
         return;
       }
 
@@ -77,20 +66,11 @@ export default function RatingDialog() {
 
 
       // Show success message
-      toast.current?.show({
-        severity: "success",
-        summary: "Success",
-        detail: "Review and rating submitted successfully!",
-        life: 3000,
-      });
+      toast.success("Review and rating submitted successfully!")
+      
     } catch (error) {
-      console.error("Failed to submit review and rating:", error);
-      toast.current?.show({
-        severity: "error",
-        summary: "Error",
-        detail: "Failed to submit review and rating. Please try again.",
-        life: 3000,
-      });
+      toast.error("Failed to submit review and rating. Please try again.")
+      
     }
   };
 
@@ -101,7 +81,6 @@ export default function RatingDialog() {
         handler={() => dispatch(ratingDialog())}
         size="sm"
       >
-        <Toast ref={toast} />
         <DialogHeader>Rate Your Experience</DialogHeader>
         <DialogBody divider className="flex flex-col gap-4 h-[30rem]">
           <div className="py-2 flex flex-col gap-2 justify-start">
