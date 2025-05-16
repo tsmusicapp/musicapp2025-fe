@@ -1,30 +1,25 @@
 
 "use client";
-import React, { useEffect, useRef, useState } from 'react';
-import { useRouter } from "next/navigation";
-import { Toast } from "primereact/toast";
-import Image from "next/image";
+import { fireGetJobRequest, getJobs, saveJob } from '@/redux/features/job/jobSlice';
+import { AppDispatch, RootState } from '@/redux/store';
+import { useAuth } from '@/utils/useAuth';
+import { formatDate } from '@/utils/utils';
+import { EllipsisHorizontalIcon, StarIcon } from "@heroicons/react/24/outline";
+import { MapPinIcon } from "@heroicons/react/24/solid";
 import {
+    Avatar,
+    Button,
     Card,
     CardBody,
-
-    Avatar,
-    Typography,
-
     Chip,
+    Typography,
 } from "@material-tailwind/react";
-import { MapPinIcon, StarIcon as StaredIcon } from "@heroicons/react/24/solid";
-import { StarIcon, EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
-import { Button } from "@material-tailwind/react";
-import { useAuth } from '@/utils/useAuth';
-import LearnMore from './learnMore';
-import SmallBox from './smallBox';
+import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DeleteJob } from './deleteJob';
-import { AppDispatch, RootState } from '@/redux/store';
-import { fireGetJobRequest, getAppliedJobs, getJobs, saveJob } from '@/redux/features/job/jobSlice';
 import { JobStatus } from './jobStatus';
-import { formatDate } from '@/utils/utils';
+import LearnMore from './learnMore';
+import SmallBox from './smallBox';
 
 interface CategoryCardProps {
     applicantName: string;
@@ -63,8 +58,6 @@ const JobCard = ({
     const { data, loading, error } = useSelector((state: any) => state.job);
     const fireGetJob = useSelector((state: RootState) => state.job.fireGetJob);
     const appliedJobs = useSelector((state: RootState) => state.job.appliedJobs);
-
-    // console.log("fireGetJob", appliedJobs);
 
     const [openDelete, setOpenDelete] = React.useState(false);
     const [savedJob, setSaveJob] = useState(false);
