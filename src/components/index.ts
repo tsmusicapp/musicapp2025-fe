@@ -1,7 +1,6 @@
 "use client";
 
 export * from "./navbar";
-export * from "./navbar-second";
 export * from "./footer";
 export * from "./layout";
 export * from "./about-card";

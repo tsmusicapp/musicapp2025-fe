@@ -7,67 +7,36 @@ import {
   Typography,
   Input,
   Avatar,
-  Tooltip,
-  Popover,
-  PopoverContent,
-  PopoverHandler,
   Badge,
 } from "@material-tailwind/react";
 import {
-  RectangleStackIcon,
-  UserCircleIcon,
-  CommandLineIcon,
-  Squares2X2Icon,
   XMarkIcon,
   Bars3Icon,
-  CloudIcon,
-  UserIcon,
 } from "@heroicons/react/24/solid";
-import {
-  ChatBubbleBottomCenterTextIcon,
-  BellIcon,
-} from "@heroicons/react/24/outline";
+import { ShoppingCartIcon } from "lucide-react";
 import Link from "next/link";
 import { NAV_MENU } from "@/default/nav-menu";
 import NavItem from "./nav-item/nav-item";
 import DropdownProfile from "./profile/dropdown-profile";
-import Cart from "./cart/cart";
-import ShoppingCartNav from "./nav-item/shopping-cart-nav";
 import ShareWorkNav from "./nav-item/share-work-nav";
+import ShoppingCartNav from "./nav-item/shopping-cart-nav";
 import { dataChat } from "@/dummy/listchat-example";
 import { useLocalStorage } from "@/context/LocalStorageContext";
 import { isAuthenticated } from "@/checkAuth";
 import { LoginModal } from "./modals/AuthModal";
-import { ShoppingCartIcon } from "lucide-react";
 
 export function Navbar() {
-  const [open, setOpen] = React.useState(false);
-  const [isScrolling, setIsScrolling] = React.useState(false);
-  const { getItem, setItem } = useLocalStorage();
-  const [auth, setAuth] = useState<any>(getItem("auth", null)); // Load initial user from local storage
+  const [open, setOpen] = useState(false);
   const [isLoginModalOpen, setLoginModalOpen] = useState(false);
+  const { getItem } = useLocalStorage();
+  const [auth, setAuth] = useState<any>(getItem("auth", null));
 
   const handleOpen = () => setOpen((cur) => !cur);
 
-  React.useEffect(() => {
-    window.addEventListener(
-      "resize",
-      () => window.innerWidth >= 960 && setOpen(false)
-    );
-  }, []);
-
-  React.useEffect(() => {
-    function handleScroll() {
-      if (window.scrollY > 0) {
-        setIsScrolling(true);
-      } else {
-        setIsScrolling(false);
-      }
-    }
-
-    window.addEventListener("scroll", handleScroll);
-
-    return () => window.removeEventListener("scroll", handleScroll);
+  useEffect(() => {
+    const handleResize = () => window.innerWidth >= 960 && setOpen(false);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   return (
@@ -76,29 +45,20 @@ export function Navbar() {
         shadow={true}
         fullWidth
         blurred={false}
-        // color={isScrolling ? "white" : "transparent"}
-        // color={"white"}
-        className={`fixed py-2 top-0 z-50 border-0 ${
-          isScrolling ? "bg-white" : "bg-transparent"
-        }`}
+        color="white"
+        className="fixed py-2 top-0 z-50 border-0 bg-white"
       >
         <div className="mx-10 flex items-center justify-between">
           <div className="flex flex-row">
-            <Link href={"/"}>
+            <Link href="/">
               <Typography
-                color={isScrolling ? "blue-gray" : "white"}
-                // color={"black"}
+                color="black"
                 className="text-lg font-bold font-notoCondensed"
               >
                 Music App
               </Typography>
             </Link>
-            <ul
-              className={`ml-10 hidden items-center gap-6 lg:flex ${
-                // "text-gray-900"
-                isScrolling ? "text-gray-900" : "text-white"
-              }`}
-            >
+            <ul className="ml-10 hidden items-center gap-6 lg:flex text-gray-900">
               {NAV_MENU.map(({ name, url, title }) => (
                 <NavItem key={name} url={url} title={title}>
                   <span className="font-semibold font-notoCondensed hover:text-blue-500 transition-colors">
@@ -110,12 +70,10 @@ export function Navbar() {
           </div>
           <div>
             <div className="hidden items-center gap-4 lg:flex">
-              {/* <Button color={isScrolling ? "gray" : "white"} variant="text"> */}
               <div className="w-72">
                 <form>
                   <label
-                    // for="search"
-                    className="mb-2 text-sm font-medium text-gray-900 sr-only font-notoCondensed"
+                    className="mb-2 text-sm font-medium text-gray-900 font-notoCondensed sr-only"
                   >
                     Search
                   </label>
@@ -140,129 +98,85 @@ export function Navbar() {
                     <input
                       type="search"
                       id="search"
-                      className={`block w-full p-4 ps-10 h-3 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50 `}
+                      className="block w-full p-4 ps-10 h-3 text-sm text-gray-900 border border-gray-300 rounded-full bg-gray-50"
                       autoComplete="off"
                       placeholder="Search"
-                      // required
                     />
-                    {/* <button
-                      type="submit"
-                      className="text-white absolute end-2.5 bottom-2.5 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-                    >
-                      Search
-                    </button> */}
                   </div>
                 </form>
               </div>
-              <>
-                {isAuthenticated() ? (
-                  <ShareWorkNav isScrolling={isScrolling} />
-                ) : (
-                  <button
-                    onClick={() => setLoginModalOpen(true)}
-                    className={`${
-                      isScrolling
-                        ? "text-black border-black"
-                        : "text-white border-white"
-                    }`}
-                  >
-                    {" "}
-                    Share work{" "}
-                  </button>
-                )}
-                {isAuthenticated() ? (
-                  <Link href={'/my-management'}>
+              {isAuthenticated() ? (
+                <>
+                  <ShareWorkNav isScrolling={false} lightOnly={true} />
+                  <Link href="/my-management">
                     <img
-                      src={
-                        isScrolling
-                          ? "/icons/my-management-black.png"
-                          : "/icons/my-management-white.png"
-                      }
+                      src="/icons/my-management-black.png"
                       style={{ height: 33, width: 38 }}
                       className="cursor-pointer"
                     />
                   </Link>
-                ) : (
+                  <Link href="/chat" className="mt-1">
+                    <Badge
+                      content={dataChat.length}
+                      color="red"
+                      withBorder
+                      className="p-1"
+                    >
+                      <img
+                        src="/icons/message-black.png"
+                        style={{ height: 22, width: 24 }}
+                        className="cursor-pointer"
+                      />
+                    </Badge>
+                  </Link>
+                  <ShoppingCartNav isScrolling={false} />
+                </>
+              ) : (
+                <>
+                  <button
+                    onClick={() => setLoginModalOpen(true)}
+                    className="text-black border-black"
+                  >
+                    Share work
+                  </button>
                   <button onClick={() => setLoginModalOpen(true)}>
                     <img
-                      src={
-                        isScrolling
-                          ? "/icons/my-management-black.png"
-                          : "/icons/my-management-white.png"
-                      }
+                      src="/icons/my-management-black.png"
                       style={{ height: 33, width: 38 }}
                       className="cursor-pointer"
                     />
                   </button>
-                )}
-                {isAuthenticated() ? (
-                  <Link href={"/chat"} className="mt-1">
+                  <button onClick={() => setLoginModalOpen(true)} className="mt-1">
                     <Badge
                       content={dataChat.length}
                       color="red"
                       withBorder
                       className="p-1"
                     >
-                      <button onClick={() => (true)}>
-                        <img
-                          src={
-                            isScrolling
-                              ? "/icons/message-black.png"
-                              : "/icons/message-white.png"
-                          }
-                          style={{ height: 22, width: 24 }}
-                          className="cursor-pointer"
-                        />
-                      </button>
+                      <img
+                        src="/icons/message-black.png"
+                        style={{ height: 22, width: 24 }}
+                        className="cursor-pointer"
+                      />
                     </Badge>
-                  </Link>
-                ) : (
-                  <Link href={""} className="mt-1">
-                    <Badge
-                      content={dataChat.length}
-                      color="red"
-                      withBorder
-                      className="p-1"
-                    >
-                      <button onClick={() => setLoginModalOpen(true)}>
-                        <img
-                          src={
-                            isScrolling
-                              ? "/icons/message-black.png"
-                              : "/icons/message-white.png"
-                          }
-                          style={{ height: 22, width: 24 }}
-                          className="cursor-pointer"
-                        />
-                      </button>
-                    </Badge>
-                  </Link>
-                )}
-                {isAuthenticated() ? (
-                  <ShoppingCartNav isScrolling={isScrolling} />
-                ) : (
+                  </button>
                   <button
-                    className={`${isScrolling ? "text-black" : "text-white"}`}
+                    className="text-black"
                     onClick={() => setLoginModalOpen(true)}
                   >
-                    {" "}
-                    <ShoppingCartIcon width="24" height="24" />{" "}
+                    <ShoppingCartIcon width="24" height="24" />
                   </button>
-                )}
-              </>
+                </>
+              )}
               {auth?.user ? (
                 <DropdownProfile user={auth.user} />
               ) : (
-                <Link href={"/auth"}>
+                <Link href="/auth">
                   <Button
-                    color={"gray"}
+                    color="gray"
                     variant="outlined"
                     size="sm"
-                    className={`rounded-full text-xs font-sans border-gray-300 normal-case transition-colors ${
-                      isScrolling
-                        ? "text-black hover:bg-gray-300"
-                        : "text-white hover:bg-gray-800"
-                    }`}
+                    className="rounded-full text-xs font-sans border-gray-300 normal-case text-black hover:bg-gray-300"
                   >
                     Sign In
                   </Button>
@@ -271,8 +185,7 @@ export function Navbar() {
             </div>
             <IconButton
               variant="text"
-              // color={isScrolling ? "gray" : "white"}
-              color={"gray"}
+              color="gray"
               onClick={handleOpen}
               className="ml-auto inline-block lg:hidden"
             >
@@ -304,7 +217,7 @@ export function Navbar() {
         isOpen={isLoginModalOpen}
         onClose={() => setLoginModalOpen(false)}
       />
-      {/* <div className="pt-[3.5rem]"></div> */}
+      <div className="pt-[3.5rem]"></div>
     </>
   );
 }

@@ -1,7 +1,7 @@
 import "./globals.css";
 import type { Metadata } from "next";
 // import { Roboto } from "next/font/google";
-import { Layout, FixedPlugin } from "@/components";
+import { Layout, FixedPlugin, Navbar } from "@/components";
 import { StoreProvider } from "@/redux/StoreProvider";
 import { PrimeReactProvider } from "primereact/api";
 import Tailwind from "primereact/passthrough/tailwind";
@@ -46,7 +46,10 @@ export default function RootLayout({
               {/* <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script> */}
             </head>
             <body className={"font-notoRegular"}>
-              <Layout>{children}</Layout>
+              <Layout>
+                <Navbar />
+                {children}
+              </Layout>
               <link
                 rel="stylesheet"
                 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css"
