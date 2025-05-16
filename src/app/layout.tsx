@@ -1,17 +1,10 @@
 import "./globals.css";
 import type { Metadata } from "next";
-// import { Roboto } from "next/font/google";
 import { Layout, FixedPlugin, Navbar } from "@/components";
 import { StoreProvider } from "@/redux/StoreProvider";
-import { PrimeReactProvider } from "primereact/api";
-import Tailwind from "primereact/passthrough/tailwind";
 import { LocalStorageProvider } from "@/context/LocalStorageContext";
-import ToasterWrapper from "@/components/ToasterWrapper"; // Import the ToasterWrapper
-// const roboto = Roboto({
-//   subsets: ["latin"],
-//   weight: ["300", "400", "500", "700", "900"],
-//   display: "swap",
-// });
+import ToasterWrapper from "@/components/ToasterWrapper"; 
+
 
 export const metadata: Metadata = {
   title: "Staging Music App",
@@ -25,7 +18,6 @@ export default function RootLayout({
 }) {
   return (
     <LocalStorageProvider>
-      <PrimeReactProvider value={{ pt: Tailwind }}>
         <StoreProvider>
           <html lang="en">
             <head>
@@ -60,7 +52,6 @@ export default function RootLayout({
             </body>
           </html>
         </StoreProvider>
-      </PrimeReactProvider>
     </LocalStorageProvider>
   );
 }

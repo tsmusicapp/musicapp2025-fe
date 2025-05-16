@@ -1,4 +1,4 @@
-@layer tailwind-base, primereact, tailwind-utilities;
+@layer tailwind-base, tailwind-utilities;
 
 @layer tailwind-base {
   @tailwind base;
@@ -8,7 +8,6 @@
   @tailwind components;
   @tailwind utilities;
 }
-@import "primereact/resources/themes/saga-blue/theme.css"; /* Choose your theme */
 
 @font-face {
   font-family: "noto-regular";
