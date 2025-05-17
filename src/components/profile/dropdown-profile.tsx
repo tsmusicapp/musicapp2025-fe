@@ -1,4 +1,3 @@
-import { useLocalStorage } from "@/context/LocalStorageContext";
 import { isCustomer } from "@/redux/features/offer/offerSlice";
 import { LOGOUTUSER } from "@/services/apiServices";
 import { API_URL } from "@/utils/env_var";
@@ -11,10 +10,9 @@ import {
   MenuList,
   Typography,
 } from "@material-tailwind/react";
-import { Router } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 
@@ -24,8 +22,10 @@ interface UserProps {
 
 export default function DropdownProfile({ user }: UserProps) {
   const dispatch = useDispatch();
-  const { getItem, removeItem } = useLocalStorage();
-  const [auth, setAuth] = useState<any>(getItem("auth", null)); // Load initial user from local storage
+  const [auth, setAuth] = useState<any>(() => {
+    const storedAuth = localStorage.getItem("auth");
+    return storedAuth ? JSON.parse(storedAuth) : null;
+  });
   const router = useRouter();
   const onLogout = async () => {
     try {
@@ -42,15 +42,14 @@ export default function DropdownProfile({ user }: UserProps) {
       });
 
       if (response.status == 204) {
-        removeItem("auth");
-        toast.success("Logout successful!")
-        
+        localStorage.clear();
+        toast.success("Logout successful!");
+
         router.push("/");
       }
-      
     } catch (error) {
       console.error("Error during logout:", error);
-      toast.error("An unexpected error occurred.")
+      toast.error("An unexpected error occurred.");
     }
   };
   return (
@@ -105,32 +104,32 @@ export default function DropdownProfile({ user }: UserProps) {
             Edit My Availability
           </Typography>
         </MenuItem> */}
-        {
-          auth.user.role == "recruiter" ?
+        {auth.user.role == "recruiter" ? (
+          <MenuItem className="flex items-center gap-2">
+            <Link href={"/order"} onClick={() => dispatch(isCustomer(false))}>
+              <Typography variant="small" className="font-medium">
+                My Work Orders
+              </Typography>
+            </Link>
+          </MenuItem>
+        ) : (
+          <>
             <MenuItem className="flex items-center gap-2">
-              <Link href={"/order"} onClick={() => dispatch(isCustomer(false))}>
+              <Link href={"/order"} onClick={() => dispatch(isCustomer(true))}>
                 <Typography variant="small" className="font-medium">
-                  My Work Orders
+                  My Orders
                 </Typography>
               </Link>
-            </MenuItem> :
-            <>
-              <MenuItem className="flex items-center gap-2">
-                <Link href={"/order"} onClick={() => dispatch(isCustomer(true))}>
-                  <Typography variant="small" className="font-medium">
-                    My Orders
-                  </Typography>
-                </Link>
-              </MenuItem>
-              <MenuItem className="flex items-center gap-2">
-                <Link href={"/sales"}>
-                  <Typography variant="small" className="font-medium">
-                    My Sales
-                  </Typography>
-                </Link>
-              </MenuItem>
-            </>
-        }
+            </MenuItem>
+            <MenuItem className="flex items-center gap-2">
+              <Link href={"/sales"}>
+                <Typography variant="small" className="font-medium">
+                  My Sales
+                </Typography>
+              </Link>
+            </MenuItem>
+          </>
+        )}
         <MenuItem className="flex items-center gap-2">
           <Link href={"/purchase"}>
             <Typography variant="small" className="font-medium">

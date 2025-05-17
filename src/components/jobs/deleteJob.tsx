@@ -11,6 +11,7 @@ import { deleteJob, fireGetJobRequest } from "@/redux/features/job/jobSlice";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux/store";
+import toast from "react-hot-toast";
 
 interface deleteProps {
 
@@ -24,10 +25,10 @@ export function DeleteJob({ delModal, openDelete, jobId }: deleteProps) {
   const fireGetJob = useSelector((state:any) => state.job.fireGetJob);
   const router = useRouter()
   const handleDeleteJob = async (jobId: string) => {
-    console.log(jobId, "job id here ");
     dispatch(deleteJob(jobId));
     dispatch(fireGetJobRequest(!fireGetJob))
     delModal({} as React.MouseEvent<HTMLButtonElement>); // Pass empty event object
+    toast.success("Job Deleted Successfully");
 }
 
 

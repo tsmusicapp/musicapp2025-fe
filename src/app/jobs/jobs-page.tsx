@@ -19,10 +19,6 @@ interface TabItem {
 }
 export function JobsPage() {
 
-  const dispatch = useDispatch();
-
-
-
   const data = [
     {
       label: "Freelance(18)",
