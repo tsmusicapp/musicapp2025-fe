@@ -54,13 +54,8 @@ export function LoginPage() {
         const result = await response.json();
 
         // Store tokens based on "Remember Me" preference
-        if (data.rememberMe) {
           localStorage.setItem("token", result.tokens.access.token);
           localStorage.setItem("refreshToken", result.tokens.refresh.token);
-        } else {
-          sessionStorage.setItem("token", result.tokens.access.token);
-          sessionStorage.setItem("refreshToken", result.tokens.refresh.token);
-        }
 
         dispatch(login(result));
         toast.success("Login successful!", { duration: 3000 });

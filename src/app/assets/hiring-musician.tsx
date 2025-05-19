@@ -46,7 +46,6 @@ export function HiringMusician() {
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1">
         {featuredMusic.length > 0 ? (
           featuredMusic
-            .slice(0, 3)
             .map((props, key) => (
               <HomeMusicianBox
                 key={key}
