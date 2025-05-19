@@ -28,7 +28,7 @@ const Button = dynamic(() => import("@material-tailwind/react").then((mod) => mo
 const menuItems = [
   {
     url: "share-work-creation",
-    description: "Share Your Music Creation",
+    description: "Share Your Music",
     size: "0.875",
     iconName: "share-work-creation",
   },
@@ -46,7 +46,7 @@ const menuItems = [
   },
   {
     url: "share-work-sales-market",
-    description: "Upload Your Music Assets to the sales market",
+    description: "Upload Your Music Assets",
     size: "0.875",
     iconName: "share-work-market",
   },
@@ -89,7 +89,7 @@ export default function ShareWorkNav({ isScrolling, lightOnly = false }: NavProp
         <MenuList
           className="
             absolute 
-            !top-[5%] !left-[60%] !mt-[29px] w-[18rem]
+            !top-[5%] !left-[60%] !mt-[29px] w-[22rem]
             rounded-lg 
             bg-white 
             shadow-lg 
