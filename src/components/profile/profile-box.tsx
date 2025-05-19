@@ -1,8 +1,13 @@
 "use client"
 
 import * as React from "react"
-import { MapPin, Mail, Play, ChevronLeft, ChevronRight } from 'lucide-react'
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/Avatar"
+import {
+  MapPin, Mail, Play, ChevronLeft, ChevronRight
+} from 'lucide-react'
+
+import {
+  Avatar, AvatarFallback, AvatarImage
+} from "@/components/ui/Avatar"
 import { Button } from "@/components/ui/Button"
 import { Badge } from "@/components/ui/Badge"
 import { Card, CardContent } from "@/components/ui/Card"
@@ -35,7 +40,6 @@ interface ProfileBoxProps {
 }
 
 export function ProfileBox({
-  id,
   imgComposer,
   composerName = "Unknown Artist",
   location = "Unknown Location",
@@ -58,26 +62,27 @@ export function ProfileBox({
     }
   }
 
+  const getInitials = (name: string) =>
+    name ? name.split(' ').map((n) => n[0]).join('') : "?"
+
   return (
     <Card className="w-full">
       <CardContent className="p-4">
-        {/* Header Section */}
+        {/* Header */}
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">
             <Avatar className="h-10 w-10">
               <AvatarImage src={imgComposer} alt={composerName} />
-              <AvatarFallback>{composerName.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+              <AvatarFallback>{getInitials(composerName)}</AvatarFallback>
             </Avatar>
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-base font-semibold">{composerName}</h2>
-                <Badge variant="secondary" className="bg-blue-600 text-white text-xs">
-                  PRO
-                </Badge>
+                <Badge variant="secondary" className="bg-blue-600 text-white text-xs">PRO</Badge>
               </div>
               <div className="flex items-center gap-2 text-xs text-muted-foreground">
                 <MapPin className="h-3 w-3" />
-                <span className="w-[150px]">{location}</span>
+                <span title={location} className="truncate w-[150px]">{location}</span>
                 {isAvailable && (
                   <Badge variant="secondary" className="bg-green-500 text-white text-xs">
                     Available for work
@@ -92,23 +97,19 @@ export function ProfileBox({
           </Button>
         </div>
 
-        {/* Roles and Tags Section */}
+        {/* Roles & Tags */}
         <div className="flex flex-wrap gap-1 mb-4">
-          {roles.map((role, index) => (
-            <Badge key={`role-${index}`} variant="outline" className="text-xs">
-              {role}
-            </Badge>
+          {roles.map((role, i) => (
+            <Badge key={`role-${i}`} variant="outline" className="text-xs">{role}</Badge>
           ))}
-          {tags.map((tag, index) => (
-            <Badge key={`tag-${index}`} variant="secondary" className="text-xs">
-              {tag}
-            </Badge>
+          {tags.map((tag, i) => (
+            <Badge key={`tag-${i}`} variant="secondary" className="text-xs">{tag}</Badge>
           ))}
         </div>
 
-        {/* Pricing Section */}
+        {/* Pricing */}
         {(personalUsePrice || commercialUsePrice) && (
-          <div className="mb-4 text-sm">
+          <div className="mb-4 text-sm text-muted-foreground">
             <p>
               {personalUsePrice && `Personal Use: $${personalUsePrice}`}
               {personalUsePrice && commercialUsePrice && ' | '}
@@ -129,11 +130,9 @@ export function ProfileBox({
             >
               <ChevronLeft className="h-3 w-3" />
             </Button>
+
             <ScrollArea className="w-full">
-              <div
-                ref={scrollContainerRef}
-                className="flex gap-2 pb-2 px-6"
-              >
+              <div ref={scrollContainerRef} className="flex gap-2 pb-2 px-6">
                 {work.map((item, i) => (
                   <WorkCard
                     key={i}
@@ -145,6 +144,7 @@ export function ProfileBox({
               </div>
               <ScrollBar orientation="horizontal" />
             </ScrollArea>
+
             <Button
               variant="ghost"
               size="icon"
@@ -171,10 +171,6 @@ function WorkCard({
 }) {
   const [imageError, setImageError] = React.useState(false)
 
-  const handleImageError = () => {
-    setImageError(true)
-  }
-
   return (
     <div className="flex-shrink-0 w-48 h-16 flex items-center bg-muted rounded-md overflow-hidden group">
       <div className="w-16 h-16 relative">
@@ -183,7 +179,7 @@ function WorkCard({
             src={imageUrl}
             alt={title}
             className="object-cover w-full h-full"
-            onError={handleImageError}
+            onError={() => setImageError(true)}
           />
         ) : (
           <div className="w-full h-full bg-gray-200 flex items-center justify-center">
@@ -192,15 +188,22 @@ function WorkCard({
         )}
       </div>
       <div className="flex-grow px-2 overflow-hidden">
-        <h4 className="text-xs font-medium leading-tight truncate">{title}</h4>
-        <p className="text-xs text-muted-foreground truncate">{artist}</p>
+        <h4 className="text-xs font-medium leading-tight truncate" title={title}>
+          {title}
+        </h4>
+        <p className="text-xs text-muted-foreground truncate" title={artist}>
+          {artist}
+        </p>
       </div>
-      <button className="w-8 h-8 flex items-center justify-center bg-primary/10 group-hover:bg-primary/20 transition-colors">
+      <Button
+        variant="ghost"
+        size="icon"
+        className="w-8 h-8 flex items-center justify-center bg-primary/10 group-hover:bg-primary/20 transition-colors"
+      >
         <Play className="h-4 w-4 text-primary" />
-      </button>
+      </Button>
     </div>
   )
 }
 
 export default ProfileBox
-
