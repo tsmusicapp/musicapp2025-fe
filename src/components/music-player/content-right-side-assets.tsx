@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { isAuthenticated } from "@/checkAuth";
 import { toast } from "react-hot-toast";
 import { API_URL } from "@/utils/env_var";
+import { LoginModal } from "../modals/AuthModal";
 
 interface ContentRightSideAssetsProps {
   musicData: any;
@@ -24,6 +25,7 @@ function ContentRightSideAssets({ musicData }: ContentRightSideAssetsProps) {
   const [localComments, setLocalComments] = useState<any[]>([]);
   const selectedId = useSelector((state: RootState) => state.offer.selectedId);
   const dispatch = useDispatch();
+  const [isLoginModalOpen, setLoginModalOpen] = useState(false);
 
   useEffect(() => {
     if (musicData?.comments) {
@@ -79,14 +81,14 @@ function ContentRightSideAssets({ musicData }: ContentRightSideAssetsProps) {
     }
   };
 
-  const handleGetTouch = () => {
-    try {
-      window.location.href = "http://localhost:3001/chat";
-    } catch (error) {
-      console.error("Navigation error:", error);
-      alert("Navigation failed: " + error);
-    }
-  };
+const handleGetTouch = () => {
+  if (isAuthenticated()) {
+    window.location.href = "http://localhost:3001/chat";
+  } else {
+    setLoginModalOpen(true); // Show login modal
+  }
+};
+
 
   return (
     <div className="flex flex-col w-full max-w-2xl p-6 gap-6 border-2 border-black rounded-xl overflow-y-auto bg-white">
@@ -158,6 +160,10 @@ function ContentRightSideAssets({ musicData }: ContentRightSideAssetsProps) {
           </p>
         )}
       </section>
+            <LoginModal
+              isOpen={isLoginModalOpen}
+              onClose={() => setLoginModalOpen(false)}
+            />
     </div>
   );
 }
