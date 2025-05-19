@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Card } from "@material-tailwind/react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
@@ -11,7 +11,6 @@ import {
 } from "@/redux/features/offer/offerSlice";
 import { Badge } from "../ui/Badge";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/Avatar";
-import { PauseIcon, PlayIcon } from "@heroicons/react/24/solid";
 
 interface AssetMusicianBoxProps {
   id: string;
@@ -39,8 +38,6 @@ function AssetMusicianBox({
   tags,
   lyrics,
 }: AssetMusicianBoxProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
-
   const getUserAuth = localStorage.getItem("auth");
   const userAuth = JSON.parse(getUserAuth || "{}");
   const userName = userAuth.user?.name || "Unknown Artist";
@@ -54,91 +51,80 @@ function AssetMusicianBox({
     dispatch(musicPlayerDialog());
   };
 
-  const togglePlay = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsPlaying(!isPlaying);
-  };
-
   return (
     <Card
-      className="relative mx-auto w-full max-w-[22rem] overflow-hidden rounded-xl bg-gradient-to-br from-white transition-all duration-300"
+      className="w-full max-w-2xl bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 border border-gray-200"
       onClick={handleClick}
     >
-      <div className="p-5 space-y-4">
+      <div className="p-5 space-y-3">
         {/* Top Section: Song Image and Info */}
-        <div className="relative flex items-center gap-4">
-          {/* Album Art */}
-          <div className="relative h-24 w-24 overflow-hidden rounded-lg bg-gray-100">
-            <img
-              src={imgSong || "/image/default-picture.jpg"}
-              alt={musicName}
-              className="h-full w-full object-cover transition-transform duration-300 hover:scale-110"
-              onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
-                e.currentTarget.src = "/image/default-picture.jpg";
-              }}
-            />
-            {!lyrics && (
-              <button
-                onClick={togglePlay}
-                className="absolute inset-0 flex items-center justify-center bg-black/30 opacity-0 transition-opacity duration-300 hover:opacity-100"
-                aria-label={isPlaying ? "Pause" : "Play"}
-              >
-                <div className="rounded-full bg-gradient-to-r from-blue-500 to-purple-500 p-3 transition-transform duration-300 hover:scale-110">
-                  {isPlaying ? (
-                    <PauseIcon className="h-6 w-6 text-white" />
-                  ) : (
-                    <PlayIcon className="h-6 w-6 text-white" />
-                  )}
-                </div>
-              </button>
-            )}
-          </div>
+        <div className="flex items-center justify-between border-2 border-gray-100 py-3 px-2 rounded-lg">
+          <div className="flex items-center gap-4">
+            {/* Album Art */}
+            <div className="relative w-20 h-20 rounded-md overflow-hidden bg-gray-200 shadow-lg">
+              <img
+                src={imgSong || "/image/default-picture.jpg"}
+                alt={musicName}
+                className="object-cover w-full h-full transition-transform duration-300 hover:scale-110"
+                onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
+                  e.currentTarget.src = "/image/default-picture.jpg";
+                }}
+              />
+            </div>
 
-          {/* Song Details */}
-          <div className="flex-1 space-y-1">
-            <h3 className="truncate text-lg font-bold text-gray-900">{musicName}</h3>
-            <p className="text-sm text-gray-600">{musicStyle}</p>
-            {!lyrics && (
-              <span className="text-xs text-gray-500">3:45</span>
-            )}
+            {/* Song Details */}
+            <div className="space-y-1 pb-2">
+              <h3 className="font-bold text-lg leading-none text-gray-900">
+                {musicName}
+              </h3>
+              <p className="text-sm font-medium text-gray-600">{musicStyle}</p>
+              {!lyrics && (
+                <span className="text-xs font-light text-gray-400">3:45</span>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Tags Section */}
-        <div className="flex flex-wrap gap-2">
-          {Array.isArray(tags) &&
-            tags.slice(0, 3).map((tag, index) => (
+        <div className="flex items-start justify-between px-1 pt-2">
+          <div className="text-sm font-medium text-gray-600">{musicStyle}</div>
+          <div className="flex flex-wrap gap-2">
+            {Array.isArray(tags) &&
+              tags.slice(0, 3).map((tag, index) => (
+                <Badge
+                  key={index}
+                  variant="secondary"
+                  className="bg-gray-100 text-gray-700 p-1 rounded-md text-xs font-medium border border-gray-200"
+                >
+                  {tag}
+                </Badge>
+              ))}
+            {tags.length > 3 && (
               <Badge
-                key={index}
                 variant="secondary"
-                className="rounded-full bg-blue-100 px-3 py-1 text-xs font-medium text-blue-800 transition-colors duration-200 hover:bg-blue-200"
+                className="bg-gray-100 p-1 rounded-md text-xs font-medium text-gray-600 border border-gray-200"
               >
-                {tag}
+                +{tags.length - 3}
               </Badge>
-            ))}
-          {tags.length > 3 && (
-            <Badge
-              variant="secondary"
-              className="rounded-full bg-gray-100 px-3 py-1 text-xs font-medium text-gray-600"
-            >
-              +{tags.length - 3}
-            </Badge>
-          )}
+            )}
+          </div>
         </div>
 
         {/* Bottom Section: Artist Info */}
-        <div className="flex items-center gap-3">
-          <Avatar className="h-12 w-12 border-2 border-blue-200 transition-transform duration-300 hover:scale-110">
-            <AvatarImage src="/image/default-picture.jpg" />
-            <AvatarFallback className="bg-blue-100 text-blue-800">
-              {userName.charAt(0)}
-            </AvatarFallback>
-          </Avatar>
-          <div className="space-y-1">
-            <p className="text-sm font-semibold text-gray-900">{userName}</p>
-            <p className="rounded-md bg-gray-100 px-2 py-1 text-xs text-gray-600">
-              {myRole.join(", ")}
-            </p>
+        <div className="flex items-center justify-between px-1">
+          <div className="flex items-center gap-3">
+            <Avatar className="w-10 h-10 border border-gray-200 shadow-sm transition-transform duration-300 hover:scale-105">
+              <AvatarImage src="/image/default-picture.jpg" alt="Artist avatar" />
+              <AvatarFallback className="bg-gray-100 text-gray-700">
+                {userName.charAt(0)}
+              </AvatarFallback>
+            </Avatar>
+            <div className="space-y-0.5">
+              <p className="text-sm font-medium leading-none text-gray-900">{userName}</p>
+              <p className="text-xs text-gray-400">
+                {myRole.join(", ")}
+              </p>
+            </div>
           </div>
         </div>
       </div>

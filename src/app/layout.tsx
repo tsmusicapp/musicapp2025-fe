@@ -1,4 +1,4 @@
-import { Layout, Navbar } from "@/components";
+import { Layout } from "@/components";
 import ToasterWrapper from "@/components/ToasterWrapper";
 import { LocalStorageProvider } from "@/context/LocalStorageContext";
 import { StoreProvider } from "@/redux/StoreProvider";
@@ -38,7 +38,6 @@ export default function RootLayout({
             </head>
             <body className={"font-notoRegular"}>
               <Layout>
-                <Navbar />
                 {children}
                 <ToasterWrapper />
               </Layout>

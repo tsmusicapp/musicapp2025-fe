@@ -9,10 +9,7 @@ import {
   Avatar,
   Badge,
 } from "@material-tailwind/react";
-import {
-  XMarkIcon,
-  Bars3Icon,
-} from "@heroicons/react/24/solid";
+import { XMarkIcon, Bars3Icon } from "@heroicons/react/24/solid";
 import { ShoppingCartIcon } from "lucide-react";
 import Link from "next/link";
 import { NAV_MENU } from "@/default/nav-menu";
@@ -60,11 +57,22 @@ export function Navbar() {
             </Link>
             <ul className="ml-10 hidden items-center gap-6 lg:flex text-gray-900">
               {NAV_MENU.map(({ name, url, title }) => (
-                <NavItem key={name} url={url} title={title}>
-                  <span className="font-semibold font-notoCondensed hover:text-blue-500 transition-colors">
-                    {name}
-                  </span>
-                </NavItem>
+                <div key={name}>
+                  {isAuthenticated()  || name === "Jobs" ? (
+                    <NavItem url={url} title={title}>
+                      <span className="font-semibold font-notoCondensed hover:text-blue-500 transition-colors">
+                        {name}
+                      </span>
+                    </NavItem>
+                  ) : (
+                    <button
+                      onClick={() => setLoginModalOpen(true)}
+                      className="font-semibold font-notoCondensed hover:text-blue-500 transition-colors"
+                    >
+                      {name}
+                    </button>
+                  )}
+                </div>
               ))}
             </ul>
           </div>
@@ -72,9 +80,7 @@ export function Navbar() {
             <div className="hidden items-center gap-4 lg:flex">
               <div className="w-72">
                 <form>
-                  <label
-                    className="mb-2 text-sm font-medium text-gray-900 font-notoCondensed sr-only"
-                  >
+                  <label className="mb-2 text-sm font-medium text-gray-900 font-notoCondensed sr-only">
                     Search
                   </label>
                   <div className="relative">
@@ -146,7 +152,10 @@ export function Navbar() {
                       className="cursor-pointer"
                     />
                   </button>
-                  <button onClick={() => setLoginModalOpen(true)} className="mt-1">
+                  <button
+                    onClick={() => setLoginModalOpen(true)}
+                    className="mt-1"
+                  >
                     <Badge
                       content={dataChat.length}
                       color="red"

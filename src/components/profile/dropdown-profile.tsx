@@ -30,7 +30,6 @@ export default function DropdownProfile({ user }: UserProps) {
   const onLogout = async () => {
     try {
       const refreshToken = auth.tokens.refresh.token;
-      console.log({ refreshToken });
       const response = await fetch(LOGOUTUSER, {
         method: "POST",
         headers: {
@@ -44,8 +43,8 @@ export default function DropdownProfile({ user }: UserProps) {
       if (response.status == 204) {
         localStorage.clear();
         toast.success("Logout successful!");
-
-        router.push("/");
+        window.location.href = "/";
+        // router.push("/");
       }
     } catch (error) {
       console.error("Error during logout:", error);

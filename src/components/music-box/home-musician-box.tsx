@@ -45,7 +45,7 @@ export function HomeMusicianBox({
   lyrics,
   tags,
   duration = "03:45",
-  likes ,
+  likes,
   audioSrc,
 }: HomeMusicianBoxProps) {
   const dispatch = useDispatch<AppDispatch>();
@@ -55,10 +55,11 @@ export function HomeMusicianBox({
   const likesLength = likes?.toString().length;
 
   console.log(likesLength, "likesLengthValues");
+
   const FeatherPencil = () => {
     return (
       <div
-        className="cursor-pointer pb-4"
+        className="cursor-pointer p-2 hover:bg-gray-100 rounded-full transition-all duration-300"
         onClick={() => {
           dispatch(setMusicCreationId({
             id: id,
@@ -66,11 +67,12 @@ export function HomeMusicianBox({
           }));
           dispatch(musicPlayerDialog());
         }}
+        aria-label="View lyrics"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="48"
-          height="48"
+          width="24"
+          height="24"
           fill-rule="evenodd"
           clip-rule="evenodd"
           image-rendering="optimizeQuality"
@@ -79,7 +81,7 @@ export function HomeMusicianBox({
           viewBox="0 0 64000 64000"
           id="feather"
         >
-          <path d="M8730 55270c5818,-17453 21044,-46540 46540,-46540 -11953,9590 -17452,31996 -26178,31996 -8727,0 -8727,0 -8727,0l-8726 14543 -2909 1z"></path>
+          <path d="M8730 55270c5818,-17453 21044,-46540 46540,-46540 -11953,9590 -17452,31996 -26178,31996 -8727,0 -8727,0 -8727,0l-8726 14543 -2909 1z" fill="#4B5563"/>
         </svg>
       </div>
     );
@@ -98,7 +100,7 @@ export function HomeMusicianBox({
       dispatch(
         setMusicCreationId({
           id: id,
-          hasLyrics: lyrics, // Pass the lyrics prop here
+          hasLyrics: lyrics,
         })
       );
       dispatch(musicPlayerDialog());
@@ -120,18 +122,19 @@ export function HomeMusicianBox({
       }
     };
   }, [audioSrc]);
+
   return (
-    <Card className="w-full max-w-2xl border-0 hover:shadow-lg transition-shadow shadow-none duration-200">
-      <CardContent className="p-4 space-y-4">
+    <Card className="w-full max-w-2xl bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 border border-gray-200">
+      <CardContent className="p-5 space-y-3">
         {/* Top Section: Song Info */}
-        <div className="flex items-center justify-between border-2 py-4 px-2">
+        <div className="flex items-center justify-between border-2 border-gray-100 py-3 px-2 rounded-lg">
           <div className="flex items-center gap-4">
             {/* Album Art */}
-            <div className="relative w-20 h-20 rounded-md overflow-hidden bg-muted">
+            <div className="relative w-20 h-20 rounded-md overflow-hidden bg-gray-200 shadow-lg">
               <img
                 src={musicImage}
                 alt={songName}
-                className="object-cover w-full h-full"
+                className="object-cover w-full h-full transition-transform duration-300 hover:scale-110"
                 onError={(e: React.SyntheticEvent<HTMLImageElement>) => {
                   e.currentTarget.src = "/image/default-picture.jpg";
                 }}
@@ -139,33 +142,30 @@ export function HomeMusicianBox({
             </div>
 
             {/* Song Details */}
-            <div className="space-y-1 pb-4">
-              <h3 className="font-semibold text-md leading-none">{songName}</h3>
-              <p className="text-xs font-thin text-muted-foreground">
+            <div className="space-y-1 pb-2">
+              <h3 className="font-bold text-lg leading-none text-gray-900">{songName}</h3>
+              <p className="text-sm font-medium text-gray-600">
                 {singerName}
-                <span className="text-xs font-thin text-muted-foreground">
-                  {" "}
-                  • Singer
-                </span>
+                <span className="text-sm font-light text-gray-400"> • Singer</span>
               </p>
             </div>
           </div>
 
           {/* Play Button and Duration */}
           {!lyrics ? (
-            <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center gap-1">
               <button
                 onClick={togglePlay}
-                className="rounded-full p-2 hover:bg-muted transition-colors"
+                className="rounded-full p-2 hover:bg-gray-100 transition-colors duration-300"
                 aria-label={isPlaying ? "Pause" : "Play"}
               >
                 {isPlaying ? (
-                  <PauseIcon className="w-10 h-10" />
+                  <PauseIcon className="w-8 h-8 text-gray-700" />
                 ) : (
-                  <PlayIcon className="w-10 h-10" />
+                  <PlayIcon className="w-8 h-8 text-gray-700" />
                 )}
               </button>
-              <span className="text-sm text-muted-foreground">{duration}</span>
+              <span className="text-xs font-light text-gray-400">{duration}</span>
             </div>
           ) : (
             <FeatherPencil />
@@ -173,41 +173,39 @@ export function HomeMusicianBox({
         </div>
 
         {/* Tags Section */}
-        <div
-          className="flex items-start justify-between px-1 inset-0 pt-2"
-          style={{ marginTop: 0, margin: 0 }}
-        >
-          <div>{musicStyle}</div>
-          <div className="flex flex-wrap gap-2 items-start justify-start inset-0 mt-0">
+        <div className="flex items-start justify-between px-1 pt-2">
+          <div className="text-sm font-medium text-gray-600">{musicStyle}</div>
+          <div className="flex flex-wrap gap-2">
             {Array.isArray(tags) &&
               tags.map((tag, index) => (
                 <Badge
                   key={index}
                   variant="secondary"
-                  className="bg-gray-100 p-1 rounded-md"
+                  className="bg-gray-100 text-gray-700 p-1 rounded-md text-xs font-medium border border-gray-200"
                 >
                   {tag}
                 </Badge>
               ))}
           </div>
         </div>
+
         {/* Bottom Section: Composer Info and Likes */}
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-3">
-            <Avatar className="w-10 h-10">
-              <AvatarImage src="/image/default-picture.jpg" />
-              <AvatarFallback>CC</AvatarFallback>
+            <Avatar className="w-10 h-10 border border-gray-200 shadow-sm transition-transform duration-300 hover:scale-105">
+              <AvatarImage src="/image/default-picture.jpg" alt="Composer avatar" />
+              <AvatarFallback className="bg-gray-100 text-gray-700">CC</AvatarFallback>
             </Avatar>
-            <div className="space-y-1">
-              <p className="text-sm font-medium leading-none">{composerName}</p>
-              <p className="text-xs text-muted-foreground">
+            <div className="space-y-0.5">
+              <p className="text-sm font-medium leading-none text-gray-900">{composerName}</p>
+              <p className="text-xs text-gray-400">
                 Composer, Lyricist, Arranger
               </p>
             </div>
           </div>
           <div className="flex items-center gap-1">
-            <ThumbsUp className="w-4 h-4 text-muted-foreground" />
-            <span className="text-sm text-muted-foreground">{likes}</span>
+            <ThumbsUp className="w-4 h-4 text-gray-600" />
+            <span className="text-sm text-gray-600">{likes || 0}</span>
           </div>
         </div>
       </CardContent>
