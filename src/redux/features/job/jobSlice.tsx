@@ -2,6 +2,7 @@ import { BASE_URL } from '@/conf/api';
 import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 // import { useLocalStorage } from "@/context/LocalStorageContext";
 import axios from 'axios';
+import toast from 'react-hot-toast';
 // const { getItem, setItem } = useLocalStorage();
 
 interface ApplyJob {
@@ -93,7 +94,9 @@ export const updateJobStatus = createAsyncThunk(
 
     if (response.status === 200) {
       console.log("Job Status Changed successfully");
+      toast.success("Job Status Changed successfully");
     } else {
+      toast.error("Failed to change the status of job");
       console.error("Failed to change the status of job");
     }
 

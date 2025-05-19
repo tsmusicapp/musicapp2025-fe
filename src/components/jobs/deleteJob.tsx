@@ -8,81 +8,68 @@ import {
   IconButton,
 } from "@material-tailwind/react";
 import { deleteJob, fireGetJobRequest } from "@/redux/features/job/jobSlice";
-import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import toast from "react-hot-toast";
 
-interface deleteProps {
-
-  delModal: (openPopup: React.MouseEvent<HTMLButtonElement>) => void;
+interface DeleteProps {
+  delModal: () => void;
   openDelete: boolean;
   jobId: string;
 }
 
-export function DeleteJob({ delModal, openDelete, jobId }: deleteProps) {
+export function DeleteJob({ delModal, openDelete, jobId }: DeleteProps) {
   const dispatch = useDispatch<AppDispatch>();
-  const fireGetJob = useSelector((state:any) => state.job.fireGetJob);
-  const router = useRouter()
-  const handleDeleteJob = async (jobId: string) => {
-    dispatch(deleteJob(jobId));
-    dispatch(fireGetJobRequest(!fireGetJob))
-    delModal({} as React.MouseEvent<HTMLButtonElement>); // Pass empty event object
-    toast.success("Job Deleted Successfully");
-}
+  const fireGetJob = useSelector((state: any) => state.job.fireGetJob);
 
+  const handleDeleteJob = async () => {
+    try {
+      await dispatch(deleteJob(jobId));
+      dispatch(fireGetJobRequest(!fireGetJob));
+      toast.success("Job Deleted Successfully");
+      delModal();
+    } catch (error) {
+      toast.error("Failed to delete job.");
+    }
+  };
 
   return (
-    <>
-      <Dialog
-        dismiss={{ outsidePress: false }}
-        size="md"
-        open={openDelete}
-        handler={delModal}
-      >
-        <DialogHeader className="font-bold text-md flex justify-between text-[30px] items-start p-2">
-          <div className="text-center" >Delete Job</div>
-          <IconButton variant="text" onClick={delModal}>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-              className="h-5 w-5"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M6 18L18 6M6 6l12 12"
-              />
-            </svg>
-          </IconButton>
-        </DialogHeader>
-        <DialogBody className="p-0 min-h-[80px] pt-[10px] text-center">
-          <div>
-            Are You Sure You Want To Delete This Job?
-          </div>
-        </DialogBody>
-        <DialogFooter className="flex justify-center">
-          <Button
-            variant="text"
-            color="green"
-            onClick={delModal}
-            className="mr-1"
+    <Dialog
+      dismiss={{ outsidePress: false }}
+      size="md"
+      open={openDelete}
+      handler={delModal}
+    >
+      <DialogHeader className="font-bold text-[24px] flex justify-between items-center p-4">
+        <div>Delete Job</div>
+        <IconButton variant="text" onClick={delModal}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={2}
+            stroke="currentColor"
+            className="h-5 w-5"
           >
-            <span>Cancel</span>
-          </Button>
-          <Button
-            variant="text"
-            color="red"
-            onClick={() => {handleDeleteJob(jobId)}}
-            className="mr-1"
-          >
-            <span>Yes, Delete</span>
-          </Button>
-        </DialogFooter>
-      </Dialog>
-    </>
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </IconButton>
+      </DialogHeader>
+      <DialogBody className="text-center text-base py-6">
+        Are you sure you want to delete this job?
+      </DialogBody>
+      <DialogFooter className="flex justify-center gap-4">
+        <Button variant="text" color="green" onClick={delModal}>
+          Cancel
+        </Button>
+        <Button variant="filled" color="red" onClick={handleDeleteJob}>
+          Yes, Delete
+        </Button>
+      </DialogFooter>
+    </Dialog>
   );
 }

@@ -21,40 +21,19 @@ interface ContentMusicPlayerV2Props {
 }
 
 function ContentMusicPlayerV2({ source = "home" }: ContentMusicPlayerV2Props) {
-  const selectedId = useSelector((state: RootState) => state.offer.selectedId);
-  const currentSource = useSelector((state: RootState) => state.offer.source);
-  const [musicData, setMusicData] = React.useState<any>(null);
 
-
-  React.useEffect(() => {
-    const fetchData = async () => {
-      if (!selectedId) return;
-
-      try {
-        let data;
-        if (currentSource === "assets") {
-          data = await MusicAssetService.getMusicAssetById(selectedId);
-        } else {
-          data = await MusicCreationService.getMusicCreationById(selectedId);
-        }
-        setMusicData(data);
-      } catch (error) {
-        console.error("Error fetching music data:", error);
-      }
-    };
-
-    fetchData();
-  }, [selectedId, currentSource]);
+  console.log("source", source);
+  
 
   
   const RightSideComponent =
     source === "assets" ? ContentRightSideAssets : ContentRightSideHome;
 
   return (
-    <div className="flex flex-row gap-6 justify-between p-2 my-2 mx-4 h-[30rem] min-w-screen max-w-screen">
-      <ContentLeftSideV2 musicData={musicData} />
+    <div className="flex flex-row gap-6 justify-between p-2 my-2 mx-4 h-[22rem] min-w-screen max-w-screen">
+      <ContentLeftSideV2 musicData={source} />
       <Suspense fallback={<div>Loading...</div>}>
-        <RightSideComponent musicData={musicData} key={source} />
+        <RightSideComponent musicData={source} key={source} />
       </Suspense>
     </div>
   );

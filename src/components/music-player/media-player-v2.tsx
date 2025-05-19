@@ -8,7 +8,6 @@ import {
 import { Progress } from "@material-tailwind/react";
 
 const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
-  console.log(musicDetailInfo, "musicDetailInfo");
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -33,7 +32,7 @@ const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
   };
 
   return (
-    <div className="w-[28rem] mx-auto mt-[5rem] border border-gray-300 rounded-xl shadow-md bg-white p-6">
+    <div className="w-[28rem] mx-auto mt-[2rem] border border-gray-300 rounded-xl shadow-md bg-white p-6">
       <audio
         id="audio-player"
         src={audioSrc}

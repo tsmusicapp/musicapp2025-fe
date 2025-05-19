@@ -17,7 +17,7 @@ import {
   Chip,
   Typography,
 } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { DeleteJob } from "./deleteJob";
 import { JobStatus } from "./jobStatus";
@@ -72,6 +72,9 @@ const JobCard = ({
     null
   );
   const [openStatus, setOpenStatus] = useState<boolean>(false);
+  const [visibleDropdownId, setVisibleDropdownId] = useState<string | null>(
+    null
+  );
 
   const userString = localStorage.getItem("auth");
   const loggedInUser: any = userString ? JSON.parse(userString) : null;
@@ -107,6 +110,20 @@ const JobCard = ({
     setSelectedJob(selectedJobs[0]);
     delModal();
   };
+useEffect(() => {
+  const handleClickOutside = (e: MouseEvent) => {
+    const target = e.target as HTMLElement;
+    if (target && !target.closest(".dropdown-wrapper")) {
+      setVisibleDropdownId(null);
+    }
+  };
+
+  document.addEventListener("mousedown", handleClickOutside);
+  return () => {
+    document.removeEventListener("mousedown", handleClickOutside);
+  };
+}, []);
+
 
   const appliedJobIds = appliedJobs
     ? appliedJobs.map((job: any) => job.id)
@@ -114,132 +131,149 @@ const JobCard = ({
 
   return (
     <>
-      <Card className="relative grid min-h-[10rem] max-h-[17rem] w-[21rem] overflow-hidden hover:shadow-xl shadow-md border-2">
-        <div className="absolute inset-0 h-full w-full bg-white" />
-        <CardBody className="relative flex flex-col justify-between p-3">
-          <div className="flex flex-col">
-            <div className="flex justify-between gap-4">
-              <div className="flex flex-row gap-4">
+      <Card className="relative group min-h-[12rem] w-[21rem] overflow-hidden hover:shadow-xl shadow-lg border-1 border-gray-100 rounded-xl transition-all duration-300 hover:-translate-y-1">
+        <div className="absolute inset-0 h-full w-full bg-gradient-to-br from-white to-gray-50" />
+        <CardBody className="relative flex flex-col justify-between p-4 space-y-3">
+          {/* Header Section */}
+          <div className="flex flex-col space-y-2">
+            <div className="flex justify-between items-start">
+              <div className="flex items-center gap-3">
                 <Avatar
                   src="https://picsum.photos/200/300"
-                  size="sm"
+                  size="md"
+                  className="border-2 border-white shadow-sm"
                   alt="avatar"
                 />
                 <div>
-                  <div className="flex items-center flex-row gap-1">
-                    <Typography
-                      variant="small"
-                      color="black"
-                      className="font-bold text-xs pt-1"
-                    >
-                      {applicantName}
-                    </Typography>
-                  </div>
+                  <Typography
+                    variant="h6"
+                    className="font-bold text-gray-900 text-sm leading-tight"
+                  >
+                    {applicantName}
+                  </Typography>
+                  <Typography variant="small" className="text-gray-500 text-xs">
+                    Posted {formatDate(createdOn)}
+                  </Typography>
                 </div>
               </div>
+
               {loggedInUser && (
-                <>
+                <div className="flex items-center gap-2">
                   <StarIcon
-                    width={26}
-                    height={26}
-                    color="black"
-                    onClick={() => handleSaveJob(id)}
-                    fill={`${
+                    width={24}
+                    height={24}
+                    className={`cursor-pointer transition-colors duration-200 ${
                       savedBy.includes(loggedInUser.user.id)
-                        ? "yellow"
-                        : "#ffffff"
+                        ? "text-amber-400 fill-current"
+                        : "text-gray-400 hover:text-amber-300"
                     }`}
-                    className="cursor-pointer hover:scale-125"
+                    onClick={() => handleSaveJob(id)}
                   />
-                  <div className="group relative cursor-pointer py-2">
-                    <EllipsisHorizontalIcon className="menu-hover rounded-full h-[1.9rem] cursor-pointer bg-gray-200 hover:bg-gray-300 hover:rounded-full text-black" />
-                    <div className="invisible z-50 absolute group-hover:visible bg-white divide-gray-100 rounded-lg shadow w-[6rem] top-10 right-0 dark:bg-gray-700">
-                      <a className="block px-2 py-2 hover:bg-gray-100 text-xs font-semibold tracking-wider">
+                  <div className="relative group">
+                    <EllipsisHorizontalIcon
+                      className="h-6 w-6 text-gray-500 hover:text-gray-700 cursor-pointer transition-colors"
+                      onClick={() =>
+                        setVisibleDropdownId((prev) =>
+                          prev === id ? null : id
+                        )
+                      }
+                    />
+                    {/* Dropdown Menu */}
+                    <div
+                      className={`absolute right-0 top-6 bg-white rounded-lg shadow-lg p-2 w-32 border border-gray-100 transition-all duration-200 ${
+                        visibleDropdownId === id ? "visible" : "invisible"
+                      }`}
+                    >
+                      <button className="w-full text-left px-2 py-1.5 text-sm hover:bg-gray-50 rounded-md">
                         Copy Link
-                      </a>
-                      <a
+                      </button>
+                      <button
                         onClick={() => StatusModalOpen(id)}
-                        className="block px-2 py-2 hover:bg-gray-100 text-xs font-semibold tracking-wider"
+                        className="w-full text-left px-2 py-1.5 text-sm hover:bg-gray-50 rounded-md"
                       >
                         Status
-                      </a>
-                      <a
+                      </button>
+                      <button
                         onClick={() => delModalOpen(id)}
-                        className="block px-2 py-2 hover:bg-gray-100 text-red-500 text-xs font-semibold tracking-wider"
+                        className="w-full text-left px-2 py-1.5 text-sm text-red-500 hover:bg-red-50 rounded-md"
                       >
                         Delete
-                      </a>
+                      </button>
                     </div>
                   </div>
-                </>
+                </div>
               )}
             </div>
-            <div className="flex items-center justify-between gap-4 mt-[0.3rem]">
-              <Typography variant="small" className="font-bold" color="black">
+
+            {/* Divider */}
+            <hr className="border-gray-200 my-1" />
+
+            {/* Content Section */}
+            <div className="space-y-2">
+              <Typography
+                variant="h5"
+                className="font-bold text-gray-900 text-lg"
+              >
                 {projectTitle}
               </Typography>
-            </div>
-            <div className="flex flex-col">
-              <Typography
-                variant="small"
-                color="black"
-                className="font-normal text-[0.7rem]"
-              >
-                Work Content: {category.join(", ")}
-              </Typography>
-              <Typography
-                variant="small"
-                color="black"
-                className="font-normal text-[0.7rem]"
-              >
-                Music Culture Region: {cultureArea.join(", ")}
-              </Typography>
+
+              <div className="flex flex-wrap gap-2">
+                <Chip
+                  value={category.join(", ")}
+                  color="blue"
+                  className="rounded-full text-xs px-3 py-1 bg-blue-50 text-blue-700"
+                />
+                <Chip
+                  value={cultureArea.join(", ")}
+                  color="amber"
+                  className="rounded-full text-xs px-3 py-1 bg-amber-50 text-amber-700"
+                />
+              </div>
             </div>
           </div>
-          <div className="flex justify-between items-center">
-            <Typography
-              variant="small"
-              color="black"
-              className="text-[0.6rem] mt-[0.6rem]"
-            >
-              {formatDate(createdOn)}
-            </Typography>
+
+          {/* Footer Section */}
+          <div className="flex justify-between items-center pt-2">
             {loggedInUser ? (
               appliedJobs ? (
                 !appliedJobIds.includes(id) ? (
                   <Button
-                    size="md"
-                    className="text-black mt-[10px] min-w-[100px] text-center bg-blue-400 normal-case"
+                    size="sm"
+                    className="rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-sm hover:shadow-md px-6 transition-all"
                     onClick={() => learnMore(id)}
                   >
-                    Apply
+                    Apply Now
                   </Button>
                 ) : (
                   <Chip
-                    value="Applied 0 days ago"
+                    value={`Applied days ago`}
                     size="sm"
-                    className="text-[0.5rem] h-[1.4rem] text-black bg-blue-gray-100 normal-case mr-[1rem]"
+                    className="rounded-full bg-emerald-100 text-emerald-700 text-xs px-4"
                   />
                 )
               ) : (
                 <Button
-                  className="text-black mt-[10px] bg-blue-400 normal-case"
+                  className="rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-sm hover:shadow-md px-6 transition-all"
                   onClick={() => learnMore(id)}
                 >
-                  Apply
+                  Apply Now
                 </Button>
               )
             ) : (
               <Button
-                size="md"
-                className="text-black mt-[10px] min-w-[100px] text-center bg-blue-400 normal-case"
+                size="sm"
+                className="rounded-full bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-sm hover:shadow-md px-6 transition-all"
                 onClick={() => setLoginModalOpen(true)}
               >
-                Apply
+                Apply Now
               </Button>
             )}
+
+            <div className="flex items-center text-sm text-gray-500">
+              {/* <CalendarDaysIcon className="w-4 h-4 mr-1" />
+        Due {formatDate(deadlineDate)} */}
+            </div>
           </div>
-          <div className="flex justify-between pt-[0.4rem]"></div>
         </CardBody>
       </Card>
 

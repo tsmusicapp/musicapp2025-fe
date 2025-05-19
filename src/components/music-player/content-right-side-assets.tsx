@@ -4,17 +4,14 @@ import { ChartPieIcon } from "@heroicons/react/24/solid";
 import { Button, Textarea } from "@material-tailwind/react";
 import Comment from "./comment";
 import { getAuthToken } from "@/utils/auth";
-import { MusicAssetService } from "@/services/music-asset.service";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/redux/store";
 import {
   updateMusicAsset,
-  setMusicDetail,
 } from "@/redux/features/offer/offerSlice";
 import { useRouter } from "next/navigation";
-import { LoginModal } from "../modals/AuthModal";
 import { isAuthenticated } from "@/checkAuth";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { API_URL } from "@/utils/env_var";
 
 interface ContentRightSideAssetsProps {
@@ -27,26 +24,18 @@ function ContentRightSideAssets({ musicData }: ContentRightSideAssetsProps) {
   const [localComments, setLocalComments] = useState<any[]>([]);
   const selectedId = useSelector((state: RootState) => state.offer.selectedId);
   const dispatch = useDispatch();
-  const router = useRouter();
 
-  // Initialize local comments when musicData changes
   useEffect(() => {
     if (musicData?.comments) {
       setLocalComments(musicData.comments);
     }
   }, [musicData]);
 
-  // Fetch updated music asset data
   const fetchUpdatedMusicAsset = async () => {
     try {
-      const response = await fetch(
-        `${API_URL}/v1/music-asset/${selectedId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${getAuthToken()}`,
-          },
-        }
-      );
+      const response = await fetch(`${API_URL}/v1/music-asset/${selectedId}`, {
+        headers: { Authorization: `Bearer ${getAuthToken()}` },
+      });
       if (response.ok) {
         const updatedData = await response.json();
         dispatch(updateMusicAsset(updatedData));
@@ -62,33 +51,25 @@ function ContentRightSideAssets({ musicData }: ContentRightSideAssetsProps) {
 
     setIsSubmitting(true);
     try {
-      const response = await fetch(
-        `${API_URL}/v1/music-asset/comment/${selectedId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${getAuthToken()}`,
-          },
-          body: JSON.stringify({ comment: commentText }),
-        }
-      );
+      const response = await fetch(`${API_URL}/v1/music-asset/comment/${selectedId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${getAuthToken()}`,
+        },
+        body: JSON.stringify({ comment: commentText }),
+      });
 
       if (response.status === 201) {
         const newComment = await response.json();
-
-        // Add new comment to local state immediately for instant feedback
         const newCommentObj = {
           _id: newComment._id || Date.now().toString(),
           userId: newComment.userId,
           comment: commentText,
           createdAt: new Date().toISOString(),
         };
-        setLocalComments((prevComments) => [newCommentObj, ...prevComments]);
-
-        // Fetch updated data from server
+        setLocalComments((prev) => [newCommentObj, ...prev]);
         await fetchUpdatedMusicAsset();
-
         setCommentText("");
       }
     } catch (error) {
@@ -99,8 +80,6 @@ function ContentRightSideAssets({ musicData }: ContentRightSideAssetsProps) {
   };
 
   const handleGetTouch = () => {
-    alert("Get Touch button clicked");
-    console.log("Get Touch clicked - attempting navigation");
     try {
       window.location.href = "http://localhost:3001/chat";
     } catch (error) {
@@ -110,60 +89,60 @@ function ContentRightSideAssets({ musicData }: ContentRightSideAssetsProps) {
   };
 
   return (
-    <div className="flex flex-col py-4 px-6 gap-4 w-[38rem] overflow-y-auto border-2 border-black rounded-xl">
-      <Toaster />
-      <div className="flex flex-col gap-2">
-        <p className="text-sm font-notoSemibold">Describe</p>
-        <p className="max-h-[12rem] text-xs text-justify tracking-wide">
-          {musicData?.description}
+    <div className="flex flex-col w-full max-w-2xl p-6 gap-6 border-2 border-black rounded-xl overflow-y-auto bg-white">
+
+      {/* Description Section */}
+      <section className="flex flex-col gap-2">
+        <h2 className="text-sm font-semibold text-gray-800">Description</h2>
+        <p className="text-xs text-justify text-gray-700 leading-relaxed max-h-[12rem] overflow-y-auto">
+          {musicData?.description || "No description provided."}
         </p>
+      </section>
+
+      {/* CTA Button */}
+      <div className="flex justify-end">
+        <button
+          onClick={handleGetTouch}
+          className="bg-blue-900 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm transition duration-200"
+        >
+          Get in Touch
+        </button>
       </div>
 
-      <button
-        onClick={handleGetTouch}
-        className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 self-end"
-      >
-        Get Touch
-      </button>
-
-      <div className="flex flex-col gap-2">
-        <p className="text-xs font-notoSemibold">Comment</p>
-        <div className="flex flex-row gap-2 -mb-2">
-          <ChartPieIcon color="blue" className="h-8 w-8" />
+      {/* Comment Box */}
+      <section className="flex flex-col gap-3">
+        <h2 className="text-sm font-semibold text-gray-800">Add Comment</h2>
+        <div className="flex items-start gap-2">
+          <ChartPieIcon className="h-6 w-6 text-blue-600 mt-1" />
           <Textarea
-            className="text-xs !h-[1rem] !text-black"
-            label="what your though about this project?"
+            label="What are your thoughts on this project?"
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
+            className="text-sm text-black"
           />
         </div>
+
         <div className="flex justify-end">
-          {isAuthenticated() ? (
-            <Button
-              variant="outlined"
-              size="sm"
-              className="normal-case text-center text-white text-[0.6rem] bg-blue-800 py-1 px-10 w-[10rem]"
-              onClick={handleCommentSubmit}
-              disabled={isSubmitting || !commentText.trim()}
-            >
-              {isSubmitting ? "Submitting..." : "Enter Comment"}
-            </Button>
-          ) : (
-            <Button
-              variant="outlined"
-              size="sm"
-              className="normal-case text-center text-white text-[0.6rem] bg-blue-800 py-1 px-10 w-[10rem]"
-              onClick={()=>{toast.dismiss("Please Sign-in First")}}
-              disabled={isSubmitting || !commentText.trim()}
-            >
-              {isSubmitting ? "Submitting..." : "Enter Comment"}
-            </Button>
-          )}
+          <Button
+            variant="outlined"
+            size="sm"
+            className="bg-blue-800 text-white text-xs px-6 py-1 rounded-md disabled:opacity-50"
+            onClick={
+              isAuthenticated()
+                ? handleCommentSubmit
+                : () => toast.error("Please sign in first.")
+            }
+            disabled={isSubmitting || !commentText.trim()}
+          >
+            {isSubmitting ? "Submitting..." : "Post Comment"}
+          </Button>
         </div>
-      </div>
-      <div className="flex flex-col gap-4 ml-10 overflow-y-auto">
-        {Array.isArray(localComments) &&
-          localComments.map((comment: any) => (
+      </section>
+
+      {/* Comments Section */}
+      <section className="flex flex-col gap-4 max-h-[20rem] overflow-y-auto pr-2">
+        {Array.isArray(localComments) && localComments.length > 0 ? (
+          localComments.map((comment) => (
             <Comment
               key={comment._id}
               userId={comment.userId}
@@ -172,8 +151,13 @@ function ContentRightSideAssets({ musicData }: ContentRightSideAssetsProps) {
               createdAt={comment.createdAt}
               profilePicture={null}
             />
-          ))}
-      </div>
+          ))
+        ) : (
+          <p className="text-xs text-gray-500 italic text-center">
+            No comments yet.
+          </p>
+        )}
+      </section>
     </div>
   );
 }
