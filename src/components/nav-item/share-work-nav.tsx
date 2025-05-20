@@ -34,15 +34,15 @@ const menuItems = [
   },
   {
     url: "share-lyrics",
-    description: "Share Your Sing Work",
-    size: "0.875",
-    iconName: "share-work-creation",
-  },
-  {
-    url: "share-lyrics",
     description: "Share Your Lyric Work",
     size: "0.875",
     iconName: "share-lyric",
+  },
+  {
+    url: "share-lyrics",
+    description: "Share Your Sing Work",
+    size: "0.875",
+    iconName: "share-work-creation",
   },
   {
     url: "share-work-sales-market",
