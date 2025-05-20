@@ -71,7 +71,7 @@ const SmallBox = ({ openSmallbox, handleOpenSmallbox, setopenSmallbox }: SmallBo
         <DialogHeader className="flex justify-between items-center p-4 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-t-xl">
           <div></div>
           <Typography variant="small" color="white" className="font-semibold text-sm text-center">
-            Please select 2 pieces of music that are similar to the customer's for reference
+          Please select 2 pieces of music that are similar to the customer&rsquo;s for reference
           </Typography>
           <IconButton
             variant="text"
