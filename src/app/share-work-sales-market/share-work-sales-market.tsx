@@ -63,8 +63,7 @@ export default function ShareWorkSalesMarket() {
 
     setFormData((prev) => ({ ...prev, [name]: value }));
 
-    clearErrors(name);
-  };
+ clearErrors(name as keyof IMusicAsset);  };
 
   const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, checked } = e.target;
