@@ -41,11 +41,7 @@ function BottomPart({ register, errors }: BottomPartProps) {
     <div className="mb-1 flex flex-col gap-6">
       {/* Musical Instrument Section */}
       <div>
-        <Typography
-          variant="small"
-          color="blue-gray"
-          className="font-semibold"
-        >
+        <Typography variant="small" color="blue-gray" className="font-semibold">
           Musical Instrument (Optional)
         </Typography>
         <Input
@@ -59,18 +55,13 @@ function BottomPart({ register, errors }: BottomPartProps) {
 
       {/* Tags Section */}
       <div>
-        <Typography
-          variant="small"
-          color="blue-gray"
-          className="font-semibold"
-        >
+        <Typography variant="small" color="blue-gray" className="font-semibold">
           Tags (Fill in at least 3 key attribute words, separated by commas)
         </Typography>
-        <Input
-          crossOrigin={""}
-          size="lg"
+        <input
+          type="text"
           placeholder="e.g., Jazz, Acoustic, Instrumental"
-          className="!border !border-black !rounded-none"
+          className="w-full px-4 py-2 border border-black rounded-none outline-none focus:ring-0 focus:border-black"
           {...register("tags", {
             required: "Tags are required",
             validate: validateTags,
@@ -109,18 +100,13 @@ function BottomPart({ register, errors }: BottomPartProps) {
 
       {/* Software Tool Section */}
       <div>
-        <Typography
-          variant="small"
-          color="blue-gray"
-          className="font-semibold"
-        >
+        <Typography variant="small" color="blue-gray" className="font-semibold">
           Software Tool (Optional)
         </Typography>
-        <Input
-          crossOrigin={""}
-          size="lg"
+        <input
+          type="text"
           placeholder="e.g., FL Studio, Ableton Live, Pro Tools"
-         className="!border !border-black !rounded-none"
+          className="w-full px-4 py-2 border border-black rounded-none outline-none focus:ring-0 focus:border-black"
           {...register("softwareTool")}
         />
       </div>

@@ -35,11 +35,9 @@ function LeftSideFirst({ register, errors }: LeftSideFirstProps) {
         >
           Music Name
         </Typography>
-        <Input
-          crossOrigin={""}
-          size="lg"
+        <input
           {...register("musicName", { required: "Music name is required" })}
-          className="!border !border-black !rounded-none"
+          className="w-full px-4 py-2 border border-black rounded-none outline-none focus:ring-0 focus:border-black"
           placeholder="Enter music name"
         />
         {errors.musicName && (
@@ -154,7 +152,9 @@ function LeftSideFirst({ register, errors }: LeftSideFirstProps) {
           </div>
           <div className="flex gap-2 pr-32">
             <p className="text-sm">
-              The Music uploaded here is only for trial listening and not for download; <br /> if you don&apos;t have copyright, only upload music clips
+              The Music uploaded here is only for trial listening and not for
+              download; <br /> if you don&apos;t have copyright, only upload
+              music clips
             </p>
           </div>
         </div>

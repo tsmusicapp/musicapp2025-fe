@@ -6,6 +6,7 @@ import { API_URL } from "@/utils/env_var";
 import { removeEmptyStrings } from "@/utils/utils";
 import { Button, Input, Textarea, Typography } from "@material-tailwind/react";
 import { useRouter } from "next/navigation";
+import Input_ from "postcss/lib/input";
 import React, { useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -63,7 +64,8 @@ export default function ShareWorkSalesMarket() {
 
     setFormData((prev) => ({ ...prev, [name]: value }));
 
- clearErrors(name as keyof IMusicAsset);  };
+    clearErrors(name as keyof IMusicAsset);
+  };
 
   const handleCheckbox = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value, checked } = e.target;
@@ -166,19 +168,16 @@ export default function ShareWorkSalesMarket() {
             ...prev,
             musicImage: result.data.profilePicture,
           }));
-          toast.success("Upload Music Image successful!")
-          
+          toast.success("Upload Music Image successful!");
         } else {
           const errorResult = await response.json();
-          toast.error(`Error: ${
-              errorResult.message || "Failed to upload Music Image"
-            }`);
-         
+          toast.error(
+            `Error: ${errorResult.message || "Failed to upload Music Image"}`
+          );
         }
       } catch (error) {
         console.error("Error during Upload Music Image:", error);
-        toast.error("An unexpected error occurred.")
-        
+        toast.error("An unexpected error occurred.");
       }
     };
 
@@ -202,17 +201,15 @@ export default function ShareWorkSalesMarket() {
           const result = await response.json();
           // result.data is the Mongo ObjectID, use it as your music identifier
           setFormData((prev) => ({ ...prev, music: result?.data?.music }));
-          toast.success("Upload Music Track successful!")
-          
+          toast.success("Upload Music Track successful!");
         } else {
           const errorResult = await response.json();
-          toast.error(`Error: ${
-              errorResult.message || "Failed to upload Music Track"
-            }`)
+          toast.error(
+            `Error: ${errorResult.message || "Failed to upload Music Track"}`
+          );
         }
       } catch (error) {
         toast.error("An unexpected error occurred.");
-        
       }
     };
     if (fileMusic) {
@@ -240,22 +237,20 @@ export default function ShareWorkSalesMarket() {
 
       if (response.ok) {
         await response.json();
-        toast.success("Music Asset Created successfully!")
+        toast.success("Music Asset Created successfully!");
         router.push("/assets");
         setIsLoading(false);
-      
       } else {
         const errorResult = await response.json();
-        toast.error(`Error: ${
-            errorResult.message || "Failed to create music asset"
-          }`)
-        
+        toast.error(
+          `Error: ${errorResult.message || "Failed to create music asset"}`
+        );
+
         setIsLoading(false);
       }
     } catch (error) {
       setIsLoading(false);
-      toast.error("An unexpected error occurred.")
-      
+      toast.error("An unexpected error occurred.");
     }
   };
 
@@ -281,16 +276,15 @@ export default function ShareWorkSalesMarket() {
               >
                 Music Name
               </Typography>
-              <Input
-                crossOrigin={undefined}
-                size="lg"
+              <input
+                type="text"
                 {...register("songName", {
                   required: "Music Name is required",
                 })}
                 onChange={handleChange}
-                error={!!errors.songName}
-                className="!border !border-black !rounded-none"
+                className="w-full px-4 py-2 border border-black rounded-none outline-none focus:ring-0 focus:border-black"
               />
+
               {errors.songName && (
                 <p style={{ color: "red" }}>{errors.songName.message}</p>
               )}
@@ -549,15 +543,13 @@ export default function ShareWorkSalesMarket() {
               >
                 Creation Time
               </Typography>
-              <Input
-                crossOrigin={undefined}
-                size="lg"
+              <input
+                type="date"
                 {...register("creationTime", {
                   required: "Creation Time is required",
                 })}
-                className="!border !border-black !rounded-none"
+                className="w-full px-4 py-2 border border-black rounded-none outline-none focus:ring-0 focus:border-black"
                 onChange={handleChange}
-                error={!!errors.creationTime}
               />
               {errors.creationTime && (
                 <p style={{ color: "red" }}>{errors.creationTime.message}</p>
@@ -666,12 +658,11 @@ export default function ShareWorkSalesMarket() {
               >
                 Musical Instrument (Optional)
               </Typography>
-              <Input
-                crossOrigin={undefined}
-                size="lg"
+              <input
+                type="text"
                 {...register("musicInstrument")}
                 onChange={handleChange}
-                className="!border !border-black !rounded-none"
+                className="w-full px-4 py-2 border border-black rounded-none outline-none focus:ring-0 focus:border-black"
               />
 
               <Typography
@@ -681,13 +672,12 @@ export default function ShareWorkSalesMarket() {
               >
                 Tags (min 3)
               </Typography>
-              <Input
-                crossOrigin={undefined}
-                size="lg"
+              <input
+                type="text"
                 placeholder="e.g., Jazz, Acoustic, Instrumental"
                 value={tags}
                 onChange={handleTagChange}
-                className="!border !border-black !rounded-none"
+                className="w-full px-4 py-2 border border-black rounded-none outline-none focus:ring-0 focus:border-black"
               />
               {error && (
                 <label className="text-red-500 -mt-4 text-xs">{error}</label>
@@ -720,12 +710,11 @@ export default function ShareWorkSalesMarket() {
               >
                 Software Tool (Optional)
               </Typography>
-              <Input
-                crossOrigin={undefined}
-                size="lg"
+              <input
+                type="text"
                 {...register("softwareTool")}
                 onChange={handleChange}
-                className="!border !border-black !rounded-none"
+                className="w-full px-4 py-2 border border-black rounded-none outline-none focus:ring-0 focus:border-black"
               />
             </div>
           </div>

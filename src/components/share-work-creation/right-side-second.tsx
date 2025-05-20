@@ -179,28 +179,22 @@ function RightSideSecond({
         <Typography variant="small" color="blue-gray" className="font-bold">
           Album Name (Optional)
         </Typography>
-        <Input
-          crossOrigin={""}
-          size="lg"
+        <input
+          type="text"
           {...register("albumname")}
-          className="!border !border-black !rounded-none"
+          className="w-full px-4 py-2 border border-black rounded-none outline-none focus:ring-0 focus:border-black"
           placeholder="Enter album name"
         />
       </div>
 
       <div>
-        <Typography
-          variant="small"
-          color="blue-gray"
-          className="font-bold"
-        >
+        <Typography variant="small" color="blue-gray" className="font-bold">
           Publisher(Optional)
         </Typography>
-        <Input
-          crossOrigin={""}
-          size="lg"
+        <input
+          type="text"
           {...register("singerName")}
-          className="!border !border-black !rounded-none"
+          className="w-full px-4 py-2 border border-black rounded-none outline-none focus:ring-0 focus:border-black"
         />
       </div>
       <div className="flex flex-col gap-1">
@@ -247,8 +241,9 @@ function RightSideSecond({
                 : "Select music use..."}
             </span>
             <ChevronDown
-              className={`w-4 h-4 transition-transform ${isOpen ? "rotate-180" : ""
-                }`}
+              className={`w-4 h-4 transition-transform ${
+                isOpen ? "rotate-180" : ""
+              }`}
             />
           </button>
 
@@ -277,11 +272,11 @@ function RightSideSecond({
             </div>
           )}
         </div>
-      {errors.musicUsage && (
-        <span className="text-red-500 text-xs mt-1">
-          {errors.musicUsage.message as string}
-        </span>
-      )}
+        {errors.musicUsage && (
+          <span className="text-red-500 text-xs mt-1">
+            {errors.musicUsage.message as string}
+          </span>
+        )}
       </div>
 
       {/* Music Style Section */}
