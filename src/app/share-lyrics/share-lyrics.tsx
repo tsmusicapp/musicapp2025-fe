@@ -412,23 +412,7 @@ export function ShareLyrics() {
                   {errors.description.message as string}
                 </span>
               )}
-              <Typography
-                variant="small"
-                color="blue-gray"
-                className="-mb-3 font-semibold"
-              >
-                Software Tool (Optional)
-              </Typography>
-              <Input
-                crossOrigin={""}
-                size="lg"
-                placeholder=""
-                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                {...register("softwareTool")}
-                labelProps={{
-                  className: "before:content-none after:content-none",
-                }}
-              />
+              
             </div>
           </div>
         </div>

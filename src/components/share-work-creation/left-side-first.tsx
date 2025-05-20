@@ -11,6 +11,7 @@ interface LeftSideFirstProps {
 
 function LeftSideFirst({ register, errors }: LeftSideFirstProps) {
   const [musicImagePreview, setMusicImagePreview] = useState<string>("");
+  const [selectedFileName, setSelectedFileName] = useState<string>("");
   const musicSizeLimit = 20 * 1024 * 1024; // 20MB
   const imageSizeLimit = 1024 * 1024; // 1MB
 
@@ -130,19 +131,27 @@ function LeftSideFirst({ register, errors }: LeftSideFirstProps) {
                       if (file) {
                         if (file.size > musicSizeLimit) {
                           e.target.value = "";
+                          setSelectedFileName("");
                           alert("Music file must be less than 20MB");
                           return;
                         }
                         if (!file.type.startsWith("audio/")) {
                           e.target.value = "";
+                          setSelectedFileName("");
                           alert("File must be an audio file");
                           return;
                         }
+                        setSelectedFileName(file.name);
                       }
                     },
                   })}
                 />
               </label>
+              {selectedFileName && (
+                <p className="text-sm text-gray-700 mt-2 ">
+                  Selected File: {selectedFileName}
+                </p>
+              )}
               {errors.musicAudio && (
                 <span className="text-red-500 text-xs">
                   {errors.musicAudio.message as string}

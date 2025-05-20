@@ -149,7 +149,7 @@ function RightSideSecond({
           My Role (Multiple Choise)
         </label>
         <div className="grid grid-cols-2 gap-2">
-          {["Singer", "Lyric Writer"].map((role) => (
+          {["Singer", "Lyric Writer", "Composer", "Arranger", "Producer"].map((role) => (
             <div key={role} className="flex items-center">
               <input
                 type="checkbox"
@@ -174,6 +174,17 @@ function RightSideSecond({
             {errors.myRole.message as string}
           </span>
         )}
+      </div>
+      <div>
+        <Typography variant="small" color="blue-gray" className="font-bold">
+          Singer Name (Optional)
+        </Typography>
+        <input
+          type="text"
+          {...register("singerName")}
+          className="w-full px-4 py-2 border border-black rounded-none outline-none focus:ring-0 focus:border-black"
+          placeholder="Enter singer name"
+        />
       </div>
       <div>
         <Typography variant="small" color="blue-gray" className="font-bold">
