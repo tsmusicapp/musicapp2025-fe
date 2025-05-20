@@ -1,12 +1,12 @@
 import React from "react";
 import { Card, CardBody, Avatar, Typography } from "@material-tailwind/react";
-
 import { PlayIcon, CheckIcon } from "@heroicons/react/24/solid";
-import { BASE_URL } from "@/conf/api";
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch } from "@/redux/store";
 import { updateMusicIds } from "@/redux/features/job/jobSlice";
 import { selectedMusic } from "@/redux/features/music/musicSlice";
+import { BASE_URL } from "@/conf/api";
+
 interface CategoryCardProps {
   id: string;
   musicImage: string;
@@ -15,9 +15,9 @@ interface CategoryCardProps {
   imgComposer: string;
   composerName?: string;
 }
+
 interface ClickProps {
   e: React.MouseEvent<HTMLButtonElement, MouseEvent>;
-  // value: any;
 }
 
 function SelectableBox({
@@ -31,8 +31,7 @@ function SelectableBox({
   const [selected, setSelected] = React.useState(false);
   const dispatch = useDispatch<AppDispatch>();
   const values = useSelector((state: any) => state.job);
-  
-  // console.log(values.applyJob, "jobs values");
+
   const handleClick = (e: React.MouseEvent, id: string) => {
     e.preventDefault();
     dispatch(updateMusicIds(id));
@@ -40,88 +39,86 @@ function SelectableBox({
     e.stopPropagation();
     setSelected(!selected);
   };
+
   const modifiedPath = musicImage.replace('public', '');
-  console.log(modifiedPath, "modifiedPath");
+
   return (
-    <>
-      <button className="" onClick={(e) => handleClick(e, id)}>
-        <Card
-          className={`relative grid min-h-[5rem] w-[17rem] overflow-hidden hover:shadow-xl shadow-md border-2`}
-        >
-          <div
-            className={`absolute inset-0 h-full w-full ${
-              selected ? "" : "bg-white"
-            }`}
-          />
-          <CardBody className={`relative flex flex-col justify-between p-3`}>
-            <div className={`grid grid-cols-3`}>
-              <div className={`col-span-2 flex flex-col gap-2`}>
-                <div className="flex items-center gap-2">
-                  <div className="flex flex-row gap-2">
-                    <Avatar src={BASE_URL+"/"+modifiedPath} alt="avatar" variant="rounded" />
-                    <div>
-                      <Typography
-                        variant="small"
-                        color="black"
-                        className="font-bold text-start text-xs pt-1"
-                      >
-                        {singerName}
-                      </Typography>
-                      <Typography
-                        variant="small"
-                        color="black"
-                        className="font-bold text-[0.6rem] pt-[0.1rem]"
-                      >
-                        {songName}
-                      </Typography>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  {composerName ? (
-                    <>
-                      <Avatar src={imgComposer} alt="avatar" size="sm" />
-                      <Typography variant="h6">{composerName}</Typography>
-                      <Typography
-                        variant="small"
-                        color="black"
-                        className="font-normal"
-                      >
-                        Composer
-                      </Typography>
-                    </>
-                  ) : (
-                    <>
-                      <Typography
-                        variant="small"
-                        color="black"
-                        className={`mt-[0.2rem] text-xs`}
-                      >
-                        Composer for the song
-                      </Typography>
-                    </>
-                  )}
-                </div>
-              </div>
-              <div className="flex justify-end items-center">
-                <div className="flex flex-col">
-                  <PlayIcon className="h-10 w-10" />
-                </div>
-                { values?.applyJob.musicIds.includes(id) ? ( 
-                  <>
-                    <div className=" absolute bottom-0 right-0 mx-[0.7rem]">
-                      <CheckIcon className="w-8 h-8 font-bold" />
-                    </div>
-                  </>
-                ) : (
-                  ""
-                )}
-              </div>
+    <button
+      className="w-full transition-transform hover:scale-105"
+      onClick={(e) => handleClick(e, id)}
+    >
+      <Card
+        className={`relative w-full min-h-[5rem] overflow-hidden rounded-lg border-2 border-gray-200 shadow-md hover:shadow-lg transition-shadow ${
+          selected ? "border-blue-500" : "border-gray-200"
+        }`}
+      >
+        <div
+          className={`absolute inset-0 h-full w-full bg-white/80 ${
+            selected ? "bg-blue-100" : ""
+          }`}
+        />
+        <CardBody className="relative flex items-center justify-between p-3">
+          <div className="flex items-center gap-3">
+            <Avatar
+              src={modifiedPath}
+              alt="avatar"
+              variant="rounded"
+              className="h-12 w-12 object-cover"
+            />
+            <div className="flex flex-col">
+              <Typography
+                variant="small"
+                color="blue-gray"
+                className="font-bold text-sm"
+              >
+                {singerName}
+              </Typography>
+              <Typography
+                variant="small"
+                color="gray"
+                className="text-xs"
+              >
+                {songName}
+              </Typography>
             </div>
-          </CardBody>
-        </Card>
-      </button>
-    </>
+          </div>
+          <div className="flex items-center gap-4">
+            {composerName ? (
+              <div className="flex items-center gap-2">
+                <Avatar
+                  src={BASE_URL + imgComposer.replace('public', '')}
+                  alt="composer avatar"
+                  size="sm"
+                  className="h-8 w-8 object-cover"
+                />
+                <Typography
+                  variant="small"
+                  color="blue-gray"
+                  className="font-medium text-xs"
+                >
+                  {composerName}
+                </Typography>
+              </div>
+            ) : (
+              <Typography
+                variant="small"
+                color="gray"
+                className="text-xs italic"
+              >
+                No composer
+              </Typography>
+            )}
+            <div className="flex items-center">
+              <PlayIcon className="h-6 w-6 text-blue-500 cursor-pointer" />
+              {values?.applyJob.musicIds.includes(id) && (
+                <CheckIcon className="w-6 h-6 text-green-500 ml-2" />
+              )}
+            </div>
+          </div>
+        </CardBody>
+      </Card>
+    </button>
   );
 }
+
 export default SelectableBox;

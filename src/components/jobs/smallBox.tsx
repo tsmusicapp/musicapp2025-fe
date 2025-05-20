@@ -5,115 +5,59 @@ import {
   DialogFooter,
   Spinner,
 } from "@material-tailwind/react";
-
 import {
   Avatar,
   Typography,
   IconButton,
   Textarea
 } from "@material-tailwind/react";
-import { MapPinIcon, StarIcon as StaredIcon } from "@heroicons/react/24/solid";
-import { StarIcon, EllipsisHorizontalIcon } from "@heroicons/react/24/outline";
-import { Badge, Button } from "@material-tailwind/react";
-import { use, useEffect, useState } from "react";
-import { CATEGORIES, SELECTED } from "@/conf/jobsprops";
+import { MapPinIcon } from "@heroicons/react/24/solid";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AppDispatch } from "@/redux/store";
 import SelectableBox from "../music-box/selectable-box";
 import PocketsizeBox from "../music-box/pocketsize-box";
 import { getMyMusic } from "@/redux/features/music/musicSlice";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch } from "@/redux/store";
-import { MusicallService } from "@/services/musicall.service";
-import { BASE_URL } from "@/conf/api";
 import { applyJob, fireGetJobRequest, updateMessage } from "@/redux/features/job/jobSlice";
+import { Button } from "@material-tailwind/react";
+import { BASE_URL } from "@/conf/api";
 
-// id,
-// imgSong,
-// singerName,
-// songName,
-// imgComposer,
-// composerName,
-// }
-
-
-let data = [
-  {
-    id: 1,
-    imgSong: "https://picsum.photos/200/300",
-    singerName: "Singer Name",
-    songName: "Song Name",
-    imgComposer: "https://picsum.photos/200/300",
-    composerName: "Composer Name",
-  },
-  {
-    id: 2,
-    imgSong: "https://picsum.photos/200/300",
-    singerName: "Singer Name",
-    songName: "Song Name",
-    imgComposer: "https://picsum.photos/200/300",
-    composerName: "Composer Name",
-  },
-  {
-    id: 3,
-    imgSong: "https://picsum.photos/200/300",
-    singerName: "Singer Name",
-    songName: "Song Name",
-    imgComposer: "https://picsum.photos/200/300",
-    composerName: "Composer Name",
-  },
-  {
-    id: 4,
-    imgSong: "https://picsum.photos/200/300",
-    singerName: "Singer Name",
-    songName: "Song Name",
-    imgComposer: "https://picsum.photos/200/300",
-    composerName: "Composer Name",
-  },
-]
-
-
-interface smallboxprops {
+interface SmallBoxProps {
   openSmallbox: boolean;
   setopenSmallbox: React.Dispatch<React.SetStateAction<boolean>>;
-  handleOpenSmallbox: (openPopup: React.MouseEvent<HTMLButtonElement>) => void;
-  handleOpen: (openPopup: React.MouseEvent<HTMLButtonElement>) => void;
+  handleOpenSmallbox: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  handleOpen: (event: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const SmallBox = ({ openSmallbox, handleOpenSmallbox, setopenSmallbox }: smallboxprops) => {
+const SmallBox = ({ openSmallbox, handleOpenSmallbox, setopenSmallbox }: SmallBoxProps) => {
   const auth = JSON.parse(localStorage.getItem("auth") || "{}");
   const currentUser = auth.user;
-  // console.log(currentUser)
-  const dispatch = useDispatch<AppDispatch>()
-  const { data } = useSelector((state: any) => state.Music)
+  const dispatch = useDispatch<AppDispatch>();
+  const { data } = useSelector((state: any) => state.Music);
   const fireGetJob = useSelector((state: any) => state.job.fireGetJob);
-  const Musics = useSelector((state: any) => state.Music)
-  const jobData = useSelector((state: any) => state.job)
+  const Musics = useSelector((state: any) => state.Music);
+  const jobData = useSelector((state: any) => state.job);
 
-  console.log(jobData, "applyjobres")
-
-  const [openPopup, setOpenPopup] = useState(false);
-  //   const [openSmallbox, setopenSmallbox] = useState(false);
-  const [openReview, setopenReview] = useState(false);
-  //   const handleOpenSmallbox = () => setopenSmallbox(!openSmallbox);
-  const handleOpenReview = () => setopenReview(!openReview);
+  const [openReview, setOpenReview] = useState(false);
+  const handleOpenReview = () => setOpenReview(!openReview);
   const [message, setMessage] = useState("");
 
   const handleMessageChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setMessage(event.target.value);
-    dispatch(updateMessage(message));
+    const newMessage = event.target.value;
+    setMessage(newMessage);
+    dispatch(updateMessage(newMessage));
   };
 
   const handleApply = () => {
     handleOpenReview();
     dispatch(fireGetJobRequest(!fireGetJob));
-    dispatch(applyJob(jobData.applyJob))
-    setOpenPopup(false);
+    dispatch(applyJob(jobData.applyJob));
     setopenSmallbox(false);
-    // handleOpenSmallbox
   };
 
   useEffect(() => {
-    dispatch(getMyMusic())
-  }, [])
+    dispatch(getMyMusic());
+  }, []);
 
   return (
     <>
@@ -122,18 +66,18 @@ const SmallBox = ({ openSmallbox, handleOpenSmallbox, setopenSmallbox }: smallbo
         size="md"
         open={openSmallbox}
         handler={handleOpenSmallbox}
+        className="bg-white rounded-xl shadow-2xl max-w-2xl mx-auto"
       >
-        <DialogHeader className="font-light text-md flex justify-between py-2 shadow-md">
+        <DialogHeader className="flex justify-between items-center p-4 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-t-xl">
           <div></div>
-          <Typography
-            variant="small"
-            className="font-bold text-xs"
-            color="black"
-          >
-            please select 2 pieces of music that are similar to the customers
-            for reference
+          <Typography variant="small" color="white" className="font-semibold text-sm text-center">
+            Please select 2 pieces of music that are similar to the customer's for reference
           </Typography>
-          <IconButton variant="text" onClick={handleOpenSmallbox}>
+          <IconButton
+            variant="text"
+            onClick={handleOpenSmallbox}
+            className="text-white hover:bg-white/20 rounded-full"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -150,23 +94,22 @@ const SmallBox = ({ openSmallbox, handleOpenSmallbox, setopenSmallbox }: smallbo
             </svg>
           </IconButton>
         </DialogHeader>
-        <DialogBody className="p-0 h-[30rem] overflow-y-scroll">
-          <div className="flex items-center justify-center py-2">
-            <div className="grid grid-cols-2 gap-4">
+        <DialogBody className="p-6 max-h-[30rem] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
+          <div className="flex items-center justify-center">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full">
               {data ? data.map((props: any, key: any) => (
                 <SelectableBox key={key} {...props} />
-              )) : <Spinner className="w-12 h-12" />
-              }
+              )) : <Spinner className="w-12 h-12 mx-auto" />}
             </div>
           </div>
         </DialogBody>
-        <DialogFooter className="flex justify-end py-2 px-6">
+        <DialogFooter className="flex justify-end p-4 bg-gray-50 rounded-b-xl">
           <Button
             onClick={handleOpenReview}
             variant="gradient"
             color="blue"
             size="sm"
-            className="hover:scale-100"
+            className="w-40 h-10 hover:scale-105 transition-transform"
           >
             Confirm Application
           </Button>
@@ -178,22 +121,26 @@ const SmallBox = ({ openSmallbox, handleOpenSmallbox, setopenSmallbox }: smallbo
         size="lg"
         open={openReview}
         handler={handleOpenReview}
+        className="bg-white rounded-xl shadow-2xl max-w-4xl mx-auto"
       >
-        <DialogHeader className="flex flex-row justify-between font-light text-md gap-4 py-2 shadow-md">
-          <div className=""></div>
-          <div className="flex flex-row gap-2 items-center justify-center">
+        <DialogHeader className="flex justify-between items-center p-4 bg-gradient-to-r from-blue-500 to-indigo-600 rounded-t-xl">
+          <div></div>
+          <div className="flex items-center gap-3">
             <Avatar
-              //   src={fotoprofile}
-              src={currentUser && BASE_URL + currentUser?.profilePicture.replace('public', '')}
+              src={currentUser && currentUser?.profilePicture.replace('public', '')}
               alt="avatar"
               size="sm"
-              className=""
+              className="border-2 border-white shadow-md"
             />
-            <Typography variant="small" className="font-bold" color="black">
+            <Typography variant="small" color="white" className="font-semibold">
               {currentUser && currentUser?.name}
             </Typography>
           </div>
-          <IconButton variant="text" onClick={handleOpenReview}>
+          <IconButton
+            variant="text"
+            onClick={handleOpenReview}
+            className="text-white hover:bg-white/20 rounded-full"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -210,80 +157,74 @@ const SmallBox = ({ openSmallbox, handleOpenSmallbox, setopenSmallbox }: smallbo
             </svg>
           </IconButton>
         </DialogHeader>
-        <DialogBody className="p-2">
+        <DialogBody className="p-6">
           <Typography
             variant="h4"
-            className="flex justify-center font-bold mb-2"
-            color="black"
+            className="text-center font-bold mb-2"
+            color="blue-gray"
           >
             Apply with your Profile
           </Typography>
           <Typography
             variant="small"
-            className="flex justify-center mb-2"
+            className="text-center mb-4"
             color="blue-gray"
           >
-            Your Application will be submitted along with a preview of your
-            Profile and projects.
+            Your Application will be submitted along with a preview of your Profile and projects.
           </Typography>
-          <div className="flex flex-row justify-center gap-4">
-            <div className="flex flex-col relative border-2 p-0 border-black/20 rounded-md min-h-[20rem] min-w-[25.5rem] max-w-[25.5rem] mb-2">
-              <div className="">
+          <div className="flex flex-col md:flex-row justify-center gap-6">
+            <div className="relative border-2 border-gray-300 rounded-lg shadow-md min-h-[20rem] w-full max-w-md">
+              <div>
                 <img
-                  className="h-fit max-h-[8rem] w-full rounded-md object-cover object-center shadow-md shadow-blue-gray-900/50"
-                  src="https://images.unsplash.com/photo-1682407186023-12c70a4a35e0?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2832&q=80"
+                  className="h-32 w-full rounded-t-lg object-cover object-center shadow-sm"
+                  src="https://images.unsplash.com/photo-1682407186023-12c70a4a35e0?ixlib=rb-4.0.3&auto=format&fit=crop&w=2832&q=80"
                   alt="nature image"
                 />
                 <Avatar
                   variant="circular"
-                  alt="user 1"
+                  alt="user"
                   size="xl"
-                  className="absolute object-cover object-center top-[6.5rem]  border-2 border-black hover:z-10 focus:z-10"
-                  src={currentUser && BASE_URL + currentUser?.profilePicture.replace('public', '')}
+                  className="absolute top-24 left-4 border-2 border-white shadow-lg"
+                  src={currentUser && currentUser?.profilePicture.replace('public', '')}
                 />
               </div>
-              <div className="pl-[6.5rem]">
-                <Typography variant="h5" className="p-2" color="blue-gray">
+              <div className="pl-32 pr-4 pt-2 pb-4">
+                <Typography variant="h5" color="blue-gray" className="font-semibold">
                   {currentUser && currentUser?.name}
                 </Typography>
               </div>
-              <div className="mt-1 my-2 min-h-[10rem] p-2">
-                <div className="grid grid-cols-1 gap-2">
-                  <div className="grid grid-cols-2 gap-3">
-                    {/* <PocketsizeBox /> */}
-                    {Musics ? Musics.selectedMusic.map((props: any, key: any) => (
-                      <PocketsizeBox key={key} {...props} />
-                    )) :
-                      <Spinner className="w-12 h-12" />
-                    }
-                  </div>
+              <div className="px-4 pb-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {Musics ? Musics.selectedMusic.map((props: any, key: any) => (
+                    <PocketsizeBox key={key} {...props} />
+                  )) : <Spinner className="w-12 h-12 mx-auto" />}
                 </div>
               </div>
             </div>
-            <div className="flex justify-center mb-2">
+            <div className="flex justify-center w-full max-w-md">
               <Textarea
                 value={message}
-                // value="Hello there"
                 onChange={handleMessageChange}
                 label="Message"
-                className="h-92 !w-96" />
+                className="h-64 w-full border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+              />
             </div>
           </div>
         </DialogBody>
-        <DialogFooter className="flex justify-center py-4 px-6">
+        <DialogFooter className="flex justify-center p-4 bg-gray-50 rounded-b-xl">
           <Button
             onClick={handleApply}
             variant="gradient"
             color="blue"
             size="sm"
-            className="hover:scale-100"
+            className="w-40 h-10 hover:scale-105 transition-transform"
           >
             Submit Application
           </Button>
         </DialogFooter>
       </Dialog>
     </>
-  )
-}
+  );
+};
 
-export default SmallBox
+export default SmallBox;
