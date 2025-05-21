@@ -1,16 +1,10 @@
 "use client";
-import {
-  Tabs,
-  TabsHeader,
-  TabsBody,
-  Tab,
-  TabPanel,
-} from "@material-tailwind/react";
+
+import { useCallback, useState } from "react";
 import HiringMusician from "./hiring-musician";
 import FindCreatives from "./find-creatives";
 import Sidebar from "@/components/sidebar/sidebar";
 import { debounce } from "lodash";
-import { useCallback, useState } from "react";
 
 export function AssetsPage() {
   const [section, setSection] = useState("find-creatives");
@@ -28,7 +22,6 @@ export function AssetsPage() {
     []
   );
 
-
   const data = [
     {
       label: "Hiring Musician",
@@ -36,7 +29,7 @@ export function AssetsPage() {
       desc: <HiringMusician />,
     },
     {
-      label: "Find Creatives",
+      label: "Find Music Assets",
       value: "find-creatives",
       desc: (
         <FindCreatives
@@ -52,7 +45,7 @@ export function AssetsPage() {
   ];
 
   return (
-    <section className="flex justify-center min-h-screen px-4 py-2 gap-4">
+    <section style={{ display: "flex", justifyContent: "center", minHeight: "100vh", padding: "16px", gap: "16px" }}>
       <Sidebar
         setFilterTags={setFilterTags}
         debounceSearchTerm={debounceSearchTerm}
@@ -61,30 +54,43 @@ export function AssetsPage() {
         setSelectedMusicStyle={setSelectedMusicStyle}
         setSelectedMusicMood={setSelectedMusicMood}
       />
-      <Tabs id="custom-animation" value={section} className="w-full mb-16">
-        <div className="flex ml-[7rem] items-center mb-2">
-          <TabsHeader
-            className="flex justify-end bg-transparent h-12 md:w-[50rem] my-1 border border-white/25 bg-opacity-90"
-            indicatorProps={{
-              className: "bg-gray-900/10 shadow-md !text-gray-900",
-            }}
-          >
-            {data.map(({ label, value }) => (
-              <Tab key={value} value={value} className="text-sm">
-                {label}
-              </Tab>
-            ))}
-          </TabsHeader>
-        </div>
-        <div className="border-t-2 border-black/10 w-full"></div>
-        <TabsBody className="flex flex-row gap-4">
-          {data.map(({ value, desc }) => (
-            <TabPanel key={value} value={value}  className="p-0">
-              {desc}
-            </TabPanel>
+
+      <div style={{ flex: 1, maxWidth: "800px" }}>
+        <div style={{ display: "flex", borderBottom: "1px solid #ccc", marginBottom: "16px" }}>
+          {data.map(({ label, value }) => (
+            <button
+              key={value}
+              onClick={() => setSection(value)}
+              style={{
+                padding: "10px 20px",
+                cursor: "pointer",
+                border: "none",
+                borderBottom: section === value ? "3px solid #333" : "3px solid transparent",
+                backgroundColor: "transparent",
+                fontWeight: section === value ? "bold" : "normal",
+              }}
+            >
+              {label}
+            </button>
           ))}
-        </TabsBody>
-      </Tabs>
+        </div>
+
+        {/* Tab content */}
+        <div>
+          {data.map(({ value, desc }) =>
+            value === section ? (
+              <div key={value} style={{ padding: "8px 0" }}>
+                {desc}
+              </div>
+            ) : null
+          )}
+        </div>
+
+        {/* Display current selected tab value */}
+        <div style={{ marginTop: "20px", color: "#555" }}>
+          Current selected tab: <strong>{section}</strong>
+        </div>
+      </div>
     </section>
   );
 }
