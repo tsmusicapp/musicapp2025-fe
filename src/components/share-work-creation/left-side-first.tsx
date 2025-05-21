@@ -255,7 +255,7 @@ function LeftSideFirst({ register, errors, setValue }: LeftSideFirstProps) {
           <div className="flex gap-2 pr-32">
             <p className="text-sm">
               The Music uploaded here is only for trial listening and not for
-              download; <br /> if you don't have copyright, only upload
+              download; <br /> if you dont have copyright, only upload
               music clips
             </p>
           </div>

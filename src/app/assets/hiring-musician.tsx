@@ -43,7 +43,7 @@ export function HiringMusician() {
 
   return (
     <section className="w-full px-4 py-6">
-      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-1 xl:grid-cols-1">
+      <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-5">
         {featuredMusic.length > 0 ? (
           featuredMusic
             .map((props, key) => (
