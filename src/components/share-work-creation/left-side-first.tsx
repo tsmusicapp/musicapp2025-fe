@@ -1,20 +1,35 @@
 "use client";
 
 import { Typography, Input } from "@material-tailwind/react";
-import { UseFormRegister, FieldErrors } from "react-hook-form";
-import { useState } from "react";
+import { UseFormRegister, FieldErrors, UseFormSetValue } from "react-hook-form";
+import { useEffect, useState } from "react";
+import { API_URL } from "@/utils/env_var";
+import { useLocalStorage } from "@/context/LocalStorageContext";
+import toast from "react-hot-toast";
 
 interface LeftSideFirstProps {
   register: UseFormRegister<any>;
   errors: FieldErrors<any>;
+  setValue: UseFormSetValue<any>;
 }
 
-function LeftSideFirst({ register, errors }: LeftSideFirstProps) {
+function LeftSideFirst({ register, errors, setValue }: LeftSideFirstProps) {
+  const { getItem } = useLocalStorage();
+  const [auth] = useState<any>(getItem("auth", null));
+
   const [musicImagePreview, setMusicImagePreview] = useState<string>("");
   const [selectedFileName, setSelectedFileName] = useState<string>("");
   const musicSizeLimit = 20 * 1024 * 1024; // 20MB
   const imageSizeLimit = 1024 * 1024; // 1MB
-
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [fileImage, setFileImage] = useState<File | null>(null);
+  const [fileMusic, setFileMusic] = useState<File | undefined | Blob>(
+    undefined
+  );
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [musicPreview, setMusicPreview] = useState<string | null>(null);
+  const [imageError, setImageError] = useState<string | null>(null);
+  const [musicError, setMusicError] = useState<string | null>(null);
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
@@ -26,6 +41,124 @@ function LeftSideFirst({ register, errors }: LeftSideFirstProps) {
     }
   };
 
+  useEffect(() => {
+    const uploadImage = async () => {
+      if (!fileImage) return;
+      const musicImageForm = new FormData();
+      musicImageForm.append("musicImage", fileImage);
+
+      console.log(musicImageForm, "music image here in form data");
+
+      try {
+        const response = await fetch(`${API_URL}/v1/upload/music-image`, {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${auth.tokens.access.token}`,
+          },
+          body: musicImageForm,
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+
+          setValue("musicImage", result.data.profilePicture);
+
+          toast.success("Upload Music Image successful!");
+        } else {
+          const errorResult = await response.json();
+          toast.error(
+            `Error: ${errorResult.message || "Failed to upload Music Image"}`
+          );
+        }
+      } catch (error) {
+        console.error("Error during Upload Music Image:", error);
+        toast.error("An unexpected error occurred.");
+      }
+    };
+
+    const uploadMusic = async () => {
+      if (!fileMusic) {
+        return;
+      }
+      const formData = new FormData();
+      formData.append("music", fileMusic);
+
+      try {
+        const xhr = new XMLHttpRequest();
+        xhr.open("POST", `${API_URL}/v1/tracks/`, true);
+        xhr.setRequestHeader(
+          "Authorization",
+          `Bearer ${auth.tokens.access.token}`
+        );
+
+        xhr.upload.onprogress = (event) => {
+          if (event.lengthComputable) {
+            const progress = Math.round((event.loaded * 100) / event.total);
+            setUploadProgress(progress);
+          }
+        };
+
+        xhr.onload = async () => {
+          if (xhr.status === 200) {
+            const result = JSON.parse(xhr.responseText);
+            setValue("musicAudio", result.data.music);
+            toast.success("Upload Music Track successful!");
+            setUploadProgress(100); // Set to 100% instead of 0
+          } else {
+            const errorResult = JSON.parse(xhr.responseText);
+            toast.error(
+              `Error: ${errorResult.message || "Failed to upload Music Track"}`
+            );
+            setUploadProgress(0);
+          }
+        };
+
+        xhr.onerror = () => {
+          toast.error("An unexpected error occurred.");
+          setUploadProgress(0);
+        };
+
+        xhr.send(formData);
+      } catch (error) {
+        toast.error("An unexpected error occurred.");
+        setUploadProgress(0);
+      }
+    };
+    if (fileMusic) {
+      uploadMusic();
+    }
+    if (fileImage) {
+      uploadImage();
+    }
+  }, [fileMusic, fileImage, auth]);
+
+  const handleFileMusicChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.readAsDataURL(selectedFile);
+      setFileMusic(selectedFile);
+      setMusicError(null);
+    } else {
+      setMusicError("Please upload a music file.");
+    }
+  };
+  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result as string);
+      };
+      reader.readAsDataURL(selectedFile);
+      setFileImage(selectedFile);
+      setImageError(null);
+    } else {
+      setImageError("Please upload an image file.");
+    }
+  };
   return (
     <div className="mb-1 flex flex-col gap-4">
       <div>
@@ -48,124 +181,89 @@ function LeftSideFirst({ register, errors }: LeftSideFirstProps) {
         )}
       </div>
 
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col gap-4">
-          <div className="flex gap-2">
-            <div className="w-[18rem] flex flex-col gap-2 font-semibold text-sm">
-              Upload Music Image
+      <div className="flex flex-col gap-4">
+        <div className="flex  gap-2">
+          <div className="w-[18rem] flex flex-col justify-center items-start gap-2 font-semibold text-sm">
+            Upload Music Image
+            <label
+              htmlFor="dropzone-file"
+              className="relative flex flex-col items-center justify-center w-[10rem] h-[10rem] border-2 border-black border-dashed rounded-lg cursor-pointer"
+            >
+              {!imagePreview && (
+                <div className="flex flex-col items-left justify-center pt-5 pb-6">
+                  <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
+                    <span className="font-semibold">Less than 1M</span>
+                  </p>
+                </div>
+              )}
+              {imagePreview && (
+                <img
+                  src={imagePreview}
+                  alt="Thumbnail"
+                  className="w-[10rem] h-[10rem] object-cover shadow-md absolute hover:scale-105 rounded-md"
+                />
+              )}
+              <input
+                id="dropzone-file"
+                type="file"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+            </label>
+          </div>
+          {imageError && (
+            <p className="text-red-500 text-sm mt-1">{imageError}</p>
+          )}
+        </div>
+
+        <div className="flex justify-start items-start gap-2">
+          <div className="w-[18rem] flex flex-col justify-center items-start  font-semibold text-sm">
+            Upload Music
+            <div className="flex flex-col gap-2">
               <label
-                htmlFor="musicImage"
-                className="flex flex-col items-center justify-center w-[10rem] h-[10rem] border-2 border-black border-dashed rounded-lg cursor-pointer  hover:bg-gray-100"
+                htmlFor="dropzone-file-music"
+                className="relative flex flex-col items-center justify-center w-[10rem] h-[6rem] border-2 border-black border-dashed rounded-lg cursor-pointer"
               >
-                {musicImagePreview ? (
-                  <img
-                    src={musicImagePreview}
-                    alt="Preview"
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                ) : (
+                {!musicPreview && (
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <p className="mb-2 text-sm text-gray-500">
-                      <span className="font-semibold">Less than 1MB</span>
+                    <p className="text-sm text-gray-500 dark:text-gray-400">
+                      <span className="font-semibold">Less than 20M</span>
                     </p>
                   </div>
                 )}
+                {musicPreview && (
+                  <img
+                    src={musicPreview}
+                    alt="music Thumbnail"
+                    className="w-[10rem] h-[6rem] object-cover shadow-md absolute hover:scale-105 rounded-md"
+                  />
+                )}
                 <input
-                  id="musicImage"
-                  type="file"
-                  className="hidden"
-                  accept="image/*"
-                  {...register("musicImage", {
-                    required: "Music image is required",
-                    onChange: (e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        if (file.size > imageSizeLimit) {
-                          e.target.value = "";
-                          // You can add a state for error message instead of alert here
-                          alert("Image must be less than 1MB");
-                          return;
-                        }
-                        if (!file.type.startsWith("image/")) {
-                          e.target.value = "";
-                          alert("File must be an image");
-                          return;
-                        }
-                        handleImageChange(e);
-                      }
-                    },
-                  })}
-                />
-              </label>
-              {errors.musicImage && (
-                <span className="text-red-500 text-xs">
-                  {errors.musicImage.message as string}
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-4">
-            <div className="w-[18rem] flex flex-col gap-2 font-semibold text-sm">
-              Upload Music
-              <label
-                htmlFor="music"
-                className="flex flex-col items-center justify-center w-[10rem] h-[6rem] border-2 border-black border-dashed rounded-lg cursor-pointer hover:bg-gray-100"
-              >
-                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <p className="text-sm text-gray-500">
-                    <span className="font-semibold">Less than 20MB</span>
-                  </p>
-                </div>
-                <input
-                  id="music"
+                  id="dropzone-file-music"
                   type="file"
                   className="hidden"
                   accept="audio/*"
-                  {...register("musicAudio", {
-                    required: "Music file is required",
-                    onChange: (e) => {
-                      const file = e.target.files?.[0];
-                      if (file) {
-                        if (file.size > musicSizeLimit) {
-                          e.target.value = "";
-                          setSelectedFileName("");
-                          alert("Music file must be less than 20MB");
-                          return;
-                        }
-                        if (!file.type.startsWith("audio/")) {
-                          e.target.value = "";
-                          setSelectedFileName("");
-                          alert("File must be an audio file");
-                          return;
-                        }
-                        setSelectedFileName(file.name);
-                      }
-                    },
-                  })}
+                  onChange={handleFileMusicChange}
                 />
               </label>
-              {selectedFileName && (
-                <p className="text-sm text-gray-700 mt-2 ">
-                  Selected File: {selectedFileName}
-                </p>
-              )}
-              {errors.musicAudio && (
-                <span className="text-red-500 text-xs">
-                  {errors.musicAudio.message as string}
-                </span>
+              {uploadProgress > 0 && (
+                <div className="w-full mt-2">
+                  <div className="w-full bg-gray-200 rounded-full h-2.5">
+                    <div
+                      className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+                      style={{ width: `${uploadProgress}%` }}
+                    ></div>
+                  </div>
+                  <p className="text-xs text-gray-600 mt-1 text-right">
+                    {uploadProgress}%
+                  </p>
+                </div>
               )}
             </div>
           </div>
-          <div className="flex gap-2 pr-32">
-            <p className="text-sm">
-              The Music uploaded here is only for trial listening and not for
-              download; <br /> if you don&apos;t have copyright, only upload
-              music clips
-            </p>
-          </div>
+          {musicError && (
+            <p className="text-red-500 text-sm mt-1">{musicError}</p>
+          )}
         </div>
       </div>
     </div>
