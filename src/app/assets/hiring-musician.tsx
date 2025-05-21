@@ -6,6 +6,7 @@ import { getAuthToken } from "@/utils/auth";
 import { API_URL } from "@/utils/env_var";
 import HomeMusicianBox from "@/components/music-box/home-musician-box";
 import { Spinner } from "@material-tailwind/react";
+import MusicPlayerDialog from "@/components/music-player/music-player-dialog";
 
 export function HiringMusician() {
   const [featuredMusic, setFeaturedMusic] = useState<any[]>([]);
@@ -43,6 +44,8 @@ export function HiringMusician() {
 
   return (
     <section className="w-full px-4 py-6">
+            <MusicPlayerDialog source="home" />
+      
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-5">
         {featuredMusic.length > 0 ? (
           featuredMusic

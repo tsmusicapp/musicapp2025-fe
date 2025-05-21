@@ -79,7 +79,7 @@ export function AssetsPage() {
         <div className="border-t-2 border-black/10 w-full"></div>
         <TabsBody className="flex flex-row gap-4">
           {data.map(({ value, desc }) => (
-            <TabPanel key={value} value={value} className="p-0">
+            <TabPanel key={value} value={value}  className="p-0">
               {desc}
             </TabPanel>
           ))}
