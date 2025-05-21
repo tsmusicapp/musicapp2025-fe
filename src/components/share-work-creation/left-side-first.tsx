@@ -26,18 +26,35 @@ function LeftSideFirst({ register, errors, setValue }: LeftSideFirstProps) {
   const [fileMusic, setFileMusic] = useState<File | undefined | Blob>(
     undefined
   );
-  const [imagePreview, setImagePreview] = useState<string | null>(null);
-  const [musicPreview, setMusicPreview] = useState<string | null>(null);
   const [imageError, setImageError] = useState<string | null>(null);
   const [musicError, setMusicError] = useState<string | null>(null);
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
+
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
       const reader = new FileReader();
       reader.onloadend = () => {
         setMusicImagePreview(reader.result as string);
       };
-      reader.readAsDataURL(file);
+      reader.readAsDataURL(selectedFile);
+      setFileImage(selectedFile);
+      setImageError(null);
+    } else {
+      setImageError("Please upload an image file.");
+    }
+  };
+
+  const handleFileMusicChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.readAsDataURL(selectedFile);
+      setFileMusic(selectedFile);
+      setMusicError(null);
+    } else {
+      setMusicError("Please upload a music file.");
     }
   };
 
@@ -132,33 +149,6 @@ function LeftSideFirst({ register, errors, setValue }: LeftSideFirstProps) {
     }
   }, [fileMusic, fileImage, auth]);
 
-  const handleFileMusicChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const selectedFile = event.target.files?.[0];
-    if (selectedFile) {
-      const reader = new FileReader();
-      reader.readAsDataURL(selectedFile);
-      setFileMusic(selectedFile);
-      setMusicError(null);
-    } else {
-      setMusicError("Please upload a music file.");
-    }
-  };
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const selectedFile = event.target.files?.[0];
-    if (selectedFile) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImagePreview(reader.result as string);
-      };
-      reader.readAsDataURL(selectedFile);
-      setFileImage(selectedFile);
-      setImageError(null);
-    } else {
-      setImageError("Please upload an image file.");
-    }
-  };
   return (
     <div className="mb-1 flex flex-col gap-4">
       <div>
@@ -181,71 +171,69 @@ function LeftSideFirst({ register, errors, setValue }: LeftSideFirstProps) {
         )}
       </div>
 
-      <div className="flex flex-col gap-4">
-        <div className="flex  gap-2">
-          <div className="w-[18rem] flex flex-col justify-center items-start gap-2 font-semibold text-sm">
-            Upload Music Image
-            <label
-              htmlFor="dropzone-file"
-              className="relative flex flex-col items-center justify-center w-[10rem] h-[10rem] border-2 border-black border-dashed rounded-lg cursor-pointer"
-            >
-              {!imagePreview && (
-                <div className="flex flex-col items-left justify-center pt-5 pb-6">
-                  <p className="mb-2 text-sm text-gray-500 dark:text-gray-400">
-                    <span className="font-semibold">Less than 1M</span>
-                  </p>
-                </div>
-              )}
-              {imagePreview && (
-                <img
-                  src={imagePreview}
-                  alt="Thumbnail"
-                  className="w-[10rem] h-[10rem] object-cover shadow-md absolute hover:scale-105 rounded-md"
-                />
-              )}
-              <input
-                id="dropzone-file"
-                type="file"
-                className="hidden"
-                onChange={handleFileChange}
-              />
-            </label>
-          </div>
-          {imageError && (
-            <p className="text-red-500 text-sm mt-1">{imageError}</p>
-          )}
-        </div>
-
-        <div className="flex justify-start items-start gap-2">
-          <div className="w-[18rem] flex flex-col justify-center items-start  font-semibold text-sm">
-            Upload Music
-            <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4">
+          <div className="flex gap-2">
+            <div className="w-[18rem] flex flex-col gap-2 font-semibold text-sm">
+              Upload Music Image
               <label
-                htmlFor="dropzone-file-music"
-                className="relative flex flex-col items-center justify-center w-[10rem] h-[6rem] border-2 border-black border-dashed rounded-lg cursor-pointer"
+                htmlFor="musicImage"
+                className="flex flex-col items-center justify-center w-[10rem] h-[10rem] border-2 border-black border-dashed rounded-lg cursor-pointer hover:bg-gray-100"
               >
-                {!musicPreview && (
+                {musicImagePreview ? (
+                  <img
+                    src={musicImagePreview}
+                    alt="Preview"
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                ) : (
                   <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <p className="text-sm text-gray-500 dark:text-gray-400">
-                      <span className="font-semibold">Less than 20M</span>
+                    <p className="mb-2 text-sm text-gray-500">
+                      <span className="font-semibold">Less than 1MB</span>
                     </p>
                   </div>
                 )}
-                {musicPreview && (
-                  <img
-                    src={musicPreview}
-                    alt="music Thumbnail"
-                    className="w-[10rem] h-[6rem] object-cover shadow-md absolute hover:scale-105 rounded-md"
-                  />
-                )}
                 <input
-                  id="dropzone-file-music"
+                  id="musicImage"
+                  type="file"
+                  className="hidden"
+                  accept="image/*"
+                  onChange={handleImageChange}
+                />
+              </label>
+              {imageError && (
+                <span className="text-red-500 text-xs">{imageError}</span>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-4">
+            <div className="w-[18rem] flex flex-col gap-2 font-semibold text-sm">
+              Upload Music
+              <label
+                htmlFor="music"
+                className="flex flex-col items-center justify-center w-[10rem] h-[6rem] border-2 border-black border-dashed rounded-lg cursor-pointer hover:bg-gray-100"
+              >
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                  <p className="text-sm text-gray-500">
+                    <span className="font-semibold">Less than 20MB</span>
+                  </p>
+                </div>
+                <input
+                  id="music"
                   type="file"
                   className="hidden"
                   accept="audio/*"
                   onChange={handleFileMusicChange}
                 />
               </label>
+              {selectedFileName && (
+                <p className="text-sm text-gray-700 mt-2">
+                  Selected File: {selectedFileName}
+                </p>
+              )}
               {uploadProgress > 0 && (
                 <div className="w-full mt-2">
                   <div className="w-full bg-gray-200 rounded-full h-2.5">
@@ -259,11 +247,18 @@ function LeftSideFirst({ register, errors, setValue }: LeftSideFirstProps) {
                   </p>
                 </div>
               )}
+              {musicError && (
+                <span className="text-red-500 text-xs">{musicError}</span>
+              )}
             </div>
           </div>
-          {musicError && (
-            <p className="text-red-500 text-sm mt-1">{musicError}</p>
-          )}
+          <div className="flex gap-2 pr-32">
+            <p className="text-sm">
+              The Music uploaded here is only for trial listening and not for
+              download; <br /> if you don't have copyright, only upload
+              music clips
+            </p>
+          </div>
         </div>
       </div>
     </div>
