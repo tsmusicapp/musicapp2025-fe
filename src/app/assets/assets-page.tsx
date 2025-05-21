@@ -45,7 +45,7 @@ export function AssetsPage() {
   ];
 
   return (
-    <section style={{ display: "flex", justifyContent: "center", minHeight: "100vh", padding: "16px", gap: "16px" }}>
+    <section className="flex justify-center min-h-screen px-4 py-2 gap-4">
       <Sidebar
         setFilterTags={setFilterTags}
         debounceSearchTerm={debounceSearchTerm}
@@ -55,40 +55,38 @@ export function AssetsPage() {
         setSelectedMusicMood={setSelectedMusicMood}
       />
 
-      <div style={{ flex: 1, maxWidth: "800px" }}>
-        <div style={{ display: "flex", borderBottom: "1px solid #ccc", marginBottom: "16px" }}>
-          {data.map(({ label, value }) => (
-            <button
-              key={value}
-              onClick={() => setSection(value)}
-              style={{
-                padding: "10px 20px",
-                cursor: "pointer",
-                border: "none",
-                borderBottom: section === value ? "3px solid #333" : "3px solid transparent",
-                backgroundColor: "transparent",
-                fontWeight: section === value ? "bold" : "normal",
-              }}
-            >
-              {label}
-            </button>
-          ))}
+      <div className="flex-1">
+        {/* Tabs Header */}
+        <div className="flex justify-start ml-28 mb-3">
+          <div className="flex w-full max-w-2xl border border-white/25 rounded-md overflow-hidden bg-white/10 backdrop-blur-sm">
+            {data.map(({ label, value }) => (
+              <button
+                key={value}
+                onClick={() => setSection(value)}
+                className={`w-full text-sm px-4 py-2 transition-all duration-300 ${
+                  section === value
+                    ? "bg-gray-900/10 font-semibold shadow-md text-gray-900"
+                    : "hover:bg-gray-100/20 text-gray-700"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
 
-        {/* Tab content */}
-        <div>
+        {/* Border Line Below Tabs */}
+        <div className="border-t-2 border-black/10 w-full mb-2" />
+
+        {/* Tabs Content */}
+        <div className="w-full">
           {data.map(({ value, desc }) =>
-            value === section ? (
-              <div key={value} style={{ padding: "8px 0" }}>
+            section === value ? (
+              <div key={value} className="p-0">
                 {desc}
               </div>
             ) : null
           )}
-        </div>
-
-        {/* Display current selected tab value */}
-        <div style={{ marginTop: "20px", color: "#555" }}>
-          Current selected tab: <strong>{section}</strong>
         </div>
       </div>
     </section>

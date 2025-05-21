@@ -1,26 +1,13 @@
 "use client";
-import {
-  Tabs,
-  TabsHeader,
-  TabsBody,
-  Tab,
-  TabPanel,
-  Input,
-} from "@material-tailwind/react";
-import HiringMusician from "@/app/assets/hiring-musician";
-import FilterContent from "@/components/assets/filter-content";
-import { filterContent, filterMusicUsage } from "@/default/filter";
-import FilterMusicUsage from "@/components/assets/filter-music-usage";
-import FindCreatives from "@/app/assets/find-creatives";
-import MyFreelanceProjects from "@/app/assets/my-freelance-projects";
-import NewFreelanceProject from "@/app/assets/new-freelance-project";
-import React, { useCallback, useState } from "react";
+
 import Sidebar from "@/components/sidebar/sidebar";
 import { debounce } from "lodash";
+import { useCallback, useState } from "react";
+import HiringMusician from "../assets/hiring-musician";
+import FindCreatives from "../assets/find-creatives";
 
 export function HiringMusicianPage() {
-  const [section, setSection] = React.useState("hiring-musician");
-
+  const [section, setSection] = useState("find-creatives");
   const [filterTags, setFilterTags] = useState<string | null>(null);
   const [searchTerm, setSearchTerm] = useState<string | null>(null);
   const [selectedInstrument, setSelectedInstruments] = useState<string[]>([]);
@@ -34,6 +21,7 @@ export function HiringMusicianPage() {
     }, 500),
     []
   );
+
   const data = [
     {
       label: "Hiring Musician",
@@ -41,27 +29,19 @@ export function HiringMusicianPage() {
       desc: <HiringMusician />,
     },
     {
-      label: "Find Creatives",
+      label: "Find Music Assets",
       value: "find-creatives",
-      desc: <FindCreatives
-        filterTags={filterTags}
-        searchTerm={searchTerm}
-        selectedInstrument={selectedInstrument}
-        selectedMusicUsage={selectedMusicUsage}
-        selectedMusicStyle={selectedMusicStyle}
-        selectedMusicMood={selectedMusicMood}
-      />,
+      desc: (
+        <FindCreatives
+          filterTags={filterTags}
+          searchTerm={searchTerm}
+          selectedInstrument={selectedInstrument}
+          selectedMusicUsage={selectedMusicUsage}
+          selectedMusicStyle={selectedMusicStyle}
+          selectedMusicMood={selectedMusicMood}
+        />
+      ),
     },
-    // {
-    //   label: "My Freelance Projects",
-    //   value: "my-freelance-projects",
-    //   desc: <MyFreelanceProjects />,
-    // },
-    // {
-    //   label: "New Freelance Project",
-    //   value: "new-freelance-project",
-    //   desc: <NewFreelanceProject />,
-    // },
   ];
 
   return (
@@ -74,31 +54,41 @@ export function HiringMusicianPage() {
         setSelectedMusicStyle={setSelectedMusicStyle}
         setSelectedMusicMood={setSelectedMusicMood}
       />
-      <Tabs id="custom-animation" value={section} className="w-full mb-16">
-        <div className="flex ml-[7rem] items-center mb-2">
-          {/* <TabsHeader className="flex justify-end bg-transparent h-10 md:w-[50rem] border border-white/25 bg-opacity-90"> */}
-          <TabsHeader
-            className="flex justify-end bg-transparent h-10 md:w-[50rem] border border-white/25 bg-opacity-90"
-            indicatorProps={{
-              className: "bg-gray-900/10 shadow-md !text-gray-900",
-            }}
-          >
+
+      <div className="flex-1">
+        {/* Tabs Header */}
+        <div className="flex justify-start ml-28 mb-3">
+          <div className="flex w-full max-w-2xl border border-white/25 rounded-md overflow-hidden bg-white/10 backdrop-blur-sm">
             {data.map(({ label, value }) => (
-              <Tab key={value} value={value} className="text-sm">
+              <button
+                key={value}
+                onClick={() => setSection(value)}
+                className={`w-full text-sm px-4 py-2 transition-all duration-300 ${
+                  section === value
+                    ? "bg-gray-900/10 font-semibold shadow-md text-gray-900"
+                    : "hover:bg-gray-100/20 text-gray-700"
+                }`}
+              >
                 {label}
-              </Tab>
+              </button>
             ))}
-          </TabsHeader>
+          </div>
         </div>
-        <div className="border-t-2 border-black/10"></div>
-        <TabsBody className="flex flex-row gap-4">
-          {data.map(({ value, desc }) => (
-            <TabPanel key={value} value={value} className="p-0">
-              {desc}
-            </TabPanel>
-          ))}
-        </TabsBody>
-      </Tabs>
+
+        {/* Border Line Below Tabs */}
+        <div className="border-t-2 border-black/10 w-full mb-2" />
+
+        {/* Tabs Content */}
+        <div className="w-full">
+          {data.map(({ value, desc }) =>
+            section === value ? (
+              <div key={value} className="p-0">
+                {desc}
+              </div>
+            ) : null
+          )}
+        </div>
+      </div>
     </section>
   );
 }
