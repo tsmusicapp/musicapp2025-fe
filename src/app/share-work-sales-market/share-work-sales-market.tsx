@@ -53,6 +53,7 @@ export default function ShareWorkSalesMarket() {
   const [imageError, setImageError] = useState<string | null>(null);
   const [musicError, setMusicError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
 
   const router = useRouter();
   const handleChange = (
@@ -189,27 +190,42 @@ export default function ShareWorkSalesMarket() {
       formData.append("music", fileMusic);
 
       try {
-        const response = await fetch(`${API_URL}/v1/tracks/`, {
-          method: "POST",
-          headers: {
-            Authorization: `Bearer ${auth.tokens.access.token}`,
-          },
-          body: formData,
-        });
+        const xhr = new XMLHttpRequest();
+        xhr.open('POST', `${API_URL}/v1/tracks/`, true);
+        xhr.setRequestHeader('Authorization', `Bearer ${auth.tokens.access.token}`);
 
-        if (response.ok) {
-          const result = await response.json();
-          // result.data is the Mongo ObjectID, use it as your music identifier
-          setFormData((prev) => ({ ...prev, music: result?.data?.music }));
-          toast.success("Upload Music Track successful!");
-        } else {
-          const errorResult = await response.json();
-          toast.error(
-            `Error: ${errorResult.message || "Failed to upload Music Track"}`
-          );
-        }
+        xhr.upload.onprogress = (event) => {
+          if (event.lengthComputable) {
+            const progress = Math.round((event.loaded * 100) / event.total);
+            setUploadProgress(progress);
+          }
+        };
+
+        xhr.onload = async () => {
+          if (xhr.status === 200) {
+            const result = JSON.parse(xhr.responseText);
+            setFormData((prev) => ({ ...prev, music: result?.data?.music }));
+            console.log(result, "result of music");
+            toast.success("Upload Music Track successful!");
+            setUploadProgress(100); // Set to 100% instead of 0
+          } else {
+            const errorResult = JSON.parse(xhr.responseText);
+            toast.error(
+              `Error: ${errorResult.message || "Failed to upload Music Track"}`
+            );
+            setUploadProgress(0);
+          }
+        };
+
+        xhr.onerror = () => {
+          toast.error("An unexpected error occurred.");
+          setUploadProgress(0);
+        };
+
+        xhr.send(formData);
       } catch (error) {
         toast.error("An unexpected error occurred.");
+        setUploadProgress(0);
       }
     };
     if (fileMusic) {
@@ -327,32 +343,45 @@ export default function ShareWorkSalesMarket() {
                 <div className="flex justify-start items-start gap-2">
                   <div className="w-[18rem] flex flex-col justify-center items-start  font-semibold text-sm">
                     Upload Music
-                    <label
-                      htmlFor="dropzone-file-music"
-                      className="relative flex flex-col items-center justify-center w-[10rem] h-[6rem] border-2 border-black border-dashed rounded-lg cursor-pointer"
-                    >
-                      {!musicPreview && (
-                        <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                          <p className="text-sm text-gray-500 dark:text-gray-400">
-                            <span className="font-semibold">Less than 20M</span>
-                          </p>
+                    <div className="flex flex-col gap-2">
+                      <label
+                        htmlFor="dropzone-file-music"
+                        className="relative flex flex-col items-center justify-center w-[10rem] h-[6rem] border-2 border-black border-dashed rounded-lg cursor-pointer"
+                      >
+                        {!musicPreview && (
+                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              <span className="font-semibold">Less than 20M</span>
+                            </p>
+                          </div>
+                        )}
+                        {musicPreview && (
+                          <img
+                            src={musicPreview}
+                            alt="music Thumbnail"
+                            className="w-[10rem] h-[6rem] object-cover shadow-md absolute hover:scale-105 rounded-md"
+                          />
+                        )}
+                        <input
+                          id="dropzone-file-music"
+                          type="file"
+                          className="hidden"
+                          accept="audio/*"
+                          onChange={handleFileMusicChange}
+                        />
+                      </label>
+                      {uploadProgress > 0 && (
+                        <div className="w-full mt-2">
+                          <div className="w-full bg-gray-200 rounded-full h-2.5">
+                            <div 
+                              className="bg-blue-600 h-2.5 rounded-full transition-all duration-300" 
+                              style={{ width: `${uploadProgress}%` }}
+                            ></div>
+                          </div>
+                          <p className="text-xs text-gray-600 mt-1 text-right">{uploadProgress}%</p>
                         </div>
                       )}
-                      {musicPreview && (
-                        <img
-                          src={musicPreview}
-                          alt="music Thumbnail"
-                          className="w-[10rem] h-[6rem] object-cover shadow-md absolute hover:scale-105 rounded-md"
-                        />
-                      )}
-                      <input
-                        id="dropzone-file-music"
-                        type="file"
-                        name="track"
-                        className="hidden"
-                        onChange={handleFileMusicChange}
-                      />
-                    </label>
+                    </div>
                   </div>
                   {musicError && (
                     <p className="text-red-500 text-sm mt-1">{musicError}</p>
@@ -536,24 +565,7 @@ export default function ShareWorkSalesMarket() {
                 </div>
               </div>
 
-              <Typography
-                variant="small"
-                color="blue-gray"
-                className="-mb-3 font-semibold"
-              >
-                Creation Time
-              </Typography>
-              <input
-                type="date"
-                {...register("creationTime", {
-                  required: "Creation Time is required",
-                })}
-                className="w-full px-4 py-2 border border-black rounded-none outline-none focus:ring-0 focus:border-black"
-                onChange={handleChange}
-              />
-              {errors.creationTime && (
-                <p style={{ color: "red" }}>{errors.creationTime.message}</p>
-              )}
+              
 
               <div className="flex flex-col gap-1">
                 <label
