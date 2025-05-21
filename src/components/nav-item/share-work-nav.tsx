@@ -39,7 +39,7 @@ const menuItems = [
     iconName: "share-lyric",
   },
   {
-    url: "share-lyrics",
+    url: "share-your-sing-work",
     description: "Share Your Sing Work",
     size: "0.875",
     iconName: "share-work-creation",
