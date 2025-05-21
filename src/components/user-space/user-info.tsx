@@ -53,7 +53,7 @@ function UserInfo() {
     };
 
     fetchData();
-  }, [auth, toast]);
+  }, [auth]);
 
   return (
     <div className="absolute max-w-[22rem] top-[23.5rem] left-[2rem] z-30 border-2 border-black/10 rounded-lg">

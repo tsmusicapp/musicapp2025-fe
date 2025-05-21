@@ -133,7 +133,7 @@ export function FindCreatives({
                   {...props}
                   source="home"
                   lyrics={false}
-                  isMusicAsset={false}
+                  isMusicAsset={true}
                 />
               ))
             ) : (

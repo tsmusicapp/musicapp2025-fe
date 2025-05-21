@@ -8,6 +8,7 @@ import {
   Feather,
   LucideFeather,
   FeatherIcon,
+  BaggageClaim
 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
@@ -34,6 +35,8 @@ interface HomeMusicianBoxProps {
   audioSrc?: string;
   lyrics?: boolean;
   myRole: string[];
+  isMusicAsset?: boolean;
+  commercialUsePrice: string
 }
 
 export function HomeMusicianBox({
@@ -49,6 +52,8 @@ export function HomeMusicianBox({
   likes,
   audioSrc,
   myRole,
+  isMusicAsset,
+  commercialUsePrice
 }: HomeMusicianBoxProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [isPlaying, setIsPlaying] = React.useState(false);
@@ -239,10 +244,18 @@ export function HomeMusicianBox({
               </p>
             </div>
           </div>
+          {isMusicAsset ?           
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold text-gray-800">
+            {commercialUsePrice || 0}$
+          </span>
+          <BaggageClaim className="w-4 h-4 text-gray-600" />
+        </div>
+        :           
           <div className="flex items-center gap-1">
             <ThumbsUp className="w-4 h-4 text-gray-600" />
             <span className="text-sm text-gray-600">{likes || 0}</span>
-          </div>
+          </div>}
         </div>
       </CardContent>
     </Card>
