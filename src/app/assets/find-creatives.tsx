@@ -4,7 +4,8 @@ import { getAuthToken } from "@/utils/auth";
 import { API_URL } from "@/utils/env_var";
 import { useEffect, useState } from "react";
 import MusicPlayerDialog from "../../components/music-player/music-player-dialog";
-
+import HomeMusicianBox from "@/components/music-box/home-musician-box";
+import { Spinner } from "@material-tailwind/react";
 
 interface FindCreativesProps {
   filterTags: string | null;
@@ -66,7 +67,6 @@ export function FindCreatives({
     fetchAssets();
   }, []);
   const filteredAssets = assets.filter((item) => {
-
     const normalizedSelectedStyles = selectedMusicStyle.map((style) =>
       style.trim().toLowerCase()
     );
@@ -126,29 +126,19 @@ export function FindCreatives({
       <div className="py-4 flex justify-items-start items-start sm:justify-start">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-1">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {filteredAssets.map((item) => (
-              <AssetMusicianBox
-                key={item.id}
-                lyrics={false}
-                id={item.id}
-                imgSong={item.musicImage}
-                musicName={item.songName}
-                musicStyle={item.musicStyle}
-                musicMood={item.musicMood}
-                myRole={item.myRole}
-                musicInstrument={item.musicInstrument}
-                softwareTool={item.softwareTool}
-                description={item.description}
-                personalUsePrice={item.personalUsePrice}
-                commercialUsePrice={item.commercialUsePrice}
-                createdBy={item.createdBy}
-                tags={
-                  item.tags
-                    ? item.tags.split(",").map((tag: any) => tag.trim())
-                    : []
-                }
-              />
-            ))}
+            {filteredAssets.length > 0 ? (
+              filteredAssets.map((props, key) => (
+                <HomeMusicianBox
+                  key={key}
+                  {...props}
+                  source="home"
+                  lyrics={false}
+                  isMusicAsset={false}
+                />
+              ))
+            ) : (
+              <Spinner className="w-10 h-10 mx-auto" />
+            )}
           </div>
         </div>
       </div>

@@ -1,5 +1,6 @@
-"use client"
+"use client";
 import HomeMusicianBox from "@/components/music-box/home-musician-box";
+import MusicPlayerDialog from "@/components/music-player/music-player-dialog";
 import { getAuthToken } from "@/utils/auth";
 import { API_URL } from "@/utils/env_var";
 import { Spinner } from "@material-tailwind/react";
@@ -38,6 +39,8 @@ export function MyAssets() {
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-5">
+        <MusicPlayerDialog source="assets" />
+
         {myAssets.length > 0 ? (
           myAssets.map((props, key) => (
             <HomeMusicianBox
