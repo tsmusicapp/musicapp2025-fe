@@ -249,7 +249,7 @@ export function HomeMusicianBox({
           <span className="text-sm font-semibold text-gray-800">
             {commercialUsePrice || 0}$
           </span>
-          <BaggageClaim className="w-4 h-4 text-gray-600" />
+          <img src="/icons/add-shopping.png" className="w-6 text-gray-600" />
         </div>
         :           
           <div className="flex items-center gap-1">
