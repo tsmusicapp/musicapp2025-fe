@@ -11,7 +11,7 @@ import LeftSideFirst from "../../components/share-work-creation/left-side-first"
 import LeftSideSecond from "../../components/share-work-creation/left-side-second";
 import MusicBackgroundDialog from "../../components/share-work-creation/music-background-dialog";
 import RightSideFirst from "../../components/share-work-creation/right-side-first";
-import RightSideSecond from "../../components/share-work-creation/right-side-second";
+import RightSideSecond from "../../components/share-your-sing-work/right-side-second";
 import { API_URL } from "@/utils/env_var";
 import { useLocalStorage } from "@/context/LocalStorageContext";
 
