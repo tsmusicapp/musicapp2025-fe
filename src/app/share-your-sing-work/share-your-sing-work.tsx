@@ -11,7 +11,9 @@ import LeftSideFirst from "../../components/share-work-creation/left-side-first"
 import LeftSideSecond from "../../components/share-work-creation/left-side-second";
 import MusicBackgroundDialog from "../../components/share-work-creation/music-background-dialog";
 import RightSideFirst from "../../components/share-work-creation/right-side-first";
-import RightSideSecond from "../../components/share-your-sing-work/right-side-second";
+import RightSideSecond from "../../components/share-work-creation/right-side-second";
+import { API_URL } from "@/utils/env_var";
+import { useLocalStorage } from "@/context/LocalStorageContext";
 
 export interface ShareWorkFormData {
   musicName: string;
@@ -39,6 +41,8 @@ export function ShareYourSingWorkPage() {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { getItem } = useLocalStorage();
+  const [auth] = useState<any>(getItem("auth", null));
 
   const {
     register,
@@ -76,54 +80,54 @@ export function ShareYourSingWorkPage() {
   }, [watch]);
 
   const onSubmit = async (data: ShareWorkFormData) => {
-    try {
-      setIsLoading(true);
-      // Prepare FormData to handle files and other form fields
-      const formData = new FormData();
-      // Append form data fields
-      // formData.append("musicName", data.musicName);
-      formData.append("songName", data.musicName);
-      formData.append("myRole", JSON.stringify(data.myRole));
-      formData.append("singerName", data.singerName || "");
-      formData.append("publisher", data.singerName || "");
-      formData.append("albumname", data.albumname || "");
-      formData.append("songLanguage", data.songLanguage || "");
-      formData.append("musicUsage", JSON.stringify(data.musicUsage));
-      formData.append("musicStyle", data.musicStyle);
-      formData.append("musicMood", data.musicMood || "");
-      formData.append("musicInstrument", data.musicInstrument || "");
-      formData.append("tags", data.tags);
-      formData.append("description", data.description);
-      formData.append("softwareTool", data.softwareTool || "");
-
-      // Append file data (if any)
-      if (data.musicImage && data.musicImage[0]) {
-        formData.append("musicImage", data.musicImage[0]);
-      }
-      if (data.music && data.music[0]) {
-        formData.append("music", data.music[0]);
-      }
-      if (data.musicLyric) {
-        formData.append("musicLyric", data.musicLyric);
-      }
-      if (data.musicBackground && data.musicBackground[0]) {
-        formData.append("musicBackground", data.musicBackground[0]);
-      }
-      if (data.musicAudio && data.musicAudio[0]) {
-        formData.append("musicAudio", data.musicAudio[0]);
-      }
-
-      // Call the createMusic service
-      await MusicCreationService.createMusic(formData);
-      toast.success("Work shared successfully!");
-      router.push("/");
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Submission error:", error);
-      toast.error( error instanceof Error ? error.message : "Failed to submit form")
-      
-      setIsLoading(false);
-    }
+         const payload = {
+      songName: data.musicName,
+      myRole: JSON.stringify(data.myRole),
+      singerName: data.singerName || "",
+      publisher: data.singerName || "",
+      albumname: data.albumname || "",
+      songLanguage: data.songLanguage || "",
+      musicUsage: JSON.stringify(data.musicUsage),
+      musicStyle: data.musicStyle,
+      musicMood: data.musicMood || "",
+      musicInstrument: data.musicInstrument || "",
+      tags: data.tags,
+      description: data.description,
+      softwareTool: data.softwareTool || "",
+      // Instead of sending files, send metadata or pre-uploaded URLs
+      musicImage: data.musicImage,
+      music: data.music,
+      musicLyric: null,
+      musicBackground: data.musicBackground,
+      musicAudio: data.musicAudio,
+    };
+        try {
+          const response = await fetch(`${API_URL}/v1/music/upload`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${auth.tokens.access.token}`,
+            },
+            body: JSON.stringify(payload),
+          });
+    
+          if (response.ok) {
+            await response.json();
+            toast.success("Work shared successfully!");
+            router.push("/");
+            setIsLoading(false);
+          } else {
+            const errorResult = await response.json();
+            toast.error(
+              `Error: ${errorResult.message || "Failed to create music asset"}`
+            );
+    
+            setIsLoading(false);
+          }
+        } catch (error) {
+          setIsLoading(false);
+          toast.error("An unexpected error occurred.");
+        }
   };
 
   if (!isAuthenticated) {
@@ -140,7 +144,7 @@ export function ShareYourSingWorkPage() {
       >
         <div className="flex flex-row gap-24">
           <div className="flex flex-col gap- w-1/2">
-            <LeftSideFirst register={register} errors={errors} />
+            <LeftSideFirst register={register} errors={errors} setValue={setValue} />
             <LeftSideSecond
               register={register}
               errors={errors}
