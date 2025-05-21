@@ -204,7 +204,7 @@ function RightSideSecond({
         </Typography>
         <input
           type="text"
-          {...register("singerName")}
+          {...register("publisher")}
           className="w-full px-4 py-2 border border-black rounded-none outline-none focus:ring-0 focus:border-black"
         />
       </div>

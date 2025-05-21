@@ -33,6 +33,7 @@ interface HomeMusicianBoxProps {
   likes?: number;
   audioSrc?: string;
   lyrics?: boolean;
+  myRole: string[];
 }
 
 export function HomeMusicianBox({
@@ -47,24 +48,24 @@ export function HomeMusicianBox({
   duration = "03:45",
   likes,
   audioSrc,
+  myRole,
 }: HomeMusicianBoxProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [isPlaying, setIsPlaying] = React.useState(false);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
 
   const likesLength = likes?.toString().length;
-
-  console.log(likesLength, "likesLengthValues");
-
   const FeatherPencil = () => {
     return (
       <div
         className="cursor-pointer p-2 hover:bg-gray-100 rounded-full transition-all duration-300"
         onClick={() => {
-          dispatch(setMusicCreationId({
-            id: id,
-            hasLyrics: true
-          }));
+          dispatch(
+            setMusicCreationId({
+              id: id,
+              hasLyrics: true,
+            })
+          );
           dispatch(musicPlayerDialog());
         }}
         aria-label="View lyrics"
@@ -81,7 +82,10 @@ export function HomeMusicianBox({
           viewBox="0 0 64000 64000"
           id="feather"
         >
-          <path d="M8730 55270c5818,-17453 21044,-46540 46540,-46540 -11953,9590 -17452,31996 -26178,31996 -8727,0 -8727,0 -8727,0l-8726 14543 -2909 1z" fill="#4B5563"/>
+          <path
+            d="M8730 55270c5818,-17453 21044,-46540 46540,-46540 -11953,9590 -17452,31996 -26178,31996 -8727,0 -8727,0 -8727,0l-8726 14543 -2909 1z"
+            fill="#4B5563"
+          />
         </svg>
       </div>
     );
@@ -143,10 +147,15 @@ export function HomeMusicianBox({
 
             {/* Song Details */}
             <div className="space-y-1 pb-2">
-              <h3 className="font-bold text-lg leading-none text-gray-900">{songName}</h3>
+              <h3 className="font-bold text-lg leading-none text-gray-900">
+                {songName}
+              </h3>
               <p className="text-sm font-medium text-gray-600">
                 {singerName}
-                <span className="text-sm font-light text-gray-400"> • Singer</span>
+                <span className="text-sm font-light text-gray-400">
+                  {" "}
+                  • Singer
+                </span>
               </p>
             </div>
           </div>
@@ -165,7 +174,9 @@ export function HomeMusicianBox({
                   <PlayIcon className="w-8 h-8 text-gray-700" />
                 )}
               </button>
-              <span className="text-xs font-light text-gray-400">{duration}</span>
+              <span className="text-xs font-light text-gray-400">
+                {duration}
+              </span>
             </div>
           ) : (
             <FeatherPencil />
@@ -173,33 +184,58 @@ export function HomeMusicianBox({
         </div>
 
         {/* Tags Section */}
-        <div className="flex items-start justify-between px-1 pt-2">
-          <div className="text-sm font-medium text-gray-600">{musicStyle}</div>
-          <div className="flex flex-wrap gap-2">
-            {Array.isArray(tags) &&
-              tags.map((tag, index) => (
-                <Badge
-                  key={index}
-                  variant="secondary"
-                  className="bg-gray-100 text-gray-700 p-1 rounded-md text-xs font-medium border border-gray-200"
-                >
-                  {tag}
-                </Badge>
-              ))}
-          </div>
+       <div className="flex items-start justify-between px-1 pt-2">
+  <div className="text-sm font-medium text-gray-600">{musicStyle}</div>
+<div className="flex flex-wrap gap-2">
+  {Array.isArray(tags) &&
+    tags.flatMap(tagStr =>
+      tagStr.split(',').map((tag, index) => (
+        <span
+          key={index}
+          className="inline-block px-3 py-1 text-xs font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded"
+        >
+          {tag.trim()}
+        </span>
+      ))
+    )}
+</div>
+
+
         </div>
+
 
         {/* Bottom Section: Composer Info and Likes */}
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-3">
             <Avatar className="w-10 h-10 border border-gray-200 shadow-sm transition-transform duration-300 hover:scale-105">
-              <AvatarImage src="/image/default-picture.jpg" alt="Composer avatar" />
-              <AvatarFallback className="bg-gray-100 text-gray-700">CC</AvatarFallback>
+              <AvatarImage
+                src="/image/default-picture.jpg"
+                alt="Composer avatar"
+              />
+              <AvatarFallback className="bg-gray-100 text-gray-700">
+                CC
+              </AvatarFallback>
             </Avatar>
             <div className="space-y-0.5">
-              <p className="text-sm font-medium leading-none text-gray-900">{composerName}</p>
+              <p className="text-sm font-medium leading-none text-gray-900">
+                {singerName}
+              </p>
               <p className="text-xs text-gray-400">
-                Composer, Lyricist, Arranger
+                {myRole && Array.isArray(myRole)
+                  ? myRole
+                      .flatMap((role) => {
+                        try {
+                          const parsed = JSON.parse(role);
+                          return Array.isArray(parsed) ? parsed : [role];
+                        } catch {
+                          return [role];
+                        }
+                      })
+                      .map(
+                        (role) => role.charAt(0).toUpperCase() + role.slice(1)
+                      )
+                      .join(", ")
+                  : "No roles"}
               </p>
             </div>
           </div>

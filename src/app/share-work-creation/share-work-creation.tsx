@@ -80,7 +80,8 @@ export function ShareWorkCreationPage() {
   }, [watch]);
 
   const onSubmit = async (data: ShareWorkFormData) => {
-         const payload = {
+    setIsLoading(true);
+    const payload = {
       songName: data.musicName,
       myRole: JSON.stringify(data.myRole),
       singerName: data.singerName || "",
