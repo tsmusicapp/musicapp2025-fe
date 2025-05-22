@@ -47,7 +47,6 @@ function UserInfo() {
         setFormData(data);
       } catch (error) {
         setImageUrl("/image/default-picture.jpg");
-        toast.error("Failed to fetch user data.")
         
       }
     };
