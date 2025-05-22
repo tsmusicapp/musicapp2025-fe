@@ -13,7 +13,20 @@ function ContentLeftSideV2({ musicDetailInfo }: ContentLeftSideV2Props) {
         ["Music Name", musicDetailInfo?.songName],
         ["Album Name", musicDetailInfo?.albumname],
         ["Publisher", musicDetailInfo?.singerName],
-        ["Music Usage", musicDetailInfo?.musicUsage],
+        [
+          "Music Usage",
+          (() => {
+            try {
+              const parsed = JSON.parse(musicDetailInfo?.musicUsage || "[]");
+              return Array.isArray(parsed)
+                ? parsed.join(", ")
+                : musicDetailInfo?.musicUsage;
+            } catch {
+              return musicDetailInfo?.musicUsage || "N/A";
+            }
+          })(),
+        ],
+        ,
         ["Music Style", musicDetailInfo?.musicStyle],
         ["Mood", musicDetailInfo?.musicMood],
         ["Musical Instrument", musicDetailInfo?.musicInstrument],
