@@ -26,7 +26,6 @@ function ContentLeftSideV2({ musicDetailInfo }: ContentLeftSideV2Props) {
             }
           })(),
         ],
-        ,
         ["Music Style", musicDetailInfo?.musicStyle],
         ["Mood", musicDetailInfo?.musicMood],
         ["Musical Instrument", musicDetailInfo?.musicInstrument],

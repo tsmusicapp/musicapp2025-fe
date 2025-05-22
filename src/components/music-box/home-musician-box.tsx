@@ -154,7 +154,7 @@ export function HomeMusicianBox({
 
             {/* Song Details */}
             <div className="space-y-1 pb-2">
-              <h3 className="font-bold text-lg leading-none text-gray-900">
+              <h3 className="font-bold text-lg leading-none text-gray-900 cursor-pointer" onClick={togglePlay}>
                 {songName}
               </h3>
               <p className="text-sm font-medium text-gray-600">
