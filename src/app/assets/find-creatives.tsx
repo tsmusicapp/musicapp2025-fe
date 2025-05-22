@@ -125,7 +125,7 @@ export function FindCreatives({
       <MusicPlayerDialog source="assets" />
       <div className="py-4 flex justify-items-start items-start sm:justify-start">
         <div className="grid grid-cols-1 gap-4 lg:grid-cols-1">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-5">
             {filteredAssets.length > 0 ? (
               filteredAssets.map((props, key) => (
                 <HomeMusicianBox

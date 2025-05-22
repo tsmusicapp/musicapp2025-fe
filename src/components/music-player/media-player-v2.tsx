@@ -1,9 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   PlayIcon,
   PauseIcon,
   SpeakerWaveIcon,
-  ArrowTopRightOnSquareIcon,
 } from "@heroicons/react/24/solid";
 import { Progress } from "@material-tailwind/react";
 
@@ -11,7 +10,18 @@ const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const audioSrc = musicDetailInfo?.music ?musicDetailInfo?.music : musicDetailInfo?.musicAudio;
+  const [showPlayer, setShowPlayer] = useState(true);
+
+  const audioSrc = musicDetailInfo?.music
+    ? musicDetailInfo?.music
+    : musicDetailInfo?.musicAudio;
+
+  useEffect(() => {
+    const isLyric =
+      musicDetailInfo?.isLyric === false || musicDetailInfo?.isLyric === "false";
+
+    setShowPlayer(isLyric);
+  }, [musicDetailInfo?.isLyric]);
 
   const handlePlayPause = () => {
     const audio = document.getElementById("audio-player") as HTMLAudioElement;
@@ -31,15 +41,19 @@ const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
+  if (!showPlayer) {
+    return null;
+  }
+
   return (
-    <div className="w-[28rem] mx-auto  border border-gray-300 rounded-xl shadow-md bg-white p-6">
+    <div className="w-[28rem] mx-auto border border-gray-300 rounded-xl shadow-md bg-white p-6">
       <audio
         id="audio-player"
         src={audioSrc}
         onTimeUpdate={(e) => setCurrentTime(e.currentTarget.currentTime)}
         onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
       />
-  
+
       <div className="flex items-center justify-center gap-4">
         {isPlaying ? (
           <PauseIcon
@@ -56,20 +70,19 @@ const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
             onClick={handlePlayPause}
           />
         )}
-  
+
         <p className="text-sm text-gray-700">{formatTime(currentTime)}</p>
-  
+
         <div className="w-[12rem]">
           <Progress value={(currentTime / duration) * 100 || 0} color="blue" />
         </div>
-  
+
         <p className="text-sm text-gray-700">{formatTime(duration)}</p>
-  
+
         <SpeakerWaveIcon height={24} width={24} className="text-gray-600" />
       </div>
     </div>
   );
-  
 };
 
 export default MediaPlayerV2;
