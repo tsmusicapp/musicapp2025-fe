@@ -8,6 +8,7 @@ import {
   Textarea,
   Typography
 } from "@material-tailwind/react";
+import { useRouter } from "next/navigation";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import toast from "react-hot-toast";
@@ -37,6 +38,7 @@ export function ShareLyrics() {
 
   const [musicImagePreview, setMusicImagePreview] = React.useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const router = useRouter();
 
   const imageSizeLimit = 1024 * 1024; // 1MB
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -79,7 +81,8 @@ export function ShareLyrics() {
       });
       if (response.ok) {
         toast.success("Lyrics created successfully!");
-        
+      router.push("/");
+
         reset();
         setMusicImagePreview("");
         setIsLoading(false); 
