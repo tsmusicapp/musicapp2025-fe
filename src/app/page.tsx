@@ -18,9 +18,7 @@ export default function Portfolio() {
         const token = getAuthToken();
         const isLoggedIn = !!token;
 
-        const endpoint = isLoggedIn
-          ? `${API_URL}/v1/music/get-music`
-          : `${API_URL}/v1/music/get-all-music`;
+        const endpoint = `${API_URL}/v1/music/get-all-music`;
 
         const response = await fetch(endpoint, {
           headers: {
@@ -62,7 +60,7 @@ export default function Portfolio() {
                     key={key}
                     {...props}
                     source="home"
-                    lyrics={false}
+                    lyrics={props?.isLyric}
                     isMusicAsset={false}
                   />
                 ))

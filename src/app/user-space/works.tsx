@@ -43,7 +43,7 @@ function Works() {
               key={key}
               {...props}
               source="home"
-              lyrics={false}
+              lyrics={props?.isLyric}
               isMusicAsset={false}
             />
           ))

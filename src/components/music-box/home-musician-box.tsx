@@ -55,6 +55,7 @@ export function HomeMusicianBox({
   isMusicAsset,
   commercialUsePrice
 }: HomeMusicianBoxProps) {
+  console.log("id", id)
   const dispatch = useDispatch<AppDispatch>();
   const [isPlaying, setIsPlaying] = React.useState(false);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
@@ -109,7 +110,7 @@ export function HomeMusicianBox({
       dispatch(
         setMusicCreationId({
           id: id,
-          hasLyrics: lyrics,
+          hasLyrics: false,
         })
       );
       dispatch(musicPlayerDialog());
