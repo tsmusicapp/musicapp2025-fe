@@ -91,26 +91,12 @@ function MusicPlayerV2({ source = "home", hasLyrics }: MusicPlayerV2Props) {
               <div className="flex flex-col w-full">
                 <TopMusicPlayerV2 musicDetailInfo={musicDetailInfo} />
                 <ContentMusicPlayerV2 musicDetailInfo={musicDetailInfo} />
-{musicDetailInfo?.isLyric !== true && musicDetailInfo?.isLyric !== "true" && (
-  <MediaPlayerV2 musicDetailInfo={musicDetailInfo} />
-)}
-
-
-
+                <MediaPlayerV2 musicDetailInfo={musicDetailInfo} />
               </div>
             </div>
           </div>
         </div>
-        <div className="absolute right-0 bottom-0 p-2">
-          <p
-            className="text-xs normal-case hover:underline hover:text-blue-500 cursor-pointer"
-            onClick={() => dispatch(reportDialog())}
-          >
-            Report
-          </p>
-        </div>
       </div>
-      <button onClick={performAction}>Perform Action</button>
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}

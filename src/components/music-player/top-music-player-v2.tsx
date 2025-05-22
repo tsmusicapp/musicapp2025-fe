@@ -86,7 +86,7 @@ function TopMusicPlayerV2({ musicDetailInfo }: any) {
             />
             <div className="flex flex-col items-start justify-center gap-0">
               <p className="text-md font-notoCondensed">
-                {musicDetailInfo?.songName || "Unknown Title"}{" "}
+                {musicDetailInfo?.userName || "Unknown Title"}{" "}
                 <span className="text-xs ml-4 font-notoRegular">
                   {musicDetailInfo?.commercialUse ? "Available for Commercial Use" : "Personal Use Only"}
                 </span>
