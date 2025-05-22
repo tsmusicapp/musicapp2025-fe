@@ -40,26 +40,31 @@ function MusicPlayerV2({ source = "home", hasLyrics }: MusicPlayerV2Props) {
     });
   };
 
-
   const selectedId = useSelector((state: RootState) => state.offer.selectedId);
   const [musicDetailInfo, setMuicDetailInfo] = useState<any>(null);
   useEffect(() => {
     const fetchMusicData = async () => {
       try {
-        const accessToken = localStorage.getItem('token');
+        const accessToken = localStorage.getItem("token");
         const headers = {
           Authorization: `Bearer ${accessToken}`,
         };
-  
+
         let response;
         if (source === "assets") {
           console.log("Fetching from music-asset endpoint");
-          response = await axios.get(`${BASE_URL}/v1/music-asset/${selectedId}`, { headers });
+          response = await axios.get(
+            `${BASE_URL}/v1/music-asset/${selectedId}`,
+            { headers }
+          );
         } else if (source === "home") {
           console.log("Fetching from get-music endpoint");
-          response = await axios.get(`${BASE_URL}/v1/music/get-music/${selectedId}`, { headers });
+          response = await axios.get(
+            `${BASE_URL}/v1/music/get-music/${selectedId}`,
+            { headers }
+          );
         }
-  
+
         if (response && response.status === 200) {
           console.log("Music Data:", response.data);
           setMuicDetailInfo(response.data);
@@ -70,12 +75,11 @@ function MusicPlayerV2({ source = "home", hasLyrics }: MusicPlayerV2Props) {
         console.error("Error fetching music data:", error);
       }
     };
-  
+
     if (isMusicPlayerDialog && selectedId) {
       fetchMusicData();
     }
   }, [isMusicPlayerDialog, source, selectedId]);
-  
 
   return (
     <>
@@ -85,9 +89,14 @@ function MusicPlayerV2({ source = "home", hasLyrics }: MusicPlayerV2Props) {
           <div className="relative w-full h-fit space-y-2 items-center">
             <div className="flex flex-row">
               <div className="flex flex-col w-full">
-                <TopMusicPlayerV2 musicDetailInfo={musicDetailInfo}/>
+                <TopMusicPlayerV2 musicDetailInfo={musicDetailInfo} />
                 <ContentMusicPlayerV2 musicDetailInfo={musicDetailInfo} />
-                <MediaPlayerV2 musicDetailInfo={musicDetailInfo}/>
+{musicDetailInfo?.isLyric !== true && musicDetailInfo?.isLyric !== "true" && (
+  <MediaPlayerV2 musicDetailInfo={musicDetailInfo} />
+)}
+
+
+
               </div>
             </div>
           </div>

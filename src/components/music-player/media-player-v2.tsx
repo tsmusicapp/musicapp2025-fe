@@ -10,18 +10,12 @@ const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(0);
-  const [showPlayer, setShowPlayer] = useState(true);
 
   const audioSrc = musicDetailInfo?.music
     ? musicDetailInfo?.music
     : musicDetailInfo?.musicAudio;
 
-  useEffect(() => {
-    const isLyric =
-      musicDetailInfo?.isLyric === false || musicDetailInfo?.isLyric === "false";
 
-    setShowPlayer(isLyric);
-  }, [musicDetailInfo?.isLyric]);
 
   const handlePlayPause = () => {
     const audio = document.getElementById("audio-player") as HTMLAudioElement;
@@ -41,9 +35,6 @@ const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
     return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
   };
 
-  if (!showPlayer) {
-    return null;
-  }
 
   return (
     <div className="w-[28rem] mx-auto border border-gray-300 rounded-xl shadow-md bg-white p-6">
