@@ -96,6 +96,7 @@ export function EditUserSpace() {
           ...prev,
           profilePicture: result.data.profilePicture, // Use the path from the response
         }));
+        setImageUrl(result.data.profilePicture);
         toast.success("Profile picture uploaded successfully!");
       } else {
         const errorResult = await response.json();
@@ -274,21 +275,13 @@ export function EditUserSpace() {
 
         if (response.ok) {
           const data = await response.json();
-
-          // Set the image URL if profilePicture exists
-          if (data.profilePicture && data.createdBy) {
-            const imageUrl = `${API_URL}/uploads/${data.createdBy}/profilePicture.jpg`;
-            setImageUrl(imageUrl);
-          }
-
+          setImageUrl(data.profilePicture );
           delete data.createdBy;
           delete data.updatedBy;
           delete data.id;
           delete data.occupation;
           setFormData(data);
           reset(data);
-
-          // Rest of your existing code for setting other data...
         }
       } catch (error) {
         toast.error("Failed to fetch data.");
