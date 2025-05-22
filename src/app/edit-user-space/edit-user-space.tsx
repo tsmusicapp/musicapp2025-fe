@@ -132,14 +132,6 @@ export function EditUserSpace() {
       setFormData((prev) => ({
         ...prev,
         creationOccupation: newCheckedItems,
-        // Set business occupation based on first checked item if any exist
-        businessOccupation:
-          newCheckedItems.length > 0
-            ? `${
-                newCheckedItems[0].charAt(0).toUpperCase() +
-                newCheckedItems[0].slice(1)
-              } Business`
-            : "",
       }));
 
       return newCheckedItems;
@@ -255,43 +247,60 @@ export function EditUserSpace() {
     (state: RootState) => state.selectMultiple.items
   );
 
-  console.log(formData);
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await fetch(`${API_URL}/v1/user-space`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${auth.tokens.access.token}`,
+        },
+      });
 
-  const getProfileImageUrl = (userId: string, filename: string) => {
-    if (!userId || !filename) return null;
-    return `${API_URL}/uploads/${userId}/profilePicture.jpg`;
+      if (response.ok) {
+        const data = await response.json();
+
+        setImageUrl(data.profilePicture);
+
+        // Map string arrays to full option objects
+        setMatchedLang(
+          collaborativeOptions.filter((opt) =>
+            data.collaborationLyricsLangs?.includes(opt.value)
+          )
+        );
+
+        setMatchedMusicStyles(
+          musicStylesOptions.filter((opt) =>
+            data.proficientMusicStyles?.includes(opt.value)
+          )
+        );
+
+        setMatchedInstrument(
+          instrumentsOptions.filter((opt) =>
+            data.skilledInstruments?.includes(opt.value)
+          )
+        );
+
+        // Remove unwanted fields
+        delete data.createdBy;
+        delete data.updatedBy;
+        delete data.id;
+        delete data.occupation;
+
+        setFormData(data);
+        reset(data);
+      }
+    } catch (error) {
+      toast.error("Failed to fetch data.");
+    }
   };
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(`${API_URL}/v1/user-space`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${auth.tokens.access.token}`,
-          },
-        });
+  if (!auth?.isNewUser) {
+    fetchData();
+  }
+}, [auth, reset, toast]);
 
-        if (response.ok) {
-          const data = await response.json();
-          setImageUrl(data.profilePicture );
-          delete data.createdBy;
-          delete data.updatedBy;
-          delete data.id;
-          delete data.occupation;
-          setFormData(data);
-          reset(data);
-        }
-      } catch (error) {
-        toast.error("Failed to fetch data.");
-      }
-    };
-
-    if (!auth?.isNewUser) {
-      fetchData();
-    }
-  }, [auth, reset, toast]);
 
   if (auth === null) return null;
   return (
@@ -534,19 +543,13 @@ export function EditUserSpace() {
                 <Typography
                   variant="small"
                   color="blue-gray"
-                  className="-mb-3 font-semibold"
+                  className="font-semibold"
                 >
                   Bussiness Occupation
                 </Typography>
-                <Input
-                  crossOrigin={""}
-                  size="lg"
-                  required
+                <input
                   placeholder="eg; Publisher Owner, Manager"
-                  className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                  labelProps={{
-                    className: "before:content-none after:content-none",
-                  }}
+                  className="w-full px-4 py-2 border border-black rounded-none outline-none focus:ring-0 focus:border-black"
                   {...register("businessOccupation", {
                     required: "enter business occupation",
                   })}
@@ -568,7 +571,7 @@ export function EditUserSpace() {
                     type="checkbox"
                     className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
                     {...register("hiring")}
-                    checked={formData.hiring ? formData.hiring : isChecked} // Controlled component
+                    checked={formData.hiring ? formData.hiring : isChecked}
                     onChange={handleHiring}
                   />
                   <div className="flex flex-col gap-2">
@@ -595,21 +598,14 @@ export function EditUserSpace() {
                 >
                   Collaboration lyrics Language
                 </label>
-                <SelectMultiple
-                  options={collaborativeOptions}
-                  label={"Select Languages"}
-                  keyState={"collaborationLyricsLangs"}
-                  {...register("collaborationLyricsLangs")}
-                  setFormData={setFormData}
-                  selectedValue={matchedLang}
-                />
-                {selectMultipleValue.collaborationLyricsLangs.length == 0 ? (
-                  <p style={{ color: "red" }}>
-                    At least one collaboration lyric language is required
-                  </p>
-                ) : (
-                  ""
-                )}
+                    <SelectMultiple
+                      options={collaborativeOptions}
+                      label={"Select Languages"}
+                      keyState={"collaborationLyricsLangs"}
+                      {...register("collaborationLyricsLangs")}
+                      setFormData={setFormData}
+                      selectedValue={matchedLang}
+                    />
               </div>
               <Typography
                 variant="small"
@@ -626,13 +622,6 @@ export function EditUserSpace() {
                 setFormData={setFormData}
                 selectedValue={matchedMusicStyles}
               />
-              {selectMultipleValue.proficientMusicStyles.length == 0 ? (
-                <p style={{ color: "red" }}>
-                  At least one Proficient music styles is required
-                </p>
-              ) : (
-                ""
-              )}
               <Typography
                 variant="small"
                 color="blue-gray"
@@ -648,13 +637,6 @@ export function EditUserSpace() {
                 setFormData={setFormData}
                 selectedValue={matchedInstrument}
               />
-              {selectMultipleValue.skilledInstruments.length == 0 ? (
-                <p style={{ color: "red" }}>
-                  At least one Skilled instruments is required
-                </p>
-              ) : (
-                ""
-              )}
               <Typography
                 variant="small"
                 color="blue-gray"
