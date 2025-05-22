@@ -12,7 +12,7 @@ import {
 } from "@material-tailwind/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 
@@ -26,6 +26,8 @@ export default function DropdownProfile({ user }: UserProps) {
     const storedAuth = localStorage.getItem("auth");
     return storedAuth ? JSON.parse(storedAuth) : null;
   });
+    const [imageUrl, setImageUrl] = useState("/image/default-picture.png");
+  
   const router = useRouter();
   const onLogout = async () => {
     try {
@@ -51,6 +53,41 @@ export default function DropdownProfile({ user }: UserProps) {
       toast.error("An unexpected error occurred.");
     }
   };
+    useEffect(() => {
+      const fetchData = async () => {
+        if (!auth?.tokens?.access?.token) {
+          toast.error("Please log in to view your profile.");
+  
+          return;
+        }
+  
+        try {
+          const response = await fetch(`${API_URL}/v1/user-space`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${auth.tokens.access.token}`,
+            },
+          });
+  
+          if (!response.ok) {
+            throw new Error("Network response was not ok");
+          }
+  
+          const data = await response.json();
+  
+          const profileUrl = data?.profilePicture
+            ? `${data?.profilePicture}`
+            : "/image/default-picture.png";
+          setImageUrl(profileUrl);
+  
+        } catch (error) {
+          setImageUrl("/image/default-picture.jpg");
+        }
+      };
+  
+      fetchData();
+    }, [auth]);
   return (
     <Menu>
       <MenuHandler>
@@ -59,11 +96,7 @@ export default function DropdownProfile({ user }: UserProps) {
           alt="profile picture"
           size="sm"
           className="cursor-pointer"
-          src={
-            user?.profilePicture
-              ? `${user?.profilePicture}`
-              : "/image/default-picture.png"
-          }
+          src={imageUrl}
         />
       </MenuHandler>
       <MenuList>
