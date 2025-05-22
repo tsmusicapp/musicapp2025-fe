@@ -17,7 +17,7 @@ function UserInfo() {
     const fetchData = async () => {
       if (!auth?.tokens?.access?.token) {
         toast.error("Please log in to view your profile.");
-        
+
         return;
       }
 
@@ -36,18 +36,14 @@ function UserInfo() {
 
         const data = await response.json();
 
-        // Set profile picture URL with the correct path
-        if (data.profilePicture && data.createdBy) {
-          const profileUrl = `${API_URL}/uploads/${data.createdBy}/profilePicture.png`;
-          setImageUrl(profileUrl);
-        } else {
-          setImageUrl("/image/default-picture.jpg");
-        }
+        const profileUrl = data?.profilePicture
+          ? `${data?.profilePicture}`
+          : "/image/default-picture.png";
+        setImageUrl(profileUrl);
 
         setFormData(data);
       } catch (error) {
         setImageUrl("/image/default-picture.jpg");
-        
       }
     };
 
@@ -89,7 +85,9 @@ function UserInfo() {
                 style={{ height: 24, width: 24 }}
               />
               <p className="text-black font-bold text-sm capitalize">
-                {formData.creationOccupation ? formData.creationOccupation.join(", ") : "-"}
+                {formData.creationOccupation
+                  ? formData.creationOccupation.join(", ")
+                  : "-"}
               </p>
             </div>
             <div className="flex flex-row items-center gap-1">
@@ -98,7 +96,9 @@ function UserInfo() {
                 style={{ height: 24, width: 24 }}
               />
               <p className="text-black font-bold text-sm capitalize">
-                {formData.businessOccupation ? formData.businessOccupation: "-"}
+                {formData.businessOccupation
+                  ? formData.businessOccupation
+                  : "-"}
               </p>
             </div>
             <div className="flex flex-row items-center gap-1">

@@ -59,12 +59,10 @@ export default function DropdownProfile({ user }: UserProps) {
           alt="profile picture"
           size="sm"
           className="cursor-pointer"
-          // src={
-          //   user?.profilePicture
-          //     ? `${API_URL}/uploads/${user.id}/profilePicture.png`
-          //     : "/image/default-picture.png"
-          // }
-        src={"/image/default-picture.png"
+          src={
+            user?.profilePicture
+              ? `${user?.profilePicture}`
+              : "/image/default-picture.png"
           }
         />
       </MenuHandler>
