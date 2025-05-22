@@ -1,16 +1,17 @@
 "use client";
+import CreativeHire from "@/app/jobs/creative-hire";
+import Freelance from "@/app/jobs/freelance";
+import MyProjects from "@/app/jobs/my-projects";
+import SavedJobs from "@/app/jobs/saved-jobs";
+import { isAuthenticated } from "@/checkAuth";
 import {
-  Tabs,
-  TabsHeader,
-  TabsBody,
   Tab,
   TabPanel,
+  Tabs,
+  TabsBody,
+  TabsHeader,
 } from "@material-tailwind/react";
-import Freelance from "@/app/jobs/freelance";
-import CreativeHire from "@/app/jobs/creative-hire";
-import SavedJobs from "@/app/jobs/saved-jobs";
-import MyProjects from "@/app/jobs/my-projects";
-import { isAuthenticated } from "@/checkAuth";
+import { useSelector } from "react-redux";
 
 interface TabItem {
   label: string;
@@ -19,11 +20,14 @@ interface TabItem {
 }
 
 export function JobsPage() {
+  const { data: jobData, loading, error } = useSelector((state: any) => state.job);
   const auth = isAuthenticated();
+
+  const activeJobs = jobData?.jobs?.filter((job: any) => job.status === "active") || [];
 
   const allTabs: TabItem[] = [
     {
-      label: "Freelance(18)",
+      label: `Freelance (${activeJobs.length})`,
       value: "freelance",
       desc: <Freelance />,
     },
