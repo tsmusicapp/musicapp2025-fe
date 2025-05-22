@@ -64,7 +64,7 @@ export function UserSpace() {
               <div className="w-full max-w-full">
                 {section.map(({ value, desc }) =>
                   activeTab === value ? (
-                    <div key={value} className="p-0 pt-4 max-w-fit">
+                    <div key={value} className="p-0 pt-4">
                       {desc}
                     </div>
                   ) : null
