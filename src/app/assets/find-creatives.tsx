@@ -121,10 +121,9 @@ export function FindCreatives({
   console.log(filteredAssets, "chec");
 
   return (
-    <section className="grid min-h-screen">
+    <section className="w-full px-4 py-6">
       <MusicPlayerDialog source="assets" />
-      <div className="py-4 flex justify-items-start items-start sm:justify-start">
-        <div className="grid grid-cols-1 gap-4 lg:grid-cols-1">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-1">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 gap-5">
             {filteredAssets.length > 0 ? (
               filteredAssets.map((props, key) => (
@@ -141,7 +140,6 @@ export function FindCreatives({
             )}
           </div>
         </div>
-      </div>
     </section>
   );
 }
