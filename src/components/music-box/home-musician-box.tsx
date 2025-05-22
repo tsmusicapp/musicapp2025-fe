@@ -38,6 +38,7 @@ interface HomeMusicianBoxProps {
   isMusicAsset?: boolean;
   commercialUsePrice: string
   userName: string;
+  profilePicture: string; 
 }
 
 export function HomeMusicianBox({
@@ -55,7 +56,8 @@ export function HomeMusicianBox({
   myRole,
   isMusicAsset,
   commercialUsePrice,
-  userName
+  userName,
+  profilePicture
 }: HomeMusicianBoxProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [isPlaying, setIsPlaying] = React.useState(false);
@@ -216,7 +218,7 @@ export function HomeMusicianBox({
           <div className="flex items-center gap-3">
             <Avatar className="w-10 h-10 border border-gray-200 shadow-sm transition-transform duration-300 hover:scale-105">
               <AvatarImage
-                src="/image/default-picture.jpg"
+                src={profilePicture ? profilePicture : "/image/default-picture.jpg"}
                 alt="Composer avatar"
               />
               <AvatarFallback className="bg-gray-100 text-gray-700">

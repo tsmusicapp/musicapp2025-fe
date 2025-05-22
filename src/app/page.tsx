@@ -37,7 +37,7 @@ export default function Portfolio() {
         setFeaturedMusic(data);
       } catch (error) {
         console.error("Error fetching music data:", error);
-        setFeaturedMusic(MUSIC_GENRES); // fallback
+        setFeaturedMusic([]);
       }
     };
 

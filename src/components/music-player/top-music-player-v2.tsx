@@ -53,7 +53,6 @@ function TopMusicPlayerV2({ musicDetailInfo }: any) {
   return (
     <>
       <div className="right-0 top-0 absolute focus:outline-none">
-        <Toaster />
         <IconButton
           color="blue-gray"
           size="sm"
@@ -81,7 +80,7 @@ function TopMusicPlayerV2({ musicDetailInfo }: any) {
         <div className="flex flex-row items-center gap-8">
           <div className="flex flex-row items-center gap-2">
             <Avatar
-              src={musicDetailInfo?.musicImage || "https://docs.material-tailwind.com/img/face-4.jpg"}
+              src= {musicDetailInfo?.profilePicture ? musicDetailInfo?.profilePicture : "/image/default-picture.jpg"}
               alt="avatar"
               size="md"
             />
