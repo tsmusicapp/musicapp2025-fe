@@ -27,6 +27,28 @@ function TopMusicPlayerV2({ musicDetailInfo }: any) {
     dispatch(updateChatUsers([newChatUser]));
     window.location.href = "/chat";
   };
+  const formatRoles = (roles?: string[] | null): string => {
+  if (!Array.isArray(roles) || roles.length === 0) {
+    return "Artist";
+  }
+
+  return roles
+    .flatMap((role) => {
+      try {
+        const parsed = JSON.parse(role);
+        return Array.isArray(parsed) ? parsed : [parsed];
+      } catch {
+        return [role];
+      }
+    })
+    .map((role) =>
+      typeof role === "string"
+        ? role.charAt(0).toUpperCase() + role.slice(1)
+        : ""
+    )
+    .join(", ");
+};
+
 
   return (
     <>
@@ -71,7 +93,7 @@ function TopMusicPlayerV2({ musicDetailInfo }: any) {
                 </span>
               </p>
               <p className="text-md font-notoCondensed">
-                {musicDetailInfo?.myRole?.[0] || "Artist"}{" "}
+                {formatRoles(musicDetailInfo?.myRole)}
                 <span className="text-[0.7rem] ml-1 font-notoRegular">
                   for the song
                 </span>

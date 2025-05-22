@@ -16,38 +16,19 @@ interface CommentType {
   createdAt: string;
 }
 
-interface ContentRightSideV2Props {
-  source?: "assets" | "home";
+interface ContentMusicPlayerV2Props {
+  musicDetailInfo: any;
 }
 
-function ContentRightSideV2({ source = "home" }: ContentRightSideV2Props) {
+function ContentRightSideV2({ musicDetailInfo }: ContentMusicPlayerV2Props) {
+  console.log("ContentRightSideV2 rendered", musicDetailInfo);
   const selectedId = useSelector((state: RootState) => state.offer.selectedId);
   const [musicDetail, setMusicDetail] = useState<any>(null);
   const [commentText, setCommentText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const router = useRouter();
-
-  const fetchData = async () => {
-    if (selectedId) {
-      try {
-        // Only fetch from music-asset endpoint if we're on the assets page
-        const allData = await CategoriesService.getCategories();
-        const detail = allData.find((item: any) => item.id === selectedId);
-        setMusicDetail(detail);
-      } catch (error) {
-        console.error("Error fetching music detail:", error);
-      }
-    }
-  };
-
   useEffect(() => {
-    // Only fetch if we're on the assets page
-    if (source === "assets") {
-      fetchData();
-      console.log("Fetching music-asset data in ContentRightSideV2");
-    }
-  }, [selectedId, source]);
-
+    setMusicDetail(musicDetailInfo);
+  }, [musicDetailInfo]);
   const handleCommentSubmit = async () => {
     if (!commentText.trim() || !selectedId || isSubmitting) return;
 
@@ -75,7 +56,6 @@ function ContentRightSideV2({ source = "home" }: ContentRightSideV2Props) {
 
       if (response.status === 201) {
         setCommentText("");
-        await fetchData();
       } else {
         throw new Error("Failed to submit comment");
       }
@@ -86,40 +66,24 @@ function ContentRightSideV2({ source = "home" }: ContentRightSideV2Props) {
     }
   };
 
-  const handleGetTouch = () => {
-    alert("Get Touch button clicked");
-    console.log("Get Touch clicked - attempting navigation");
-    try {
-      window.location.href = "http://localhost:3001/chat";
-    } catch (error) {
-      console.error("Navigation error:", error);
-      alert("Navigation failed: " + error);
-    }
-  };
-
   return (
-    <div className="flex flex-col py-4 px-6 gap-4 w-[38rem] overflow-y-auto border-2 border-black rounded-xl">
+    <div className="flex flex-col py-4 px-6 gap-4 w-full max-w-[38rem] overflow-hidden border-2 border-black rounded-xl">
+      {/* Description */}
       <div className="flex flex-col gap-2">
         <p className="text-sm font-notoSemibold">Describe</p>
-        <p className="max-h-[12rem] text-xs text-justify tracking-wide">
+        <p className="max-h-[12rem] text-xs text-justify tracking-wide break-words overflow-y-auto pr-2">
           {musicDetail?.description}
         </p>
       </div>
 
-      <button
-        onClick={handleGetTouch}
-        className="bg-gray-800 text-white px-4 py-2 rounded-md hover:bg-gray-700 self-end"
-      >
-        Get Touch
-      </button>
-
+      {/* Comment Input */}
       <div className="flex flex-col gap-2">
         <p className="text-xs font-notoSemibold">Comment</p>
-        <div className="flex flex-row gap-2 -mb-2">
-          <ChartPieIcon color="blue" className="h-8 w-8" />
+        <div className="flex flex-row gap-2">
+          <ChartPieIcon color="blue" className="h-8 w-8 shrink-0" />
           <Textarea
-            className="text-xs !h-[1rem] !text-black"
-            label="what your though about this project?"
+            className="text-xs !text-black flex-1"
+            label="What are your thoughts about this project?"
             value={commentText}
             onChange={(e) => setCommentText(e.target.value)}
           />
@@ -128,7 +92,7 @@ function ContentRightSideV2({ source = "home" }: ContentRightSideV2Props) {
           <Button
             variant="outlined"
             size="sm"
-            className="normal-case text-center text-white text-[0.6rem] bg-blue-800 py-1 px-10 w-[10rem]"
+            className="normal-case text-white text-[0.6rem] bg-blue-800 py-1 px-10 w-[10rem]"
             onClick={handleCommentSubmit}
             disabled={isSubmitting || !commentText.trim()}
           >
@@ -136,7 +100,9 @@ function ContentRightSideV2({ source = "home" }: ContentRightSideV2Props) {
           </Button>
         </div>
       </div>
-      <div className="flex flex-col gap-4 ml-10 overflow-y-auto">
+
+      {/* Comment List */}
+      <div className="flex flex-col gap-4 ml-10 max-h-[12rem] overflow-y-auto pr-2">
         {Array.isArray(musicDetail?.comments) &&
           musicDetail.comments.map((comment: CommentType) => (
             <Comment
