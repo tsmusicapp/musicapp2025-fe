@@ -29,7 +29,7 @@ function TopMusicPlayerV2({ musicDetailInfo }: any) {
   };
   const formatRoles = (roles?: string[] | null): string => {
   if (!Array.isArray(roles) || roles.length === 0) {
-    return "Artist";
+    return "";
   }
 
   return roles
@@ -91,12 +91,15 @@ function TopMusicPlayerV2({ musicDetailInfo }: any) {
                   {musicDetailInfo?.commercialUse ? "Available for Commercial Use" : "Personal Use Only"}
                 </span>
               </p>
-              <p className="text-md font-notoCondensed">
-                {formatRoles(musicDetailInfo?.myRole)}
-                <span className="text-[0.7rem] ml-1 font-notoRegular">
-                  for the song
-                </span>
-              </p>
+              {musicDetailInfo?.myRole.length > 0 && (
+                <p className="text-md font-notoCondensed">
+                  {formatRoles(musicDetailInfo.myRole)}
+                  <span className="text-[0.7rem] ml-1 font-notoRegular">
+                    for the song
+                  </span>
+                </p>
+              )}
+
             </div>
           </div>
         </div>
