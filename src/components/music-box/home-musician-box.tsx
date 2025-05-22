@@ -37,6 +37,7 @@ interface HomeMusicianBoxProps {
   myRole: string[];
   isMusicAsset?: boolean;
   commercialUsePrice: string
+  userName: string;
 }
 
 export function HomeMusicianBox({
@@ -53,7 +54,8 @@ export function HomeMusicianBox({
   audioSrc,
   myRole,
   isMusicAsset,
-  commercialUsePrice
+  commercialUsePrice,
+  userName
 }: HomeMusicianBoxProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [isPlaying, setIsPlaying] = React.useState(false);
@@ -223,7 +225,7 @@ export function HomeMusicianBox({
             </Avatar>
             <div className="space-y-0.5">
               <p className="text-sm font-medium leading-none text-gray-900">
-                {singerName}
+                {userName}
               </p>
               <p className="text-xs text-gray-400">
                 {myRole && Array.isArray(myRole)
