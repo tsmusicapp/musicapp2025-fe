@@ -8,7 +8,7 @@ import {
   Feather,
   LucideFeather,
   FeatherIcon,
-  BaggageClaim
+  BaggageClaim,
 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/redux/store";
@@ -36,9 +36,9 @@ interface HomeMusicianBoxProps {
   lyrics?: boolean;
   myRole: string[];
   isMusicAsset?: boolean;
-  commercialUsePrice: string
+  commercialUsePrice: string;
   userName: string;
-  profilePicture: string; 
+  profilePicture: string;
 }
 
 export function HomeMusicianBox({
@@ -57,7 +57,7 @@ export function HomeMusicianBox({
   isMusicAsset,
   commercialUsePrice,
   userName,
-  profilePicture
+  profilePicture,
 }: HomeMusicianBoxProps) {
   const dispatch = useDispatch<AppDispatch>();
   const [isPlaying, setIsPlaying] = React.useState(false);
@@ -137,8 +137,8 @@ export function HomeMusicianBox({
   }, [audioSrc]);
 
   return (
-    <Card className="w-full max-w-2xl bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 border border-gray-200">
-      <CardContent className="p-5 space-y-3">
+    <Card className="w-[310px] h-[215px] max-w-2xl bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 border border-gray-200">
+      <CardContent className="p-1 space-y-1">
         {/* Top Section: Song Info */}
         <div className="flex items-center justify-between border-2 border-gray-100 py-3 px-2 rounded-lg">
           <div className="flex items-center gap-4">
@@ -156,9 +156,13 @@ export function HomeMusicianBox({
 
             {/* Song Details */}
             <div className="space-y-1 pb-2">
-              <h3 className="font-bold text-lg leading-none text-gray-900 cursor-pointer" onClick={togglePlay}>
+              <h3
+                className="font-bold text-lg leading-none text-gray-900 cursor-pointer truncate w-[8rem]"
+                onClick={togglePlay}
+              >
                 {songName}
               </h3>
+
               <p className="text-sm font-medium text-gray-600">
                 {singerName}
                 <span className="text-sm font-light text-gray-400">
@@ -193,32 +197,33 @@ export function HomeMusicianBox({
         </div>
 
         {/* Tags Section */}
-       <div className="flex items-start justify-between px-1 pt-2">
-  <div className="text-sm font-medium text-gray-600">{musicStyle}</div>
-<div className="flex flex-wrap gap-2">
-  {Array.isArray(tags) &&
-    tags.flatMap(tagStr =>
-      tagStr.split(',').map((tag, index) => (
-        <span
-          key={index}
-          className="inline-block px-3 py-1 text-xs font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded"
-        >
-          {tag.trim()}
-        </span>
-      ))
-    )}
-</div>
-
-
+        <div className="flex items-start justify-between px-1 pt-2">
+          <div className="text-sm font-medium text-gray-600">{musicStyle}</div>
+          <div className="flex flex-wrap gap-1">
+            {Array.isArray(tags) &&
+              tags
+                .flatMap((tagStr) => tagStr.split(",").map((tag) => tag.trim()))
+                .filter((tag) => tag) // remove empty strings
+                .slice(0, 3)
+                .map((tag, index) => (
+                  <span
+                    key={index}
+                    className="inline-block px-1 py-1 text-xs font-medium text-gray-700 bg-gray-100 border border-gray-300 rounded"
+                  >
+                    {tag}
+                  </span>
+                ))}
+          </div>
         </div>
-
 
         {/* Bottom Section: Composer Info and Likes */}
         <div className="flex items-center justify-between px-1">
           <div className="flex items-center gap-3">
             <Avatar className="w-10 h-10 border border-gray-200 shadow-sm transition-transform duration-300 hover:scale-105">
               <AvatarImage
-                src={profilePicture ? profilePicture : "/image/default-picture.jpg"}
+                src={
+                  profilePicture ? profilePicture : "/image/default-picture.jpg"
+                }
                 alt="Composer avatar"
               />
               <AvatarFallback className="bg-gray-100 text-gray-700">
@@ -248,18 +253,22 @@ export function HomeMusicianBox({
               </p>
             </div>
           </div>
-          {isMusicAsset ?           
-        <div className="flex items-center gap-2">
-          <span className="text-sm font-semibold text-gray-800">
-            {commercialUsePrice || 0}$
-          </span>
-          <img src="/icons/add-shopping.png" className="w-6 text-gray-600" />
-        </div>
-        :           
-          <div className="flex items-center gap-1">
-            <ThumbsUp className="w-4 h-4 text-gray-600" />
-            <span className="text-sm text-gray-600">{likes || 0}</span>
-          </div>}
+          {isMusicAsset ? (
+            <div className="flex items-center gap-2">
+              <span className="text-sm font-semibold text-gray-800">
+                {commercialUsePrice || 0}$
+              </span>
+              <img
+                src="/icons/add-shopping.png"
+                className="w-6 text-gray-600"
+              />
+            </div>
+          ) : (
+            <div className="flex items-center gap-1">
+              <ThumbsUp className="w-4 h-4 text-gray-600" />
+              <span className="text-sm text-gray-600">{likes || 0}</span>
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>

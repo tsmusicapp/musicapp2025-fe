@@ -97,7 +97,7 @@ const getHiringStatus = (hiring: string) => {
                   {getHiringStatus(musicDetailInfo?.hiring)}
                 </span>
               </p>
-              {musicDetailInfo?.myRole.length > 0 && (
+              {musicDetailInfo?.myRole?.length > 0 && (
                 <p className="text-md font-notoCondensed">
                   {formatRoles(musicDetailInfo.myRole)}
                   <span className="text-[0.7rem] ml-1 font-notoRegular">
