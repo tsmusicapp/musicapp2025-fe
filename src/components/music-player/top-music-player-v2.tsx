@@ -19,7 +19,9 @@ function TopMusicPlayerV2({ musicDetailInfo }: any) {
       id: musicDetailInfo?.createdBy || "unknown-user",
       chatId: Date.now().toString(),
       userName: musicDetailInfo?.composerName || "Unknown Composer",
-      avatar: musicDetailInfo?.composerAvatar || "https://docs.material-tailwind.com/img/face-4.jpg",
+      avatar:
+        musicDetailInfo?.composerAvatar ||
+        "https://docs.material-tailwind.com/img/face-4.jpg",
       latestMessage: "",
       unreadCount: 0,
     };
@@ -28,33 +30,31 @@ function TopMusicPlayerV2({ musicDetailInfo }: any) {
     window.location.href = "/chat";
   };
   const formatRoles = (roles?: string[] | null): string => {
-  if (!Array.isArray(roles) || roles.length === 0) {
-    return "";
-  }
+    if (!Array.isArray(roles) || roles.length === 0) {
+      return "";
+    }
 
-  return roles
-    .flatMap((role) => {
-      try {
-        const parsed = JSON.parse(role);
-        return Array.isArray(parsed) ? parsed : [parsed];
-      } catch {
-        return [role];
-      }
-    })
-    .map((role) =>
-      typeof role === "string"
-        ? role.charAt(0).toUpperCase() + role.slice(1)
-        : ""
-    )
-    .join(", ");
-};
+    return roles
+      .flatMap((role) => {
+        try {
+          const parsed = JSON.parse(role);
+          return Array.isArray(parsed) ? parsed : [parsed];
+        } catch {
+          return [role];
+        }
+      })
+      .map((role) =>
+        typeof role === "string"
+          ? role.charAt(0).toUpperCase() + role.slice(1)
+          : ""
+      )
+      .join(", ");
+  };
 
-const getHiringStatus = (hiring: string) => {
-  if (hiring === null || hiring === undefined) return '';
-  return hiring === "available" ? 'Available to work' : 'Unavailable to work';
-};
-
-
+  const getHiringStatus = (hiring: string) => {
+    if (hiring === null || hiring === undefined) return "";
+    return hiring === "available" ? "Available to work" : "Unavailable to work";
+  };
 
   return (
     <>
@@ -86,7 +86,11 @@ const getHiringStatus = (hiring: string) => {
         <div className="flex flex-row items-center gap-8">
           <div className="flex flex-row items-center gap-2">
             <Avatar
-              src= {musicDetailInfo?.profilePicture ? musicDetailInfo?.profilePicture : "/image/default-picture.jpg"}
+              src={
+                musicDetailInfo?.profilePicture
+                  ? musicDetailInfo?.profilePicture
+                  : "/image/default-picture.jpg"
+              }
               alt="avatar"
               size="md"
             />
@@ -97,15 +101,19 @@ const getHiringStatus = (hiring: string) => {
                   {getHiringStatus(musicDetailInfo?.hiring)}
                 </span>
               </p>
-              {musicDetailInfo?.myRole?.length > 0 && (
+              {musicDetailInfo?.myRole?.length > 0 ? (
                 <p className="text-md font-notoCondensed">
-                  {formatRoles(musicDetailInfo.myRole)}
+                  {formatRoles(musicDetailInfo?.myRole)}
                   <span className="text-[0.7rem] ml-1 font-notoRegular">
                     for the song
                   </span>
                 </p>
-              )}
-
+              ) : musicDetailInfo?.isLyric === true ||
+                musicDetailInfo?.isLyric === "true" ? (
+                <p className="text-md font-notoCondensed">
+                  <span className="font-notoRegular">Layricts</span>
+                </p>
+              ) : null}
             </div>
           </div>
         </div>

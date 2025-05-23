@@ -1,5 +1,7 @@
 "use client";
 
+import { ThumbsUp } from "lucide-react";
+
 interface ContentLeftSideV2Props {
   musicDetailInfo: any;
 }
@@ -15,12 +17,15 @@ function ContentLeftSideV2({ musicDetailInfo }: ContentLeftSideV2Props) {
       }
       return null;
     } catch {
-      return  null;
+      return null;
     }
   };
 
   const fields: [string, any][] = [
-    ["Music Name", musicDetailInfo?.songName],
+    [
+      `${musicDetailInfo?.isLyric !== true ? "Music Name" : "Lyric Name"}`,
+      musicDetailInfo?.songName,
+    ],
     ["Album Name", musicDetailInfo?.albumname],
     ["Publisher", musicDetailInfo?.singerName],
     ["Music Usage", parseMusicUsage(musicDetailInfo?.musicUsage)],
@@ -47,15 +52,22 @@ function ContentLeftSideV2({ musicDetailInfo }: ContentLeftSideV2Props) {
           </div>
         ))}
 
-      {musicDetailInfo?.musicLyric?.trim() && (
-        <div className="flex flex-col sm:flex-row">
+      {musicDetailInfo?.isLyric !== false &&
+      musicDetailInfo?.isLyric !== "false" ? (
+        <div className="flex flex-col gap-2 mt-2">
+          <p className="text-sm font-notoSemibold">Describe</p>
+          <p className="max-h-[12rem] text-xs text-justify tracking-wide break-words overflow-y-auto pr-2">
+            {musicDetailInfo?.description || "No description available."}
+          </p>
+        </div>
+      ) : (
+        <div className="flex flex-col sm:flex-row gap-2 mt-2">
           <p className="text-xs font-notoSemibold min-w-[8rem]">Lyric:</p>
-          <div
-            className="text-xs leading-relaxed break-words rounded-m w-full"
-            dangerouslySetInnerHTML={{
-              __html: getValue(musicDetailInfo.musicLyric),
-            }}
-          />
+
+          <div className="flex items-center text-xs gap-1">
+            <span>0</span>
+            <ThumbsUp className="w-4 h-4 text-gray-600" />
+          </div>
         </div>
       )}
     </div>

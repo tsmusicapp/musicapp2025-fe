@@ -51,7 +51,7 @@ const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
               "https://docs.material-tailwind.com/img/face-4.jpg"
             }
             alt="cover"
-            className="w-44 h-44 rounded-lg bg-slate-100 object-cover"
+            className="w-12 h-12 rounded-lg bg-slate-100 object-cover"
             loading="lazy"
           />
         </div>

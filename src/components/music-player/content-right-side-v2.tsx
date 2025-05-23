@@ -1,13 +1,13 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import { RootState } from "@/redux/store";
+import { API_URL } from "@/utils/env_var";
 import { ChartPieIcon } from "@heroicons/react/24/solid";
 import { Button, Textarea } from "@material-tailwind/react";
-import Comment from "./comment";
+import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
-import { RootState } from "@/redux/store";
-import { CategoriesService } from "@/services/categories.service";
-import { useRouter } from "next/navigation";
-import { API_URL } from "@/utils/env_var";
+import Comment from "./comment";
+import { useLocalStorage } from "@/context/LocalStorageContext";
 
 interface CommentType {
   _id: string;
@@ -21,20 +21,23 @@ interface ContentMusicPlayerV2Props {
 }
 
 function ContentRightSideV2({ musicDetailInfo }: ContentMusicPlayerV2Props) {
-  console.log("ContentRightSideV2 rendered", musicDetailInfo);
   const selectedId = useSelector((state: RootState) => state.offer.selectedId);
   const [musicDetail, setMusicDetail] = useState<any>(null);
   const [commentText, setCommentText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const { getItem } = useLocalStorage();
+  const [auth, setAuth] = useState<any>(getItem("auth", null));
   useEffect(() => {
     setMusicDetail(musicDetailInfo);
   }, [musicDetailInfo]);
+
   const handleCommentSubmit = async () => {
     if (!commentText.trim() || !selectedId || isSubmitting) return;
 
     const token = localStorage.getItem("token");
     if (!token) {
       console.error("No authentication token found");
+      toast.error("Please log in to comment");
       return;
     }
 
@@ -55,12 +58,28 @@ function ContentRightSideV2({ musicDetailInfo }: ContentMusicPlayerV2Props) {
       );
 
       if (response.status === 201) {
+        const responseData = await response.json();
+        const newComment = {
+          _id: Date.now().toString(), // Temporary ID since API doesn't return _id
+          userId: responseData.comment.userId,
+          comment: responseData.comment.comment,
+          createdAt: responseData.comment.createdAt,
+        };
+
+        // Prepend the new comment to the existing comments array
+        setMusicDetail((prev: any) => ({
+          ...prev,
+          comments: [newComment, ...(prev?.comments || [])],
+        }));
+
         setCommentText("");
+        toast.success(responseData.message || "Comment submitted successfully");
       } else {
         throw new Error("Failed to submit comment");
       }
     } catch (error) {
       console.error("Error submitting comment:", error);
+      toast.error("Failed to submit comment");
     } finally {
       setIsSubmitting(false);
     }
@@ -68,13 +87,24 @@ function ContentRightSideV2({ musicDetailInfo }: ContentMusicPlayerV2Props) {
 
   return (
     <div className="flex flex-col py-4 px-6 gap-4 w-full max-w-[38rem] overflow-hidden border-2 border-black rounded-xl">
-      {/* Description */}
-      <div className="flex flex-col gap-2">
-        <p className="text-sm font-notoSemibold">Describe</p>
-        <p className="max-h-[12rem] text-xs text-justify tracking-wide break-words overflow-y-auto pr-2">
-          {musicDetail?.description}
-        </p>
-      </div>
+      {musicDetail?.isLyric === true || musicDetail?.isLyric === "true" ? (
+        <div className="flex flex-col gap-2 mt-2">
+          <p className="text-sm font-notoSemibold">Lyric</p>
+          <p
+            className="max-h-[12rem] text-xs text-justify tracking-wide break-words overflow-y-auto pr-2"
+            dangerouslySetInnerHTML={{
+              __html: musicDetail?.musicLyric,
+            }}
+          ></p>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-2 mt-2">
+          <p className="text-sm font-notoSemibold">Describe</p>
+          <p className="max-h-[12rem] text-xs text-justify tracking-wide break-words overflow-y-auto pr-2">
+            {musicDetail?.description || "No description available."}
+          </p>
+        </div>
+      )}
 
       {/* Comment Input */}
       <div className="flex flex-col gap-2">
@@ -108,7 +138,7 @@ function ContentRightSideV2({ musicDetailInfo }: ContentMusicPlayerV2Props) {
             <Comment
               key={comment._id}
               userId={comment.userId}
-              userName="Unknown User"
+              userName={auth.user.name ? auth.user.name :"Unknown User"} // Replace with actual user name if available
               comment={comment.comment}
               createdAt={comment.createdAt}
               profilePicture={null}
