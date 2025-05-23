@@ -30,7 +30,7 @@ export function EditUserSpace() {
   } = useForm<IUserProfile>();
   const [formData, setFormData] = useState<IUserProfile>(defaultStateUser);
 
-  const [checkedItems, setCheckedItems] = useState<string[]>([]); // Array to hold checked values
+  const [checkedItems, setCheckedItems] = useState<string[]>([]);
   const [isChecked, setIsChecked] = useState(false);
 
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -91,10 +91,9 @@ export function EditUserSpace() {
       if (response.ok) {
         const result = await response.json();
 
-        // Update formData with the full path from the response
         setFormData((prev) => ({
           ...prev,
-          profilePicture: result.data.profilePicture, // Use the path from the response
+          profilePicture: result.data.profilePicture,
         }));
         setImageUrl(result.data.profilePicture);
         toast.success("Profile picture uploaded successfully!");
@@ -112,7 +111,7 @@ export function EditUserSpace() {
 
   const handleHiring = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked } = e.target;
-    setIsChecked(checked); // Update the state with the checkbox's checked value
+    setIsChecked(checked);
     setFormData((prev) => {
       const updatedData = { ...prev, [name]: isChecked };
       return updatedData;
@@ -247,60 +246,59 @@ export function EditUserSpace() {
     (state: RootState) => state.selectMultiple.items
   );
 
-useEffect(() => {
-  const fetchData = async () => {
-    try {
-      const response = await fetch(`${API_URL}/v1/user-space`, {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${auth.tokens.access.token}`,
-        },
-      });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`${API_URL}/v1/user-space`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${auth.tokens.access.token}`,
+          },
+        });
 
-      if (response.ok) {
-        const data = await response.json();
+        if (response.ok) {
+          const data = await response.json();
 
-        setImageUrl(data.profilePicture);
+          setImageUrl(data.profilePicture);
 
-        // Map string arrays to full option objects
-        setMatchedLang(
-          collaborativeOptions.filter((opt) =>
-            data.collaborationLyricsLangs?.includes(opt.value)
-          )
-        );
+          // Map string arrays to full option objects
+          setMatchedLang(
+            collaborativeOptions.filter((opt) =>
+              data.collaborationLyricsLangs?.includes(opt.value)
+            )
+          );
 
-        setMatchedMusicStyles(
-          musicStylesOptions.filter((opt) =>
-            data.proficientMusicStyles?.includes(opt.value)
-          )
-        );
+          setMatchedMusicStyles(
+            musicStylesOptions.filter((opt) =>
+              data.proficientMusicStyles?.includes(opt.value)
+            )
+          );
 
-        setMatchedInstrument(
-          instrumentsOptions.filter((opt) =>
-            data.skilledInstruments?.includes(opt.value)
-          )
-        );
+          setMatchedInstrument(
+            instrumentsOptions.filter((opt) =>
+              data.skilledInstruments?.includes(opt.value)
+            )
+          );
 
-        // Remove unwanted fields
-        delete data.createdBy;
-        delete data.updatedBy;
-        delete data.id;
-        delete data.occupation;
+          // Remove unwanted fields
+          delete data.createdBy;
+          delete data.updatedBy;
+          delete data.id;
+          delete data.occupation;
 
-        setFormData(data);
-        reset(data);
+          setFormData(data);
+          reset(data);
+        }
+      } catch (error) {
+        toast.error("Failed to fetch data.");
       }
-    } catch (error) {
-      toast.error("Failed to fetch data.");
+    };
+
+    if (!auth?.isNewUser) {
+      fetchData();
     }
-  };
-
-  if (!auth?.isNewUser) {
-    fetchData();
-  }
-}, [auth, reset, toast]);
-
+  }, [auth, reset, toast]);
 
   if (auth === null) return null;
   return (
@@ -563,31 +561,46 @@ useEffect(() => {
                   color="blue-gray"
                   className="font-semibold"
                 >
-                  Hiring
+                  Hiring for freelance projects
                 </Typography>
-                <div className="flex items-center me-4 gap-2">
-                  <input
-                    id="inline-culture-1"
-                    type="checkbox"
-                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 cursor-pointer"
-                    {...register("hiring")}
-                    checked={formData.hiring ? formData.hiring : isChecked}
-                    onChange={handleHiring}
-                  />
-                  <div className="flex flex-col gap-2">
-                    <label
-                      htmlFor="inline-culture-1"
-                      className="ms-2 text-sm font-medium text-gray-900 "
-                    >
-                      Freelance Project
-                    </label>
-                    <label
-                      htmlFor="inline-culture-1"
-                      className="ms-2 text-xs font-medium text-gray-700 "
-                    >
+                <div className="flex flex-row items-center gap-6 my-2">
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="hiring"
+                      value="available"
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                      checked={formData.hiring === "available"}
+                      onChange={() =>
+                        setFormData({
+                          ...formData,
+                          hiring: "available",
+                        })
+                      }
+                    />
+                    <span className="text-sm font-medium text-gray-900">
                       Available to work
-                    </label>
-                  </div>
+                    </span>
+                  </label>
+
+                  <label className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="checkbox"
+                      name="hiring"
+                      value="unavailable"
+                      className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500"
+                      checked={formData.hiring === "unavailable"}
+                      onChange={() =>
+                        setFormData({
+                          ...formData,
+                          hiring: "unavailable",
+                        })
+                      }
+                    />
+                    <span className="text-sm font-medium text-gray-900">
+                      Unavailable to work
+                    </span>
+                  </label>
                 </div>
               </div>
 
@@ -598,14 +611,14 @@ useEffect(() => {
                 >
                   Collaboration lyrics Language
                 </label>
-                    <SelectMultiple
-                      options={collaborativeOptions}
-                      label={"Select Languages"}
-                      keyState={"collaborationLyricsLangs"}
-                      {...register("collaborationLyricsLangs")}
-                      setFormData={setFormData}
-                      selectedValue={matchedLang}
-                    />
+                <SelectMultiple
+                  options={collaborativeOptions}
+                  label={"Select Languages"}
+                  keyState={"collaborationLyricsLangs"}
+                  {...register("collaborationLyricsLangs")}
+                  setFormData={setFormData}
+                  selectedValue={matchedLang}
+                />
               </div>
               <Typography
                 variant="small"

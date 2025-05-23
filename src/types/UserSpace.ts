@@ -5,7 +5,7 @@ export interface IUserProfile {
   lastName: string;
   creationOccupation: string[];
   businessOccupation: string;
-  hiring?: boolean;
+  hiring?: string;
   collaborationLyricsLangs?: string[];
   proficientMusicStyles?: string[];
   skilledInstruments?: string[];
@@ -36,7 +36,7 @@ export const defaultStateUser = {
   lastName: "",
   creationOccupation: [],
   businessOccupation: "",
-  hiring: false,
+  hiring: '',
   collaborationLyricsLangs: [],
   proficientMusicStyles: [],
   skilledInstruments: [],

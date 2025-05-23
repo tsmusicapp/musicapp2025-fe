@@ -49,6 +49,12 @@ function TopMusicPlayerV2({ musicDetailInfo }: any) {
     .join(", ");
 };
 
+const getHiringStatus = (hiring: string) => {
+  if (hiring === null || hiring === undefined) return '';
+  return hiring === "available" ? 'Available to work' : 'Unavailable to work';
+};
+
+
 
   return (
     <>
@@ -88,7 +94,7 @@ function TopMusicPlayerV2({ musicDetailInfo }: any) {
               <p className="text-md font-notoCondensed">
                 {musicDetailInfo?.userName || "Unknown Title"}{" "}
                 <span className="text-xs ml-4 font-notoRegular">
-                  {musicDetailInfo?.commercialUse ? "Available for Commercial Use" : "Personal Use Only"}
+                  {getHiringStatus(musicDetailInfo?.hiring)}
                 </span>
               </p>
               {musicDetailInfo?.myRole.length > 0 && (
