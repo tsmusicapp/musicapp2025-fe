@@ -73,7 +73,6 @@ function ContentRightSideV2({ musicDetailInfo }: ContentMusicPlayerV2Props) {
         }));
 
         setCommentText("");
-        toast.success(responseData.message || "Comment submitted successfully");
       } else {
         throw new Error("Failed to submit comment");
       }
