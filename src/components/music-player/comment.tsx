@@ -27,13 +27,19 @@ function Comment({
   const formatTimeAgo = (timestamp: string) => {
     const date = new Date(timestamp);
     const now = new Date();
-    const diffInHours = Math.floor(
-      (now.getTime() - date.getTime()) / (1000 * 60 * 60)
-    );
-    return `${diffInHours} Hours Ago`;
+    const diffInSeconds = Math.floor((now.getTime() - date.getTime()) / 1000);
+
+    const minutes = Math.floor(diffInSeconds / 60);
+    const hours = Math.floor(diffInSeconds / 3600);
+    const days = Math.floor(diffInSeconds / 86400);
+
+    if (diffInSeconds < 60) return "Just now";
+    if (minutes < 60) return `${minutes} minute${minutes === 1 ? "" : "s"} ago`;
+    if (hours < 24) return `${hours} hour${hours === 1 ? "" : "s"} ago`;
+    if (days === 1) return "Yesterday";
+    return `${days} day${days === 1 ? "" : "s"} ago`;
   };
 
-  
   return (
     <div className="flex flex-row gap-2">
       <Avatar
@@ -47,9 +53,6 @@ function Comment({
         <div className="flex flex-row gap-1">
           <p className="text-xs font-bold">{userName}</p>
           <p className="text-xs text-gray-500">{formatTimeAgo(createdAt)}</p>
-          <p className="text-xs text-gray-500 hover:underline cursor-pointer">
-            Reply
-          </p>
         </div>
         <div className="flex flex-row gap-1">
           <p className="text-[0.7rem] font-semibold">{comment}</p>

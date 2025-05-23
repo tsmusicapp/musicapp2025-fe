@@ -6,15 +6,16 @@ import ContentRightSideV2 from "./content-right-side-v2";
 
 interface ContentMusicPlayerV2Props {
   musicDetailInfo: any;
+  source: any;
 }
 
-function ContentMusicPlayerV2({ musicDetailInfo }: ContentMusicPlayerV2Props) {
+function ContentMusicPlayerV2({ musicDetailInfo, source }: ContentMusicPlayerV2Props) {
 
   return (
     <div className="flex flex-row gap-6 justify-between p-2 my-2 mx-4 min-w-screen max-w-screen">
       <ContentLeftSideV2 musicDetailInfo={musicDetailInfo} />
       <Suspense fallback={<div>Loading...</div>}>
-        <ContentRightSideV2 musicDetailInfo={musicDetailInfo} />
+        <ContentRightSideV2 musicDetailInfo={musicDetailInfo} source={source} />
       </Suspense>
     </div>
   );

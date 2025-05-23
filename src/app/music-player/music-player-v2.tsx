@@ -90,7 +90,7 @@ function MusicPlayerV2({ source = "home", hasLyrics }: MusicPlayerV2Props) {
       <div className="flex flex-row">
         <div className="flex flex-col w-full">
           <TopMusicPlayerV2 musicDetailInfo={musicDetailInfo} />
-          <ContentMusicPlayerV2 musicDetailInfo={musicDetailInfo} />
+          <ContentMusicPlayerV2 musicDetailInfo={musicDetailInfo} source={source} />
           <MediaPlayerV2 musicDetailInfo={musicDetailInfo} />
         </div>
       </div>

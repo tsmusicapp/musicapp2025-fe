@@ -13,14 +13,16 @@ interface CommentType {
   _id: string;
   userId: string;
   comment: string;
+  userName: string;
   createdAt: string;
 }
 
 interface ContentMusicPlayerV2Props {
   musicDetailInfo: any;
+  source: any;
 }
 
-function ContentRightSideV2({ musicDetailInfo }: ContentMusicPlayerV2Props) {
+function ContentRightSideV2({ musicDetailInfo, source }: ContentMusicPlayerV2Props) {
   const selectedId = useSelector((state: RootState) => state.offer.selectedId);
   const [musicDetail, setMusicDetail] = useState<any>(null);
   const [commentText, setCommentText] = useState("");
@@ -44,7 +46,7 @@ function ContentRightSideV2({ musicDetailInfo }: ContentMusicPlayerV2Props) {
     setIsSubmitting(true);
     try {
       const response = await fetch(
-        `${API_URL}/v1/music/comment/${selectedId}`,
+        `${API_URL}/v1/comments/${selectedId}?type=${source}`,
         {
           method: "POST",
           headers: {
@@ -63,6 +65,7 @@ function ContentRightSideV2({ musicDetailInfo }: ContentMusicPlayerV2Props) {
           _id: Date.now().toString(), // Temporary ID since API doesn't return _id
           userId: responseData.comment.userId,
           comment: responseData.comment.comment,
+          userName: responseData.comment.userName,
           createdAt: responseData.comment.createdAt,
         };
 
@@ -137,7 +140,7 @@ function ContentRightSideV2({ musicDetailInfo }: ContentMusicPlayerV2Props) {
             <Comment
               key={comment._id}
               userId={comment.userId}
-              userName={auth.user.name ? auth.user.name :"Unknown User"} // Replace with actual user name if available
+              userName={comment.userName}
               comment={comment.comment}
               createdAt={comment.createdAt}
               profilePicture={null}
