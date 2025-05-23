@@ -52,7 +52,7 @@ export default function Portfolio() {
           <div className="flex flex-row justify-start gap-2 mb-4">
             <ExplorePage />
           </div>
-          <div className="grid grid-cols-4 sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-2">
+          <div className="grid grid-cols-4 sm:grid-cols-1 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-4 gap-4">
             {featuredMusic.length > 0 ? (
               featuredMusic
                 .map((props, key) => (

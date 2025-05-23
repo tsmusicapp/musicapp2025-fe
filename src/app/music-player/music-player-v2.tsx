@@ -83,20 +83,21 @@ function MusicPlayerV2({ source = "home", hasLyrics }: MusicPlayerV2Props) {
 
   return (
     <>
-      <ReportDialog />
-      <div className="flex flex-col h-[580px] overflow-auto text-black">
-        <div className="flex flex-row w-full h-auto border-black/10 border-2 pb-5">
-          <div className="relative w-full h-fit space-y-2 items-center">
-            <div className="flex flex-row">
-              <div className="flex flex-col w-full">
-                <TopMusicPlayerV2 musicDetailInfo={musicDetailInfo} />
-                <ContentMusicPlayerV2 musicDetailInfo={musicDetailInfo} />
-                <MediaPlayerV2 musicDetailInfo={musicDetailInfo} />
-              </div>
-            </div>
-          </div>
+      {/* <ReportDialog /> */}
+<div className="flex flex-col  text-black">
+  <div className="flex flex-row w-full h-auto border-black/10 border-2">
+    <div className="relative w-full h-fit space-y-2 items-center">
+      <div className="flex flex-row">
+        <div className="flex flex-col w-full">
+          <TopMusicPlayerV2 musicDetailInfo={musicDetailInfo} />
+          <ContentMusicPlayerV2 musicDetailInfo={musicDetailInfo} />
+          <MediaPlayerV2 musicDetailInfo={musicDetailInfo} />
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
       <LoginModal
         isOpen={isLoginModalOpen}
         onClose={() => setIsLoginModalOpen(false)}

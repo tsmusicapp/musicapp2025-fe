@@ -43,6 +43,7 @@ export default function MusicPlayerDialog({
         open={isMusicPlayerDialog}
         handler={() => dispatch(musicPlayerDialog())}
         size="lg"
+        className="w-[1100px] h-[95%] overflow-auto"
       >
         <MusicPlayerV2 source={source} hasLyrics={hasLyrics} />
       </Dialog>

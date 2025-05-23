@@ -34,7 +34,7 @@ const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
   };
 
   return (
-    <div className="w-full border-t-2 border-black/10 mt-5 px-4 py-2">
+    <div className="w-full border-t-2 border-black/10 mt-2 px-4 py-2">
       <audio
         id="audio-player"
         src={audioSrc}
@@ -51,12 +51,11 @@ const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
               "https://docs.material-tailwind.com/img/face-4.jpg"
             }
             alt="cover"
-            width="44"
-            height="44"
-            className="rounded-lg bg-slate-100"
+            className="w-44 h-44 rounded-lg bg-slate-100 object-cover"
             loading="lazy"
           />
         </div>
+
 
         {/* Center Section: Controls */}
         <div className="flex flex-1 items-center justify-center gap-3 max-w-[36rem]">

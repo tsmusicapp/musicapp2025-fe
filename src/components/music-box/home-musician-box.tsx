@@ -137,7 +137,7 @@ export function HomeMusicianBox({
   }, [audioSrc]);
 
   return (
-    <Card className="w-[310px] h-[215px] max-w-2xl bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 border border-gray-200">
+    <Card className="h-[215px] max-w-2xl bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-200 border border-gray-200">
       <CardContent className="p-1 space-y-1">
         {/* Top Section: Song Info */}
         <div className="flex items-center justify-between border-2 border-gray-100 py-3 px-2 rounded-lg">
@@ -157,7 +157,7 @@ export function HomeMusicianBox({
             {/* Song Details */}
             <div className="space-y-1 pb-2">
               <h3
-                className="font-bold text-lg leading-none text-gray-900 cursor-pointer truncate w-[8rem]"
+                className="font-bold text-lg leading-none text-gray-900 cursor-pointer truncate w-[7rem]"
                 onClick={togglePlay}
               >
                 {songName}
