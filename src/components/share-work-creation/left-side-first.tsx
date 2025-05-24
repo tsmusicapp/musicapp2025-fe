@@ -1,11 +1,10 @@
-"use client";
-
-import { Typography, Input } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 import { UseFormRegister, FieldErrors, UseFormSetValue } from "react-hook-form";
 import { useEffect, useState } from "react";
 import { API_URL } from "@/utils/env_var";
 import { useLocalStorage } from "@/context/LocalStorageContext";
 import toast from "react-hot-toast";
+import { X } from "lucide-react";
 
 interface LeftSideFirstProps {
   register: UseFormRegister<any>;
@@ -19,13 +18,11 @@ function LeftSideFirst({ register, errors, setValue }: LeftSideFirstProps) {
 
   const [musicImagePreview, setMusicImagePreview] = useState<string>("");
   const [selectedFileName, setSelectedFileName] = useState<string>("");
-  const musicSizeLimit = 20 * 1024 * 1024; // 20MB
-  const imageSizeLimit = 1024 * 1024; // 1MB
+  const musicSizeLimit = 20 * 1024 * 1024;
+  const imageSizeLimit = 1024 * 1024;
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [fileImage, setFileImage] = useState<File | null>(null);
-  const [fileMusic, setFileMusic] = useState<File | undefined | Blob>(
-    undefined
-  );
+  const [fileMusic, setFileMusic] = useState<File | undefined>(undefined);
   const [imageError, setImageError] = useState<string | null>(null);
   const [musicError, setMusicError] = useState<string | null>(null);
 
@@ -49,13 +46,25 @@ function LeftSideFirst({ register, errors, setValue }: LeftSideFirstProps) {
   ) => {
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
-      const reader = new FileReader();
-      reader.readAsDataURL(selectedFile);
       setFileMusic(selectedFile);
+      setSelectedFileName(selectedFile.name);
       setMusicError(null);
     } else {
       setMusicError("Please upload a music file.");
     }
+  };
+
+  const removeImage = () => {
+    setMusicImagePreview("");
+    setFileImage(null);
+    setValue("musicImage", null);
+  };
+
+  const removeAudio = () => {
+    setFileMusic(undefined);
+    setSelectedFileName("");
+    setUploadProgress(0);
+    setValue("musicAudio", null);
   };
 
   useEffect(() => {
@@ -63,8 +72,6 @@ function LeftSideFirst({ register, errors, setValue }: LeftSideFirstProps) {
       if (!fileImage) return;
       const musicImageForm = new FormData();
       musicImageForm.append("musicImage", fileImage);
-
-      console.log(musicImageForm, "music image here in form data");
 
       try {
         const response = await fetch(`${API_URL}/v1/upload/music-image`, {
@@ -77,9 +84,7 @@ function LeftSideFirst({ register, errors, setValue }: LeftSideFirstProps) {
 
         if (response.ok) {
           const result = await response.json();
-
           setValue("musicImage", result.data.profilePicture);
-
           toast.success("Upload Music Image successful!");
         } else {
           const errorResult = await response.json();
@@ -94,9 +99,7 @@ function LeftSideFirst({ register, errors, setValue }: LeftSideFirstProps) {
     };
 
     const uploadMusic = async () => {
-      if (!fileMusic) {
-        return;
-      }
+      if (!fileMusic) return;
       const formData = new FormData();
       formData.append("music", fileMusic);
 
@@ -115,12 +118,12 @@ function LeftSideFirst({ register, errors, setValue }: LeftSideFirstProps) {
           }
         };
 
-        xhr.onload = async () => {
+        xhr.onload = () => {
           if (xhr.status === 200) {
             const result = JSON.parse(xhr.responseText);
             setValue("musicAudio", result.data.music);
             toast.success("Upload Music Track successful!");
-            setUploadProgress(100); // Set to 100% instead of 0
+            setUploadProgress(100);
           } else {
             const errorResult = JSON.parse(xhr.responseText);
             toast.error(
@@ -141,13 +144,10 @@ function LeftSideFirst({ register, errors, setValue }: LeftSideFirstProps) {
         setUploadProgress(0);
       }
     };
-    if (fileMusic) {
-      uploadMusic();
-    }
-    if (fileImage) {
-      uploadImage();
-    }
-  }, [fileMusic, fileImage, auth]);
+
+    if (fileImage) uploadImage();
+    if (fileMusic) uploadMusic();
+  }, [fileImage, fileMusic, auth, setValue]);
 
   return (
     <div className="mb-1 flex flex-col gap-4">
@@ -171,95 +171,96 @@ function LeftSideFirst({ register, errors, setValue }: LeftSideFirstProps) {
         )}
       </div>
 
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col gap-4">
-          <div className="flex gap-2">
-            <div className="w-[18rem] flex flex-col gap-2 font-semibold text-sm">
-              Upload Music Image
-              <label
-                htmlFor="musicImage"
-                className="flex flex-col items-center justify-center w-[10rem] h-[10rem] border-2 border-black border-dashed rounded-lg cursor-pointer hover:bg-gray-100"
-              >
-                {musicImagePreview ? (
-                  <img
-                    src={musicImagePreview}
-                    alt="Preview"
-                    className="w-full h-full object-cover rounded-lg"
-                  />
-                ) : (
-                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                    <p className="mb-2 text-sm text-gray-500">
-                      <span className="font-semibold">Less than 1MB</span>
-                    </p>
-                  </div>
-                )}
-                <input
-                  id="musicImage"
-                  type="file"
-                  className="hidden"
-                  accept="image/*"
-                  onChange={handleImageChange}
-                />
-              </label>
-              {imageError && (
-                <span className="text-red-500 text-xs">{imageError}</span>
-              )}
-            </div>
-          </div>
+      <div className="flex flex-col gap-2 text-sm font-semibold">
+        Upload Music Image
+        <div className="relative w-[10rem] h-[10rem] border-2 border-black border-dashed rounded-lg">
+          <label
+            htmlFor="musicImage"
+            className="w-full h-full cursor-pointer flex items-center justify-center hover:bg-gray-100"
+          >
+            {musicImagePreview ? (
+              <img
+                src={musicImagePreview}
+                alt="Preview"
+                className="object-cover w-full h-full rounded-lg"
+              />
+            ) : (
+              <p className="text-center text-gray-500">Less than 1MB</p>
+            )}
+            <input
+              id="musicImage"
+              type="file"
+              className="hidden"
+              accept="image/*"
+              onChange={handleImageChange}
+            />
+          </label>
+          {musicImagePreview && (
+            <button
+              onClick={removeImage}
+              className="absolute top-0 right-0 p-1 bg-white rounded-full text-red-600"
+              title="Remove image"
+            >
+              <X size={16} />
+            </button>
+          )}
         </div>
+        {imageError && (
+          <span className="text-red-500 text-xs">{imageError}</span>
+        )}
+      </div>
 
-        <div className="flex flex-col gap-4">
-          <div className="flex flex-col gap-4">
-            <div className="w-[18rem] flex flex-col gap-2 font-semibold text-sm">
-              Upload Music
-              <label
-                htmlFor="music"
-                className="flex flex-col items-center justify-center w-[10rem] h-[6rem] border-2 border-black border-dashed rounded-lg cursor-pointer hover:bg-gray-100"
-              >
-                <div className="flex flex-col items-center justify-center pt-5 pb-6">
-                  <p className="text-sm text-gray-500">
-                    <span className="font-semibold">Less than 20MB</span>
-                  </p>
-                </div>
-                <input
-                  id="music"
-                  type="file"
-                  className="hidden"
-                  accept="audio/*"
-                  onChange={handleFileMusicChange}
-                />
-              </label>
-              {selectedFileName && (
-                <p className="text-sm text-gray-700 mt-2">
-                  Selected File: {selectedFileName}
-                </p>
-              )}
-              {uploadProgress > 0 && (
-                <div className="w-full mt-2">
-                  <div className="w-full bg-gray-200 rounded-full h-2.5">
-                    <div
-                      className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
-                      style={{ width: `${uploadProgress}%` }}
-                    ></div>
-                  </div>
-                  <p className="text-xs text-gray-600 mt-1 text-right">
-                    {uploadProgress}%
-                  </p>
-                </div>
-              )}
-              {musicError && (
-                <span className="text-red-500 text-xs">{musicError}</span>
-              )}
+      <div className="flex flex-col gap-2 text-sm font-semibold">
+        Upload Music
+        <div className="relative w-[10rem] h-[6rem] border-2 border-black border-dashed rounded-lg">
+          <label
+            htmlFor="music"
+            className="w-full h-full cursor-pointer flex items-center justify-center hover:bg-gray-100"
+          >
+            {selectedFileName ? (
+              <p className="text-center text-gray-700">🎵</p>
+            ) : (
+              <p className="text-center text-gray-500">Less than 20MB</p>
+            )}
+            <input
+              id="music"
+              type="file"
+              className="hidden"
+              accept="audio/*"
+              onChange={handleFileMusicChange}
+            />
+          </label>
+          {selectedFileName && (
+            <button
+              onClick={removeAudio}
+              className="absolute top-0 right-0 p-1 bg-white rounded-full text-red-600"
+              title="Remove audio"
+            >
+              <X size={16} />
+            </button>
+          )}
+        </div>
+        {uploadProgress > 0 && (
+          <div className="w-full mt-2">
+            <div className="w-full bg-gray-200 rounded-full h-2.5">
+              <div
+                className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
+                style={{ width: `${uploadProgress}%` }}
+              ></div>
             </div>
-          </div>
-          <div className="flex gap-2 pr-32">
-            <p className="text-sm">
-              The Music uploaded here is only for trial listening and not for
-              download; <br /> if you dont have copyright, only upload
-              music clips
+            <p className="text-xs text-gray-600 mt-1 text-right">
+              {uploadProgress}%
             </p>
           </div>
-        </div>
+        )}
+        {musicError && (
+          <span className="text-red-500 text-xs">{musicError}</span>
+        )}
+        <p className="text-sm text-gray-600 mt-2">
+          The Music uploaded here is only for trial listening and not for
+          download; <br />
+          if you don't have copyright, only upload music clips.
+        </p>
       </div>
     </div>
   );

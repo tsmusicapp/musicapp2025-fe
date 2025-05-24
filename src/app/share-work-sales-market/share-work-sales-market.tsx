@@ -10,6 +10,7 @@ import Input_ from "postcss/lib/input";
 import React, { useEffect, useRef, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
+import { X } from "lucide-react";
 
 const musicUse = [
   "Pop Music",
@@ -32,6 +33,7 @@ export default function ShareWorkSalesMarket() {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
     clearErrors,
   } = useForm<IMusicAsset>({ mode: "onChange" });
 
@@ -191,8 +193,11 @@ export default function ShareWorkSalesMarket() {
 
       try {
         const xhr = new XMLHttpRequest();
-        xhr.open('POST', `${API_URL}/v1/tracks/`, true);
-        xhr.setRequestHeader('Authorization', `Bearer ${auth.tokens.access.token}`);
+        xhr.open("POST", `${API_URL}/v1/tracks/`, true);
+        xhr.setRequestHeader(
+          "Authorization",
+          `Bearer ${auth.tokens.access.token}`
+        );
 
         xhr.upload.onprogress = (event) => {
           if (event.lengthComputable) {
@@ -205,7 +210,7 @@ export default function ShareWorkSalesMarket() {
           if (xhr.status === 200) {
             const result = JSON.parse(xhr.responseText);
             setFormData((prev) => ({ ...prev, music: result?.data?.music }));
-            console.log(result, "result of music");
+            setMusicPreview(result?.data?.music);
             toast.success("Upload Music Track successful!");
             setUploadProgress(100); // Set to 100% instead of 0
           } else {
@@ -278,6 +283,18 @@ export default function ShareWorkSalesMarket() {
     }
   };
 
+  const removeImage = () => {
+    setImagePreview("");
+    setFileImage(null);
+    setFormData((prev) => ({ ...prev, musicImage: "" }));
+  };
+
+  const removeAudio = () => {
+    setFileMusic(undefined);
+    setUploadProgress(0);
+    setFormData((prev) => ({ ...prev, music: "" }));
+  };
+
   return (
     <section className="flex flex-row justify-center items-center my-8">
       <form className="flex flex-col gap-2">
@@ -304,9 +321,8 @@ export default function ShareWorkSalesMarket() {
               {errors.songName && (
                 <p style={{ color: "red" }}>{errors.songName.message}</p>
               )}
-
               <div className="flex flex-col gap-4">
-                <div className="flex  gap-2">
+                <div className="flex gap-2">
                   <div className="w-[18rem] flex flex-col justify-center items-start gap-2 font-semibold text-sm">
                     Upload Music Image
                     <label
@@ -321,11 +337,20 @@ export default function ShareWorkSalesMarket() {
                         </div>
                       )}
                       {imagePreview && (
-                        <img
-                          src={imagePreview}
-                          alt="Thumbnail"
-                          className="w-[10rem] h-[10rem] object-cover shadow-md absolute hover:scale-105 rounded-md"
-                        />
+                        <>
+                          <img
+                            src={imagePreview}
+                            alt="Thumbnail"
+                            className="w-[10rem] h-[10rem] object-cover shadow-md absolute hover:scale-105 rounded-md"
+                          />
+                          <button
+                            type="button"
+                            onClick={removeImage}
+                            className="absolute top-1 right-1 bg-black bg-opacity-50 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hover:bg-opacity-80"
+                          >
+                            ✕
+                          </button>
+                        </>
                       )}
                       <input
                         id="dropzone-file"
@@ -341,26 +366,40 @@ export default function ShareWorkSalesMarket() {
                 </div>
 
                 <div className="flex justify-start items-start gap-2">
-                  <div className="w-[18rem] flex flex-col justify-center items-start  font-semibold text-sm">
+                  <div className="w-[18rem] flex flex-col justify-center items-start font-semibold text-sm">
                     Upload Music
                     <div className="flex flex-col gap-2">
                       <label
                         htmlFor="dropzone-file-music"
                         className="relative flex flex-col items-center justify-center w-[10rem] h-[6rem] border-2 border-black border-dashed rounded-lg cursor-pointer"
                       >
-                        {!musicPreview && (
+                        {musicPreview ? (
                           <div className="flex flex-col items-center justify-center pt-5 pb-6">
                             <p className="text-sm text-gray-500 dark:text-gray-400">
-                              <span className="font-semibold">Less than 20M</span>
+                              <span className="font-semibold">🎵</span>
+                            </p>
+                          </div>
+                        ) : (
+                          <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                            <p className="text-sm text-gray-500 dark:text-gray-400">
+                              <span className="font-semibold">
+                                Less than 20MB
+                              </span>
                             </p>
                           </div>
                         )}
+
                         {musicPreview && (
-                          <img
-                            src={musicPreview}
-                            alt="music Thumbnail"
-                            className="w-[10rem] h-[6rem] object-cover shadow-md absolute hover:scale-105 rounded-md"
-                          />
+                          <>
+    
+                            <button
+                              type="button"
+                              onClick={removeAudio}
+                              className="absolute top-1 right-1 bg-black bg-opacity-50 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center hover:bg-opacity-80"
+                            >
+                              ✕
+                            </button>
+                          </>
                         )}
                         <input
                           id="dropzone-file-music"
@@ -373,12 +412,14 @@ export default function ShareWorkSalesMarket() {
                       {uploadProgress > 0 && (
                         <div className="w-full mt-2">
                           <div className="w-full bg-gray-200 rounded-full h-2.5">
-                            <div 
-                              className="bg-blue-600 h-2.5 rounded-full transition-all duration-300" 
+                            <div
+                              className="bg-blue-600 h-2.5 rounded-full transition-all duration-300"
                               style={{ width: `${uploadProgress}%` }}
                             ></div>
                           </div>
-                          <p className="text-xs text-gray-600 mt-1 text-right">{uploadProgress}%</p>
+                          <p className="text-xs text-gray-600 mt-1 text-right">
+                            {uploadProgress}%
+                          </p>
                         </div>
                       )}
                     </div>
@@ -388,6 +429,7 @@ export default function ShareWorkSalesMarket() {
                   )}
                 </div>
 
+                {/* PRO Upgrade */}
                 <div className="flex justify-start items-start gap-2 max-w-[28rem]">
                   <Button
                     className="bg-blue-200 text-black normal-case w-[16rem] flex items-center justify-center"
@@ -401,8 +443,11 @@ export default function ShareWorkSalesMarket() {
                   </Button>
                 </div>
 
+                {/* Music Sales Options */}
                 <div className="flex flex-col gap-1 my-6">
                   <p className="text-black font-bold text-sm">Music Sales</p>
+
+                  {/* Personal Use */}
                   <div className="flex flex-row items-center gap-3 justify-between h-[2.7rem] max-h-[2.7rem]">
                     <div className="flex items-center">
                       <input
@@ -432,6 +477,7 @@ export default function ShareWorkSalesMarket() {
                     </div>
                   </div>
 
+                  {/* Commercial Use */}
                   <div className="flex flex-row items-center gap-3 justify-between h-[2.7rem] max-h-[2.7rem]">
                     <div className="flex items-center">
                       <input
@@ -461,6 +507,7 @@ export default function ShareWorkSalesMarket() {
                     </div>
                   </div>
 
+                  {/* Collaboration Contact */}
                   <div className="flex items-center h-[2.7rem] max-h-[2.7rem]">
                     <input
                       id="inline-music-sales-3"
@@ -564,8 +611,6 @@ export default function ShareWorkSalesMarket() {
                   </label>
                 </div>
               </div>
-
-              
 
               <div className="flex flex-col gap-1">
                 <label
