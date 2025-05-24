@@ -42,6 +42,8 @@ export default function MusicPlayerDialog({
       <Dialog
         open={isMusicPlayerDialog}
         handler={() => dispatch(musicPlayerDialog())}
+        dismiss={{ enabled: false }}
+
         size="lg"
         className="w-[1100px] h-[95%] overflow-auto"
       >

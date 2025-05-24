@@ -1,8 +1,7 @@
 "use client";
 
-import React, { Suspense, useState, useEffect } from "react";
+import React, { Suspense, useState } from "react";
 import { Spinner } from "@material-tailwind/react";
-import { useSearchParams, useRouter } from "next/navigation";
 import MusicPlayerDialog from "@/components/music-player/music-player-dialog";
 import UserInfo from "@/components/user-space/user-info";
 import Works from "@/app/user-space/works";
@@ -30,43 +29,44 @@ export function UserSpace() {
   return (
     <Suspense
       fallback={
-        <div>
+        <div className="flex justify-center items-center h-screen">
           <Spinner className="h-12 w-12" />
         </div>
       }
     >
-      <div className="mx-auto min-h-[60rem]" key={activeTab}>
-        <MusicPlayerDialog />
-        <div className="grid grid-cols-12 pl-10">
+      <MusicPlayerDialog />
+      <div className="mx-auto min-h-[60rem] px-10">
+        {/* User Info outside of tabs */}
+        <div className="mb-8">
           <UserInfo />
-          <div className="col-start-4 col-span-9 min-h-screen w-full">
+        </div>
+
+        {/* Tabs Section */}
+        <div className="grid grid-cols-12">
+          <div className="col-start-4 col-span-9 w-full">
             <div className="p-4">
-              <div className="flex flex-row gap-4 mb-4">
-                <div className="flex w-full max-w-full flex-wrap gap-2 border border-white/25 bg-white/10 rounded-md p-2">
-                  {section.map(({ label, value }) => (
-                    <button
-                      key={value}
-                      onClick={() => handleTabClick(value)}
-                      className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 ${
-                        activeTab === value
-                          ? "bg-gray-900/10 text-gray-900 shadow-md"
-                          : "text-gray-700 hover:bg-gray-100/10"
-                      }`}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
+              <div className="flex flex-wrap gap-2 mb-4 border border-white/25 bg-white/10 rounded-md p-2">
+                {section.map(({ label, value }) => (
+                  <button
+                    key={value}
+                    onClick={() => handleTabClick(value)}
+                    className={`px-4 py-2 text-sm font-medium rounded-md transition-all duration-300 ${
+                      activeTab === value
+                        ? "bg-gray-900/10 text-gray-900 shadow-md"
+                        : "text-gray-700 hover:bg-gray-100/10"
+                    }`}
+                  >
+                    {label}
+                  </button>
+                ))}
               </div>
 
               <div className="border-t-2 border-black/10 w-full mb-2" />
 
-              <div className="w-full max-w-full">
+              <div className="pt-4">
                 {section.map(({ value, desc }) =>
                   activeTab === value ? (
-                    <div key={value} className="p-0 pt-4">
-                      {desc}
-                    </div>
+                    <div key={value}>{desc}</div>
                   ) : null
                 )}
               </div>
