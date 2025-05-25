@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 import { useLocalStorage } from "../../context/LocalStorageContext";
 import { defaultStateUser, IUserProfile } from "../../types/UserSpace";
 import { API_URL } from "../../utils/env_var";
+import Image from 'next/image';
 
 function UserInfo() {
   const { getItem, setItem } = useLocalStorage();
@@ -70,9 +71,11 @@ function UserInfo() {
           </div>
           <div className="flex flex-col gap-2">
             <div className="flex flex-row items-center gap-1">
-              <img
+              <Image
                 src={"/icons/location.png"}
-                style={{ height: 24, width: 24 }}
+                alt="Location icon"
+                width={24}
+                height={24}
               />
               <p className="text-black font-bold text-sm">
                 {/* {formData.location} */}
@@ -80,9 +83,11 @@ function UserInfo() {
               </p>
             </div>
             <div className="flex flex-row items-center gap-1">
-              <img
+              <Image
                 src={"/icons/profession.png"}
-                style={{ height: 24, width: 24 }}
+                alt="Profession icon"
+                width={24}
+                height={24}
               />
               <p className="text-black font-bold text-sm capitalize">
                 {formData.creationOccupation
@@ -91,9 +96,11 @@ function UserInfo() {
               </p>
             </div>
             <div className="flex flex-row items-center gap-1">
-              <img
+              <Image
                 src={"/icons/profession.png"}
-                style={{ height: 24, width: 24 }}
+                alt="Business profession icon"
+                width={24}
+                height={24}
               />
               <p className="text-black font-bold text-sm capitalize">
                 {formData.businessOccupation
@@ -102,7 +109,12 @@ function UserInfo() {
               </p>
             </div>
             <div className="flex flex-row items-center gap-1">
-              <img src={"/icons/time.png"} style={{ height: 24, width: 24 }} />
+              <Image 
+                src={"/icons/time.png"} 
+                alt="Time icon"
+                width={24}
+                height={24}
+              />
               <p className="text-black font-bold text-sm">
                 {formData.hiring
                   ? "Available to Work"
@@ -110,18 +122,22 @@ function UserInfo() {
               </p>
             </div>
             <div className="flex flex-row items-center gap-1">
-              <img
+              <Image
                 src={"/icons/studio.png"}
-                style={{ height: 24, width: 24 }}
+                alt="Studio icon"
+                width={24}
+                height={24}
               />
               <p className="text-black font-bold text-sm">
                 {formData.companyOrStudio ? formData.companyOrStudio : ""}
               </p>
             </div>
             <div className="flex flex-row items-center gap-1">
-              <img
+              <Image
                 src={"/icons/website.png"}
-                style={{ height: 24, width: 24 }}
+                alt="Website icon"
+                width={24}
+                height={24}
               />
               <Link href={""} target="_blank">
                 <p className="text-black font-bold text-sm cursor-pointer hover:text-blue-600">
