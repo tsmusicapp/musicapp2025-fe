@@ -76,7 +76,7 @@ export function HiringMusicianPage() {
         </div>
 
         {/* Border Line Below Tabs */}
-        <div className="border-t-2 border-black/10 w-full mb-2" />
+        <div className="border-t border-black/10 w-full mb-2" />
 
         {/* Tabs Content */}
         <div className="w-full">

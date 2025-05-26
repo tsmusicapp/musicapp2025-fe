@@ -61,7 +61,7 @@ export function UserSpace() {
                 ))}
               </div>
 
-              <div className="border-t-2 border-black/10 w-full mb-2" />
+              <div className="border-t border-black/10 w-full mb-2" />
 
               <div className="pt-4">
                 {section.map(({ value, desc }) =>

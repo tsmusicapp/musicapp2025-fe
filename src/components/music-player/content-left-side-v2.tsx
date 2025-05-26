@@ -42,7 +42,7 @@ function ContentLeftSideV2({ musicDetailInfo }: ContentLeftSideV2Props) {
   ];
 
   return (
-    <div className="w-full max-w-2xl border-2 border-black rounded-xl px-4 py-4 flex flex-col gap-4 h-auto">
+    <div className="w-full max-w-2xl border border-black/10 rounded-xl px-4 py-4 flex flex-col gap-4 h-auto">
       {fields
         .filter(([_, value]) => value) // only show fields with valid value
         .map(([label, value], index) => (

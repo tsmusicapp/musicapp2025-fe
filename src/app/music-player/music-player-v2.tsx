@@ -85,7 +85,7 @@ function MusicPlayerV2({ source = "home", hasLyrics }: MusicPlayerV2Props) {
     <>
       {/* <ReportDialog /> */}
 <div className="flex flex-col  text-black">
-  <div className="flex flex-row w-full h-auto border-black/10 border-2">
+  <div className="flex flex-row w-full h-auto border-black/10 border">
     <div className="relative w-full h-fit space-y-2 items-center">
       <div className="flex flex-row">
         <div className="flex flex-col w-full">

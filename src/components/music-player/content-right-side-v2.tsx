@@ -88,7 +88,7 @@ function ContentRightSideV2({ musicDetailInfo, source }: ContentMusicPlayerV2Pro
   };
 
   return (
-    <div className="flex flex-col py-4 px-6 gap-4 w-full max-w-[38rem] overflow-hidden border-2 border-black rounded-xl">
+    <div className="flex flex-col py-4 px-6 gap-4 w-full max-w-[38rem] overflow-hidden border border-black/10 rounded-xl">
       {musicDetail?.isLyric === true || musicDetail?.isLyric === "true" ? (
         <div className="flex flex-col gap-2 mt-2">
           <p className="text-sm font-notoSemibold">Lyric</p>

@@ -82,7 +82,7 @@ function TopMusicPlayerV2({ musicDetailInfo }: any) {
         </IconButton>
       </div>
 
-      <div className="flex flex-row items-center justify-between gap-1 p-4 px-10 border-b-2 border-black/10">
+      <div className="flex flex-row items-center justify-between gap-1 p-4 px-10 border-b border-black/10">
         <div className="flex flex-row items-center gap-8">
           <div className="flex flex-row items-center gap-2">
             <Avatar
