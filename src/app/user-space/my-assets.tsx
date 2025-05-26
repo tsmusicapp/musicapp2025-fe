@@ -8,12 +8,14 @@ import { useEffect, useState } from "react";
 
 export function MyAssets() {
   const [myAssets, setMyAssets] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true); // Add loading state
+
   useEffect(() => {
     const fetchMyAssets = async () => {
       try {
         const token = getAuthToken();
-
         const endpoint = `${API_URL}/v1/music-asset/my-assets`;
+
         const response = await fetch(endpoint, {
           headers: {
             "Content-Type": "application/json",
@@ -27,15 +29,19 @@ export function MyAssets() {
         }
 
         const data = await response.json();
-        console.log("data", data);
         setMyAssets(data);
       } catch (error) {
         console.error("Error fetching music data:", error);
+      } finally {
+        setLoading(false); // Stop loading once request is complete
       }
     };
 
     fetchMyAssets();
   }, []);
+
+  if (loading) return <Spinner className="w-10 h-10 mx-auto" />;
+
   return (
     <>
       <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4">
@@ -52,7 +58,9 @@ export function MyAssets() {
             />
           ))
         ) : (
-          <Spinner className="w-10 h-10 mx-auto" />
+          <div className="col-span-3 text-center text-gray-500">
+            No music assets found.
+          </div>
         )}
       </div>
     </>

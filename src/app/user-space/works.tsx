@@ -7,6 +7,8 @@ import { useEffect, useState } from "react";
 
 function Works() {
   const [myMusic, setMyMusic] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
   useEffect(() => {
     const getMyMusic = async () => {
       try {
@@ -29,11 +31,16 @@ function Works() {
         setMyMusic(data);
       } catch (error) {
         console.error("Error fetching music data:", error);
+      } finally {
+        setLoading(false);
       }
     };
 
     getMyMusic();
   }, []);
+
+  if (loading) return <Spinner className="w-10 h-10 mx-auto" />;
+
   return (
     <>
       <div className="grid grid-cols-3 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 xl:grid-cols-3 gap-4">
@@ -48,7 +55,9 @@ function Works() {
             />
           ))
         ) : (
-          <Spinner className="w-10 h-10 mx-auto" />
+          <div className="col-span-3 text-center text-gray-500">
+            No music found.
+          </div>
         )}
       </div>
     </>
