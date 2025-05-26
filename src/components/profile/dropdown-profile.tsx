@@ -27,7 +27,8 @@ export default function DropdownProfile({ user }: UserProps) {
     return storedAuth ? JSON.parse(storedAuth) : null;
   });
     const [imageUrl, setImageUrl] = useState("/image/default-picture.png");
-  
+    const [userName, setUserName] = useState(user.name);
+
   const router = useRouter();
   const onLogout = async () => {
     try {
@@ -80,6 +81,7 @@ export default function DropdownProfile({ user }: UserProps) {
             ? `${data?.profilePicture}`
             : "/image/default-picture.png";
           setImageUrl(profileUrl);
+          setUserName(`${data?.firstName || ''} ${data?.lastName || ''}`.trim());
   
         } catch (error) {
           setImageUrl("/image/default-picture.jpg");
@@ -102,7 +104,7 @@ export default function DropdownProfile({ user }: UserProps) {
       <MenuList>
         <div className="flex flex-col justify-center items-center focus:outline-none">
           <div className="flex flex-col justify-center items-center mb-5">
-            <p className="text-black font-semibold">{user.name}</p>
+            <p className="text-black font-semibold">{userName}</p>
             <p className="text-black font-medium">{user.email}</p>
           </div>
           <Link href={"/member-management"}>
