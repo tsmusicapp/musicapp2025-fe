@@ -34,7 +34,7 @@ const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
   };
 
   return (
-    <div className="w-full border-t-2 border-black/10 mt-2 px-4 py-2">
+    <div className="w-full border-t-2 border-black/10 mt-2 px-6 py-2">
       <audio
         id="audio-player"
         src={audioSrc}

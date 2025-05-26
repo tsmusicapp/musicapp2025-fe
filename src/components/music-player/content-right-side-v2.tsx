@@ -143,7 +143,7 @@ function ContentRightSideV2({ musicDetailInfo, source }: ContentMusicPlayerV2Pro
               userName={comment.userName}
               comment={comment.comment}
               createdAt={comment.createdAt}
-              profilePicture={null}
+              profilePicture={musicDetailInfo.profilePicture}
             />
           ))}
       </div>
