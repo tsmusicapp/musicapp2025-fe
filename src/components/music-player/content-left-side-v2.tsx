@@ -51,28 +51,29 @@ function ContentLeftSideV2({ musicDetailInfo }: ContentLeftSideV2Props) {
             <p className="text-xs break-words">{getValue(value)}</p>
           </div>
         ))}
-<>
-  {musicDetailInfo && typeof musicDetailInfo === "object" && "isLyric" in musicDetailInfo && (
-    musicDetailInfo.isLyric !== false && musicDetailInfo.isLyric !== "false" ? (
-      <div className="flex flex-col gap-2 mt-2">
-        <p className="text-sm font-notoSemibold">Describe</p>
-        <p className="max-h-[12rem] text-xs text-justify tracking-wide break-words overflow-y-auto pr-2">
-          {musicDetailInfo?.description || "No description available."}
-        </p>
-      </div>
-    ) : (
-      <div className="flex flex-col sm:flex-row gap-2 mt-2">
-        <p className="text-xs font-notoSemibold min-w-[8rem]">Lyric:</p>
-        <div className="flex items-center text-xs gap-1">
-          <span>0</span>
-          <ThumbsUp className="w-4 h-4 text-gray-600" />
-        </div>
-      </div>
-    )
-  )}
-</>
+      <>
+        {musicDetailInfo &&
+          typeof musicDetailInfo === "object" &&
+          "isLyric" in musicDetailInfo &&
+          (musicDetailInfo.isLyric !== false &&
+          musicDetailInfo.isLyric !== "false" ? (
+            <div className="flex flex-col gap-2 mt-2">
+              <p className="text-sm font-notoSemibold">Describe</p>
+              <p className="max-h-[12rem] text-xs text-justify tracking-wide break-words overflow-y-auto pr-2">
+                {musicDetailInfo?.description || "No description available."}
+              </p>
+            </div>
+          ) : (
+            <div className="flex flex-col sm:flex-row gap-2 mt-2">
+              <p className="text-xs font-notoSemibold min-w-[8rem]">Lyric:</p>
+              <div className="flex items-center text-xs gap-1">
+                <ThumbsUp className="w-4 h-4 text-gray-600" />
 
-
+                <span>0</span>
+              </div>
+            </div>
+          ))}
+      </>
     </div>
   );
 }
