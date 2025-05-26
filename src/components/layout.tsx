@@ -13,8 +13,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   return (
     <ThemeProvider>
-      {showNavbar && <Navbar />}
-      {children}
+      <div className="mx-auto max-w-[1450px] px-4">
+        {showNavbar && <Navbar />}
+        {children}
+      </div>
     </ThemeProvider>
   );
 }
