@@ -56,7 +56,6 @@ const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
           />
         </div>
 
-
         {/* Center Section: Controls */}
         <div className="flex flex-1 items-center justify-center gap-3 max-w-[36rem]">
           {musicDetailInfo?.isLyric !== true &&
@@ -111,18 +110,42 @@ const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
 
         {/* Right Section: Icons */}
         <div className="flex items-center gap-2">
-          <ThumbsUp className=" text-gray-600" />
-          <img
-            src="/icons/collect-icon.png"
-            style={{ height: 24, width: 24 }}
-            className="hover:scale-125 cursor-pointer"
-            alt="collect"
-          />
-          <ArrowTopRightOnSquareIcon
-            height={24}
-            width={24}
-            className="hover:scale-125 cursor-pointer"
-          />
+          {musicDetailInfo &&
+          typeof musicDetailInfo === "object" &&
+          "isLyric" in musicDetailInfo ? (
+            <>
+              <ThumbsUp className="text-gray-600" />
+              <img
+                src="/icons/collect-icon.png"
+                style={{ height: 24, width: 24 }}
+                className="hover:scale-125 cursor-pointer"
+                alt="collect"
+              />
+              <ArrowTopRightOnSquareIcon
+                height={24}
+                width={24}
+                className="hover:scale-125 cursor-pointer"
+              />
+            </>
+          ) : (
+            <>
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold text-gray-800">
+                  {musicDetailInfo?.commercialUsePrice || 0}$
+                </span>
+                <img
+                  src="/icons/add-shopping.png"
+                  className="w-6 text-gray-600"
+                />
+              </div>{" "}
+              <img
+                src="/icons/collect-icon.png"
+                style={{ height: 24, width: 24 }}
+                className="hover:scale-125 cursor-pointer"
+                alt="collect"
+              />
+            </>
+          )}
         </div>
       </div>
     </div>

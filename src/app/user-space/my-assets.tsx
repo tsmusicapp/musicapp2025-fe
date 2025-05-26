@@ -48,7 +48,7 @@ export function MyAssets() {
               {...props}
               source="assets"
               lyrics={false}
-              isMusicAsset={false}
+              isMusicAsset={true}
             />
           ))
         ) : (
