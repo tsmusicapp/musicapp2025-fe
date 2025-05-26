@@ -95,28 +95,29 @@ function TopMusicPlayerV2({ musicDetailInfo }: any) {
               size="md"
             />
             <div className="flex flex-col items-start justify-center gap-0">
-              <p className="text-md font-notoCondensed">
+              <p className="text-md font-medium">
                 {musicDetailInfo?.userName || "Unknown Title"}{" "}
-                <span className="text-xs ml-4 font-notoRegular">
+                <span className="text-xs ml-4 font-normal">
                   {getHiringStatus(musicDetailInfo?.hiring)}
                 </span>
               </p>
               {musicDetailInfo?.myRole?.length > 0 ? (
-                <p className="text-md font-notoCondensed">
+                <p className="text-md font-medium">
                   {formatRoles(musicDetailInfo?.myRole)}
-                  <span className="text-[0.7rem] ml-1 font-notoRegular">
+                  <span className="text-[0.7rem] ml-1 font-normal">
                     for the song
                   </span>
                 </p>
               ) : musicDetailInfo?.isLyric === true ||
                 musicDetailInfo?.isLyric === "true" ? (
-                <p className="text-md font-notoCondensed">
-                  <span className="font-notoRegular">Layricts</span>
+                <p className="text-md font-normal">
+                  <span className="font-normal">Layricts</span>
                 </p>
               ) : null}
             </div>
           </div>
         </div>
+
 
         <div className="flex flex-row gap-1 items-center justify-center">
           <Button
