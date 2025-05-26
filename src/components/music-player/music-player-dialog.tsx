@@ -45,7 +45,7 @@ export default function MusicPlayerDialog({
         dismiss={{ enabled: false }}
 
         size="lg"
-        className="w-[1100px] h-[95%] overflow-auto"
+        className="w-[1100px]  overflow-auto min-h-[500px] max-h-[80vh]"
       >
         <MusicPlayerV2 source={source} hasLyrics={hasLyrics} />
       </Dialog>
