@@ -35,11 +35,9 @@ export function UserSpace() {
       }
     >
       <MusicPlayerDialog />
-      <div className="mx-auto min-h-[60rem] px-10">
+      <div className="mx-auto min-h-[60rem] px-10 relative">
         {/* User Info outside of tabs */}
-        <div className="mb-8">
-          <UserInfo />
-        </div>
+        <UserInfo />
 
         {/* Tabs Section */}
         <div className="grid grid-cols-12">

@@ -43,9 +43,9 @@ export function Navbar() {
         fullWidth
         blurred={false}
         color="white"
-        className="fixed py-2 top-0 z-50 border-0 bg-white"
+        className="fixed py-2 top-0 z-50 border-0 bg-white mx-auto max-w-[1450px] w-full "
       >
-        <div className="mx-10 flex items-center justify-between">
+        <div className="px-4 flex items-center justify">
           <div className="flex flex-row">
             <Link href="/">
               <Typography
