@@ -28,10 +28,10 @@ function Hero() {
             {/* <p className="text-white text-5xl font-extralight lg:max-w-4xl">
               A professional community for Composers, Lyricist, and Producers
             </p> */}
-            <p className="text-white mt-1 mb-10 text-xl font-extralight w-full md:max-w-full lg:max-w-2xl">
+            {/* <p className="text-white mt-1 mb-10 text-xl font-extralight w-full md:max-w-full lg:max-w-2xl">
               Let more record companies, singers, game companies, movie companies,
               and entertainment companies discover for you
-            </p>
+            </p> */}
             <div className="flex flex-row gap-10 items-center mb-3">
               <Button
                 variant="gradient"
