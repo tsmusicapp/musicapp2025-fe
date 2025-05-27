@@ -109,7 +109,7 @@ const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
         </div>
 
         {/* Right Section: Icons */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-4">
           {musicDetailInfo &&
           typeof musicDetailInfo === "object" &&
           "isLyric" in musicDetailInfo ? (
@@ -129,7 +129,7 @@ const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
             </>
           ) : (
             <>
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-4">
                 <span className="text-sm font-semibold text-gray-800">
                   {musicDetailInfo?.commercialUsePrice || 0}$
                 </span>
