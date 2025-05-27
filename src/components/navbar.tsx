@@ -76,7 +76,7 @@ export function Navbar() {
               ))}
             </ul>
           </div>
-          <div>
+          <div className="ml-auto">
             <div className="hidden items-center gap-4 lg:flex">
               <div className="w-72">
                 <form>
