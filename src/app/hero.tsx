@@ -25,9 +25,9 @@ function Hero() {
         <div className="absolute inset-0 h-full w-full bg-gray-900/60" />
         <div className="grid min-h-[55vh] px-8">
           <div className="container relative z-10 my-auto mx-auto grid place-items-center text-center mt-[9rem]">
-            <p className="text-white text-5xl font-extralight lg:max-w-4xl">
+            {/* <p className="text-white text-5xl font-extralight lg:max-w-4xl">
               A professional community for Composers, Lyricist, and Producers
-            </p>
+            </p> */}
             <p className="text-white mt-1 mb-10 text-xl font-extralight w-full md:max-w-full lg:max-w-2xl">
               Let more record companies, singers, game companies, movie companies,
               and entertainment companies discover for you
