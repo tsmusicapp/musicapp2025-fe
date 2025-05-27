@@ -141,7 +141,7 @@ useEffect(() => {
                 <Avatar
                   src="https://picsum.photos/200/300"
                   size="md"
-                  className="border-2 border-white shadow-sm"
+                  className="border border-white shadow-sm"
                   alt="avatar"
                 />
                 <div>

@@ -65,14 +65,14 @@ const MediaPlayerV2 = ({ musicDetailInfo }: any) => {
                   <PauseIcon
                     height={30}
                     width={30}
-                    className="border-2 rounded-full p-2 border-black/30 cursor-pointer"
+                    className="border rounded-full p-2 border-black/10 cursor-pointer"
                     onClick={handlePlayPause}
                   />
                 ) : (
                   <PlayIcon
                     height={30}
                     width={30}
-                    className="border-2 rounded-full p-2 border-black/30 cursor-pointer"
+                    className="border rounded-full p-2 border-black/10 cursor-pointer"
                     onClick={handlePlayPause}
                   />
                 )}

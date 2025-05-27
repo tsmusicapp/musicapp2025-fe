@@ -52,7 +52,7 @@ function UserInfo() {
   }, [auth]);
 
   return (
-    <div className="absolute max-w-[22rem] top-[1rem] left-[0rem] z-30 border-2 border-black/10 rounded-lg">
+    <div className="absolute max-w-[22rem] top-[1rem] left-[0rem] z-30 border border-black/10/10 rounded-lg">
       <div className="bg-white shadow rounded-lg p-6 z-50">
         <div className="flex flex-col">
           <div className="flex flex-col items-center justify-center gap-1 py-6">
@@ -61,7 +61,7 @@ function UserInfo() {
               variant="circular"
               src={imageUrl}
               alt="profile picture"
-              className="border-2 border-white hover:z-10 focus:z-10"
+              className="border border-white hover:z-10 focus:z-10"
             />
             <Typography variant="h5" color="blue-gray" className="font-bold">
               {formData.firstName && formData.lastName
@@ -277,8 +277,8 @@ function UserInfo() {
             </div>
           </div>
         </div>
-        <div className="flex flex-col my-8">
-          <div className="flex flex-row gap-1 justify-between border-2 border-black p-2">
+        <div className="flex flex-col my-8 space-y-2">
+          <div className="flex flex-row gap-1 justify-between border border-black/10 p-2">
             <p className="text-xs text-black font-notoRegular font-bold">
               LinkedIn
             </p>
@@ -286,13 +286,13 @@ function UserInfo() {
               <ArrowTopRightOnSquareIcon className="h-4 w-4 hover:text-blue-700" />
             </Link>
           </div>
-          <div className="flex flex-row gap-1 justify-between border-l-2 border-r-2 border-black p-2">
+          <div className="flex flex-row gap-1 justify-between border border-r-2 border-black/10 p-2">
             <p className="text-xs text-black font-notoRegular font-bold">X</p>
             <Link href={"https://x.com/?lang=en"} target="_blank">
               <ArrowTopRightOnSquareIcon className="h-4 w-4 hover:text-blue-700" />
             </Link>
           </div>
-          <div className="flex flex-row gap-1 justify-between border-2 border-black p-2">
+          <div className="flex flex-row gap-1 justify-between border border-black/10 p-2">
             <p className="text-xs text-black font-notoRegular font-bold">
               Facebook
             </p>

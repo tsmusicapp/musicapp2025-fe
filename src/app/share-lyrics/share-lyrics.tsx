@@ -109,17 +109,13 @@ export function ShareLyrics() {
               >
                 Lyric Name
               </Typography>
-              <Input
-                crossOrigin={""}
-                size="lg"
+              <input
+                type="text"
                 {...register("lyricName", {
                   required: "Lyric name is required",
                 })}
-                placeholder=""
-                className=" !border-t-blue-gray-200 focus:!border-t-gray-900"
-                labelProps={{
-                  className: "before:content-none after:content-none",
-                }}
+                className="w-full px-4 py-2 border border-black rounded-none outline-none focus:ring-0 focus:border-black"
+                
               />
               {errors.lyricName && (
                 <span className="text-red-500 text-xs">
