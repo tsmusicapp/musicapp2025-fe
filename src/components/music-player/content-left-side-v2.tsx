@@ -59,7 +59,7 @@ function ContentLeftSideV2({ musicDetailInfo }: ContentLeftSideV2Props) {
           musicDetailInfo.isLyric !== "false" ? (
             <div className="flex flex-col gap-2 mt-2">
               <p className="text-sm font-notoSemibold">Describe</p>
-              <p className="max-h-[12rem] text-xs text-justify tracking-wide break-words overflow-y-auto pr-2">
+              <p className="text-xs text-justify tracking-wide break-words  pr-2">
                 {musicDetailInfo?.description || "No description available."}
               </p>
             </div>

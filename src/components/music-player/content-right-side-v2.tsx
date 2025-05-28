@@ -93,7 +93,7 @@ function ContentRightSideV2({ musicDetailInfo, source }: ContentMusicPlayerV2Pro
         <div className="flex flex-col gap-2 mt-2">
           <p className="text-sm font-notoSemibold">Lyric</p>
           <p
-            className="max-h-[12rem] text-xs text-justify tracking-wide break-words overflow-y-auto pr-2"
+            className="text-xs text-justify tracking-wide break-words pr-2"
             dangerouslySetInnerHTML={{
               __html: musicDetail?.musicLyric,
             }}
@@ -102,7 +102,7 @@ function ContentRightSideV2({ musicDetailInfo, source }: ContentMusicPlayerV2Pro
       ) : (
         <div className="flex flex-col gap-2 mt-2">
           <p className="text-sm font-notoSemibold">Describe</p>
-          <p className="max-h-[12rem] text-xs text-justify tracking-wide break-words overflow-y-auto pr-2">
+          <p className="text-xs text-justify tracking-wide break-words pr-2">
             {musicDetail?.description || "No description available."}
           </p>
         </div>
@@ -134,7 +134,7 @@ function ContentRightSideV2({ musicDetailInfo, source }: ContentMusicPlayerV2Pro
       </div>
 
       {/* Comment List */}
-      <div className="flex flex-col gap-4 ml-10 max-h-[12rem] overflow-y-auto pr-2">
+      <div className="flex flex-col gap-4 ml-10">
         {Array.isArray(musicDetail?.comments) &&
           musicDetail.comments.map((comment: CommentType) => (
             <Comment
