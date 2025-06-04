@@ -135,7 +135,7 @@ export function Navbar() {
                       />
                     </Badge>
                   </Link>
-                  <ShoppingCartNav isScrolling={false} />
+                  <ShoppingCartNav isScrolling={true} />
                 </>
               ) : (
                 <>
