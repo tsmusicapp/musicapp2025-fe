@@ -21,6 +21,8 @@ import { Card, CardContent } from "@/components/ui/Card";
 import { Badge } from "@/components/ui/Badge";
 import { PauseIcon, PlayIcon } from "@heroicons/react/24/solid";
 import { getImageUrl } from "@/conf/music";
+import { useLocalStorage } from "@/context/LocalStorageContext"; // Import the useLocalStorage hook
+import { toast } from "react-hot-toast"; // Import react-hot-toast
 
 interface HomeMusicianBoxProps {
   id: string;
@@ -62,8 +64,10 @@ export function HomeMusicianBox({
   const dispatch = useDispatch<AppDispatch>();
   const [isPlaying, setIsPlaying] = React.useState(false);
   const audioRef = React.useRef<HTMLAudioElement | null>(null);
+  const { getItem, setItem } = useLocalStorage(); // Use the local storage hook
 
   const likesLength = likes?.toString().length;
+
   const FeatherPencil = () => {
     return (
       <div
@@ -117,6 +121,44 @@ export function HomeMusicianBox({
         })
       );
       dispatch(musicPlayerDialog());
+    }
+  };
+
+  // Handle adding item to cart
+  const handleAddToCart = () => {
+    const cartItems = getItem("cart", [] as HomeMusicianBoxProps[]);
+    const newItem = {
+      id,
+      musicImage,
+      songName,
+      singerName,
+      composerName,
+      musicStyle,
+      tags,
+      duration,
+      likes,
+      audioSrc,
+      lyrics,
+      myRole,
+      isMusicAsset,
+      commercialUsePrice,
+      userName,
+      profilePicture,
+    };
+
+    // Check if item already exists in cart
+    if (!cartItems.some((item: HomeMusicianBoxProps) => item.id === id)) {
+      const updatedCart = [...cartItems, newItem];
+      setItem("cart", updatedCart);
+      toast.success(`${songName} has been added to your cart!`, {
+        position: "bottom-right",
+        duration: 1000,
+      });
+    } else {
+      toast.error(`${songName} is already in your cart!`, {
+        position: "bottom-right",
+        duration: 1000,
+      });
     }
   };
 
@@ -226,7 +268,7 @@ export function HomeMusicianBox({
                 }
                 alt="Composer avatar"
               />
-              <AvatarFallback className="bg-gray-100 text-gray-700">
+              <AvatarFallback className="bg-gray-100 text-gray-600">
                 CC
               </AvatarFallback>
             </Avatar>
@@ -258,10 +300,17 @@ export function HomeMusicianBox({
               <span className="text-sm font-semibold text-gray-800">
                 {commercialUsePrice || 0}$
               </span>
-              <img
-                src="/icons/add-shopping.png"
-                className="w-6 text-gray-600"
-              />
+              <button
+                onClick={handleAddToCart}
+                className="cursor-pointer p-2 hover:bg-gray-100 rounded-full transition-all duration-300"
+                aria-label="Add to cart"
+              >
+                <img
+                  src="/icons/add-shopping.png"
+                  className="w-6 text-gray-600"
+                  alt="Add to cart"
+                />
+              </button>
             </div>
           ) : (
             <div className="flex items-center gap-1">
